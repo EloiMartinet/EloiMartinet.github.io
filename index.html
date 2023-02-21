@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/14273d579a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="#">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="#projects">Projects</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="welcome" class="">
+
+        <!-- BACKGROUND CAROUSSEL -->
+        <div class="container-fluid px-0">
+          <div id="carouselFrontpage" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="2" aria-label="Slide 3"></button>
+              <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
+            <div class="carousel-inner vh-100">
+                <div class="carousel-item active">
+                  <div class="d-flex justify-content-end vw-100 vh-100 bg-primary">
+                    <img src="img/frontpage_carousel/torus_density.png" class="d-flex vh-100" alt="Coucou 1">
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="d-flex justify-content-center vw-100 vh-100 bg-dark">
+                    <img src="img/frontpage_carousel/mu_1_ls.png" class="d-flex vh-100" alt="Coucou 2">
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="d-flex justify-content-center vw-100 vh-100 bg-primary">
+                    <img src="img/frontpage_carousel/mu_3_density.png" class="d-flex vh-100" alt="Coucou 3">
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="d-flex justify-content-center vw-100 vh-100 bg-dark">
+                    <img src="img/frontpage_carousel/mu_2_ls.png" class="d-flex vh-100" alt="Coucou 3">
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TITLE IN THE CENTER + CONTROLS FOR THE CAROUSEL -->
+        <div class="w-100 h-100 bg-dark bg-opacity-25"  style="position: absolute;top: 0%;left: 0%;z-index:11;"><!--Important de changer le z-index car le carousel en mode crossfade a un zi-index de 10 -->
+          <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); text-shadow: 0px 0px 2px #000000;">
+              <h1 class="text-center text-shadow">Welcome to my webpage !</h1>
+              <hr></hr>
+              <h3 class="text-center fw-light">Here you will find all my research material</h3>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselFrontpage" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselFrontpage" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+        </div>
+      </section>
+
+
+      <section id="aboutme" class="my-5">
+        <div class="container">
+          <div class="row">
+
+            <div class="col-12 my-4 col-md-7 my-md-0">
+              <h2>About me</h2>
+              <p class="text-justify">I am Eloi Martinet, a third year PhD student currently working under the supervision of
+                <a class="link-primary" href="https://www.lama.univ-savoie.fr/pagesmembres/bucur/" alt="Dorin Bucur">Dorin BUCUR</a> and
+                <a class="link-primary" href="https://membres-ljk.imag.fr/Edouard.Oudet/" alt="Edouard Oudet">Edouard OUDET</a>.
+                My main research field is about spectral shape optimization from a numerical point of view. I am part of the
+                PDE teams of both the <a class="link-primary" href="https://www.lama.univ-savoie.fr/index.php" alt="LAMA">LAMA</a> and the
+                <a class="link-primary" href="https://www-ljk.imag.fr/">LJK</a>.
+              </p>
+              <div class="row">
+
+                <div class="col">
+                  <h4>Education</h4>
+                  <ul class="fa-ul mb-0">
+                    <li>
+                      <i class="fa-li fas fa-graduation-cap"></i>
+                          PhD in Spectral Shape Optimization, 2019-Current <br />
+                          <span class="fw-light text-light">LAMA (Chambéry), LJK (Grenoble)</span>
+                      </li>
+                      <li>
+                        <i class="fa-li fas fa-graduation-cap"></i>
+                          Agrégation de Mathématiques, 2020-2021<br/>
+                          <span class="fw-light text-light">Institut Fourier (Grenoble)</span>
+                      </li>
+                      <li>
+                        <i class="fa-li fas fa-graduation-cap"></i>
+                          Engineering School in Informatics and Applied Mathematics, 2016-2019<br/>
+                          <span class="fw-light text-light">ENSIMAG (Grenoble)</span>
+                        </div>
+                      </li>
+                    </ul>
+                </div>
+              </div>
+
+              <div class="offset-1 col-10 offset-1 col-md-3  offset-md-1">
+                <img src="img/portrait.jpg" alt="Picture of me" class="img-fluid">
+                <!-- REMPLACER PAR JUSTE LES ICONES ? -->
+                <ul class="fa-ul my-2">
+                  <li>
+                    <i class="fa-li fas fa-graduation-cap"></i>
+                      eloi.martinet@univ-smb.fr
+                  </li>
+                  <li>
+                    <i class="fa-li bi bi-google"></i>
+                    My <a href="https://scholar.google.com/citations?user=KLO5HOoAAAAJ&hl=fr&oi=ao" alt="Google Scholar">Google Scholar</a>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr></hr>
+
+      <section id="publications" class="my-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 mb-4 d-flex align-items-center col-md-4 ">
+              <div class="text-end">
+              <h2 class="d-inline">Publications</h2> <span class="d-inline-block">& preprints</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-7">
+              <ul class="fa-ul">
+                <li>
+                  <i class="fa-li bi bi-file-earmark"></i>
+                  <a class="link-secondary" href="..." alt="Numerical maximizion of Neumann eigenvalues on domains on the sphere">Numerical maximizion of Neumann eigenvalues on domains on the sphere</a>
+                  (2023),<br />
+                    <small class="text-muted">Soon on arXiv.</small>
+                </li>
+                <hr />
+                <li>
+                  <i class="fa-li fas fa-graduation-cap bi bi-file-earmark"></i>
+                  <a class="link-primary" href="https://arxiv.org/abs/2208.11413" alt="Sharp inequalities for Neumann eigenvalues on the sphere">Sharp inequalities for Neumann eigenvalues on the sphere</a>
+                  (2022),<br />
+                  with <strong>D. BUCUR</strong> and <strong>M. NAHON</strong>,
+                    <small class="text-muted">Preprint.</small>
+                </li>
+                <hr />
+                <li>
+                  <i class="fa-li fas bi bi-newspaper"></i>
+                  <a class="link-primary" href="https://arxiv.org/abs/2204.11472" alt="Maximization of Neumann eigenvalues">Maximization of Neumann eigenvalues</a>
+                  (2022),<br />
+                  with <strong>D. BUCUR</strong> and <strong>E. OUDET</strong>,
+                  <small class="text-muted">Archive for Rational Mechanics and Analysis.</small>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr></hr>
+
+      <section id="projects" class="p-4">
+        <div class="container text-center">
+          <h2 class="mb-4">Projects</h2>
+
+
+
+            <!-- FIRST CARD -->
+            <a class="text-decoration-none" href="projects/neumann_density_plane/index.html">
+              <div class="col-md-8 offset-md-1">
+                <div class="card border-3 bg-light text-dark mb-3">
+                  <div class="row g-0">
+                    <div class="col-md-3 p-2">
+                      <img src="img/index_projects_cards/mu_3.png" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-9">
+                      <div class="card-body">
+                        <h5 class="card-title">Optimization of Neumann eigenvalues in the plane</h5>
+                        <p class="card-text">What is the shape of the drum that has the largest eigenfrencies ? We investigate this issue by implementing some density-based optimization procedure.</p>
+                        <p class="card-text"><small class="text-muted"></small></p>
+
+                      </div>
+                    </div>
+                    <!--
+                    <div class="rounded-end text-light bg-primary bg-opacity-50 col-md-1  d-flex align-items-center align-text-center">
+                      <h3 class="fa fa-solid fa-share w-100 pt-2"></h3>
+                    </div>
+                  -->
+                  </div>
+                </div>
+              </div>
+            </a>
+
+              <!--SECOND CARD -->
+              <a class="text-decoration-none" href="projects/neumann_sphere_density.html">
+                <div class="col-md-8 offset-md-3">
+                  <div class="card border-3 bg-light bg-opacity-75 text-dark mb-3">
+                    <div class="row g-0">
+
+                      <div class="col-md-9">
+                        <div class="card-body">
+                          <h5 class="card-title">Optimization of Neumann eigenvalues on the sphere by density method</h5>
+                          <p class="card-text">What can be the shape of the drum that has the largest eigenfrencies ? We investigate this issue by implementing some density-based optimization procedure. .</p>
+                          <p class="card-text"><small class="text-muted"></small></p>
+
+                        </div>
+                      </div>
+                      <div class="col-md-3 p-2">
+                        <img src="img/index_projects_cards/mu_3_8.03.png" class="img-fluid rounded-start" alt="...">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <!-- Third CARD -->
+              <a class="text-decoration-none" href="projects/neumann_sphere_ls.html">
+                <div class="col-md-8 offset-md-1">
+                  <div class="card border-3 bg-light text-dark mb-3">
+                    <div class="row g-0">
+                      <div class="col-md-3 p-2">
+                        <img src="img/index_projects_cards/mu_2_8.13.png" class="img-fluid rounded-start" alt="...">
+                      </div>
+                      <div class="col-md-9">
+                        <div class="card-body">
+                          <h5 class="card-title">Optimization of Neumann eigenvalues in the plane</h5>
+                          <p class="card-text">What can be the shape of the drum that has the largest eigenfrencies ? We investigate this issue by implementing some density-based optimization procedure. .</p>
+                          <p class="card-text"><small class="text-muted"></small></p>
+
+                        </div>
+                      </div>
+                      <!--
+                      <div class="rounded-end text-light bg-primary bg-opacity-50 col-md-1  d-flex align-items-center align-text-center">
+                        <h3 class="fa fa-solid fa-share w-100 pt-2"></h3>
+                      </div>
+                    -->
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+            </div>
+      </section>
+    </main>
+
+    <footer>
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>

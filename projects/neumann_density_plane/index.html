@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/14273d579a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="../../index.html">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#projects">Projects</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+
+      <section id="article" style="margin-top:80px;"><!-- on fait une marge de la hauteur de la navbar -->
+        <div class="container">
+          <div class="row">
+            <div class="offset-md-0 col-md-7">
+              <h2>Presentation of the problem</h2>
+              <p>Here are some results obtained during the first part of my thesis in collaboration with
+              Dorin Bucur and Edouard Oudet.
+              We are interested in the following problem :
+              Let $\Omega \subset \mathbb{R}^N$, $N \geq 1$ be an open set with Lipschitz boundary. Then there exists a sequence
+              $$
+                0 = \mu_0(\Omega) \leq \mu_1(\Omega) \leq ... \to \infty
+              $$
+              such that
+              $$
+                \begin{cases}
+                -\Delta u = \mu_k(\Omega) u \mbox { in } \Omega,\\
+                \frac{\partial u}{\partial n} = 0  \mbox { on } \partial \Omega,
+                \end{cases}
+              $$
+              for some $u \in H^1(\Omega) \setminus \{0\}$ . The $\mu_k(\Omega)$ are called the eigenvalues of the Laplace operator with Neumann boundary conditions and the associated $u$ is called an eigenfunction. It can be seen as the way a membrane vibrates when it isn't fixed at its boundary.
+
+              The question we are considering is then, for a given $k \in \mathbb{N}$ and a given volume $m > 0$ to find the domain $\Omega$ which maximizes the eigenvalue $\mu_k(\Omega)$ with $|\Omega| = m$
+              $$
+                \max \left\{ \mu_k(\Omega) :  \Omega \subset \mathbb{R}^N, |\Omega| =m\right\}.
+              $$
+
+              The well knows Courant-Hilbert formula allows us to express the eigenvalues in the following manner :
+              $$
+                \mu_k(\Omega) = \min_{S\in{\mathcal S}_{k+1}} \max_{u \in S\setminus \{0\}} \frac{\int_\Omega |\nabla u|^2 dx}{\int_\Omega u^2 dx},
+              $$
+              where ${\mathcal S}_k$ is the family of all subspaces of dimension $k$ in $H^1(\Omega)$.</p>
+
+
+              <h2 class="mt-5">Extension to densities</h2>
+
+              <p>Since really few is known on this problem, we aimed at considering a broader problem: let $\rho : \mathbb{R}^N \to [0,1]$ such that $0<\int_{\mathbb{R}^N} \rho dx <+\infty$. We consider  the _**degenerate eigenvalue**_
+              $$
+                \mu _k(\rho) := \inf_{S\in{\mathcal S}_{k+1}} \max_{u \in S} \frac{\int_{\mathbb{R}^N} \rho|\nabla u|^2 dx}{\int_{\mathbb{R}^N} \rho u^2 dx},
+              $$
+              where ${\mathcal S}_{k+1}$ is the family of all subspaces of dimension $k+1$ in
+              $$
+                \{u\cdot 1_{\{\rho (x)>0\}}: u \in C^\infty_c (\mathbb{R}^N)\}.
+              $$
+
+              <div class="alert alert-primary mx-5">
+                This degenerate eigenvalue corresponds to an actual eigenvalue when $\rho$ is the caracteristic function of a smooth enough domain (e.g. Lipschitz).
+              </div>
+
+              We then refomulate our maximization problem as
+              $$
+                \begin{equation} \label{bmo01}
+                \sup \left\{ \mu_k(\rho) :  \rho : \mathbb{R}^N \to [0,1], \int_{\mathbb{R}^N}\rho dx =m\right\}.
+                \end{equation}
+              $$</p>
+
+
+              <h2 class="mt-5">Numerical approximation of optimal densities</h2>
+
+              <p>Using some gradient-based algorithm, we are able to illustrate the optimal density $\rho$ for a given $k \in \mathbb{N}$. We illustrate
+              the convergence of the algorithm in the following figures, representing the optimization process
+              of the eigenvalues for $k=1,...4$.
+
+              <div class="container">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <video width="100%" height="auto" class="rounded border" autoplay loop controls>
+                       <source src="mu_1_crop.mp4" type="video/mp4">
+                      </video>
+                  </div>
+                  <div class="col-md-6">
+                    <video width="100%" height="auto" class="rounded border" autoplay loop controls>
+                       <source src="mu_2_crop.mp4" type="video/mp4">
+                      </video>
+                  </div>
+                  <div class="col-md-6">
+                    <video width="100%" height="auto" class="rounded border" autoplay loop controls>
+                       <source src="mu_3_crop.mp4" type="video/mp4">
+                      </video>
+                  </div>
+                  <div class="col-md-6">
+                    <video width="100%" height="auto" class="rounded border" autoplay loop controls>
+                       <source src="mu_4_crop.mp4" type="video/mp4">
+                      </video>
+                  </div>
+                </div>
+              </div>
+
+              <h2 class="mt-5">Final results</h2>
+
+              After some post-processing, we can finally compute the approximate optimal density
+              for $k=1,...8$ :
+              <div class="container mt-3">
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <img src="mu_1.png" class="img-fluid" alt="mu_1" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_2.png" class="img-fluid" alt="mu_2" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_3.png" class="img-fluid" alt="mu_3" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_4.png" class="img-fluid" alt="mu_4" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_5.png" class="img-fluid" alt="mu_5" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_6.png" class="img-fluid" alt="mu_6" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_7.png" class="img-fluid" alt="mu_7" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_8.png" class="img-fluid" alt="mu_8" />
+                  </div>
+                </div>
+              </div>
+
+              </p>
+              </div>
+
+              <div class="offset-md-1 col-md-4">
+                <div class="sticky-md-top" style="top:30vh">
+                  <h5>Companion articles :</h5>
+                  <small>
+                  <ul class="fa-ul">
+                    <li>
+                      <i class="fa-li fas bi bi-newspaper"></i>
+                      <a class="link-primary" href="https://arxiv.org/abs/2204.11472" alt="Maximization of Neumann eigenvalues">Maximization of Neumann eigenvalues</a>
+                      (2022),<br />
+                      with <strong>D. BUCUR</strong> and <strong>E. OUDET</strong>,<br>
+                      <small class="text-muted">Archive for Rational Mechanics and Analysis.</small>
+                    </li>
+                  </ul>
+                </small>
+                </div>
+              </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
