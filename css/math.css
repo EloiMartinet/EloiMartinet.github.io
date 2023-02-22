@@ -1,0 +1,17 @@
+/* The environement for theorems. Use it the following way :
+    <div class="theorem" text='Prime numbers'>
+    All odd numbers are prime.
+    </div>
+*/
+.theorem {
+display: block;
+font-style: italic;
+}
+.theorem:before {
+content: "Theorem. ";
+font-weight: bold;
+font-style: normal;
+}
+.theorem[text]:before {
+content: "Theorem (" attr(text) ") ";
+}

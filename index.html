@@ -8,6 +8,13 @@
     <script src="https://kit.fontawesome.com/14273d579a.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
   </head>
   <body>
 
@@ -15,7 +22,7 @@
       <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
         <div class="container">
           <a class="navbar-brand text-uppercase fw-bold" href="#">
-            Eloi Martinet
+            $\mathbb{E}$loi $\mathbb{M}$artinet
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -184,7 +191,7 @@
                   <a class="link-primary" href="https://arxiv.org/abs/2204.11472" alt="Maximization of Neumann eigenvalues">Maximization of Neumann eigenvalues</a>
                   (2022),<br />
                   with <strong>D. BUCUR</strong> and <strong>E. OUDET</strong>,
-                  <small class="text-muted">Archive for Rational Mechanics and Analysis.</small>
+                  <small class="text-muted">Archive for Rational Mechanics and Analysis (accepted 2023).</small>
                 </li>
 
               </ul>
@@ -228,7 +235,7 @@
             </a>
 
               <!--SECOND CARD -->
-              <a class="text-decoration-none" href="projects/neumann_sphere_density.html">
+              <a class="text-decoration-none" href="projects/neumann_density_surfaces/index.html">
                 <div class="col-md-8 offset-md-3">
                   <div class="card border-3 bg-light bg-opacity-75 text-dark mb-3">
                     <div class="row g-0">
@@ -236,7 +243,7 @@
                       <div class="col-md-9">
                         <div class="card-body">
                           <h5 class="card-title">Optimization of Neumann eigenvalues on the sphere by density method</h5>
-                          <p class="card-text">What can be the shape of the drum that has the largest eigenfrencies ? We investigate this issue by implementing some density-based optimization procedure. .</p>
+                          <p class="card-text">While the planar case has been investigated theoretically since the 50's, the optimization of Neumann eigenvalues on the sphere is still mysterious. Inspired by the method developed in the planar case, we try to identify some behaviour of the optimal densities.</p>
                           <p class="card-text"><small class="text-muted"></small></p>
 
                         </div>
@@ -250,6 +257,7 @@
               </a>
 
               <!-- Third CARD -->
+              <!--
               <a class="text-decoration-none" href="projects/neumann_sphere_ls.html">
                 <div class="col-md-8 offset-md-1">
                   <div class="card border-3 bg-light text-dark mb-3">
@@ -265,21 +273,18 @@
 
                         </div>
                       </div>
-                      <!--
-                      <div class="rounded-end text-light bg-primary bg-opacity-50 col-md-1  d-flex align-items-center align-text-center">
-                        <h3 class="fa fa-solid fa-share w-100 pt-2"></h3>
-                      </div>
-                    -->
                     </div>
                   </div>
                 </div>
               </a>
+            -->
 
             </div>
       </section>
     </main>
 
     <footer>
+      <br />
     </footer>
 
     <!-- Bootstrap script, don't touch of way explode -->
