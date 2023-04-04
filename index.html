@@ -22,7 +22,7 @@
       <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
         <div class="container">
           <a class="navbar-brand" href="#">
-            <span class="text-uppercase fw-bold">$\mathbb{E}$loi $\mathbb{M}$artinet</span>
+            <span class="text-uppercase fw-bold">Eloi Martinet</span>
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -84,9 +84,9 @@
         <!-- TITLE IN THE CENTER + CONTROLS FOR THE CAROUSEL -->
         <div class="w-100 h-100 bg-dark bg-opacity-25"  style="position: absolute;top: 0%;left: 0%;z-index:11;"><!--Important de changer le z-index car le carousel en mode crossfade a un zi-index de 10 -->
           <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%); text-shadow: 0px 0px 2px #000000;">
-              <h1 class="text-center text-shadow">Welcome to my webpage !</h1>
+              <div class="text-center text-shadow h1">Welcome to my webpage !</div>
               <hr></hr>
-              <h3 class="text-center fw-light">Here you will find all my research material</h3>
+              <div class="text-center fw-light h3">Here you will find all my research material</div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselFrontpage" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -142,16 +142,36 @@
               <div class="offset-1 col-10 offset-1 col-md-3  offset-md-1">
                 <img src="img/portrait.jpg" alt="Picture of me" class="img-fluid">
                 <!-- REMPLACER PAR JUSTE LES ICONES ? -->
+                <!--
                 <ul class="fa-ul my-2">
                   <li>
-                    <i class="fa-li fas fa-graduation-cap"></i>
+                    <i class="fa-li fas fa-envelope"></i>
                       eloi.martinet@univ-smb.fr
+                  </li>
+                  <li>
+                    <i class="fa-li fab fa-researchgate"></i>
+                    My <a href="https://www.researchgate.net/profile/Eloi-Martinet" alt="Researchgate">Researchgate</a>          
                   </li>
                   <li>
                     <i class="fa-li bi bi-google"></i>
                     My <a href="https://scholar.google.com/citations?user=KLO5HOoAAAAJ&hl=fr&oi=ao" alt="Google Scholar">Google Scholar</a>
                   </li>
                 </ul>
+                -->
+                <div class="display-flex text-center mt-3">
+                  <!-- Plutôt copier automatiquement l'adresse mail dans le presse-papier-->
+                  <a href="mailto:eloi.martinet@univ-smb.fr" class="text-decoration-none m-2" style="color:#cccccc" alt="eloi.martinet@univ-smb.fr">
+                    <i class="fa-2x fas fa-envelope"></i>
+                  </a>
+                   
+                  <a href="https://www.researchgate.net/profile/Eloi-Martinet" class="text-decoration-none m-2" style="color:#00c3ff" alt="Researchgate">
+                    <i class="fa-2x fab fa-researchgate"></i>
+                  </a>
+                   
+                  <a href="https://scholar.google.com/citations?user=KLO5HOoAAAAJ&hl=fr&oi=ao" class="text-decoration-none m-2" style="color:#eb4034" alt="Google Scholar">
+                    <i class="fa-2x bi bi-google"></i>
+                  </a>
+                </div>
               </div>
 
             </div>
@@ -173,9 +193,11 @@
               <ul class="fa-ul">
                 <li>
                   <i class="fa-li bi bi-file-earmark"></i>
-                  <a class="link-secondary" href="..." alt="Numerical maximizion of Neumann eigenvalues on domains on the sphere">Numerical maximizion of Neumann eigenvalues on domains on the sphere</a>
+                  <a class="link-primary" href="https://arxiv.org/abs/2303.12389" alt="Numerical optimization of Neumann eigenvalues of domains in the sphere">
+                    Numerical optimization of Neumann eigenvalues of domains in the sphere
+                  </a>
                   (2023),<br />
-                    <small class="text-muted">Soon on arXiv.</small>
+                    <small class="text-muted">Preprint.</small>
                 </li>
                 <hr />
                 <li>
