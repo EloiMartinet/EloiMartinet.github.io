@@ -15,3 +15,16 @@ font-style: normal;
 .theorem[text]:before {
 content: "Theorem (" attr(text) ") ";
 }
+
+.conjecture {
+display: block;
+font-style: italic;
+}
+.conjecture:before {
+content: "Conjecture. ";
+font-weight: bold;
+font-style: normal;
+}
+.conjecture[text]:before {
+content: "Conjecture (" attr(text) ") ";
+}

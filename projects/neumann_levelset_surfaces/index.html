@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/14273d579a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- My own stylesheets -->
+    <link rel="stylesheet" href="../../css/math.css">
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="../../index.html">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#projects">Projects</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+
+      <section id="article" style="margin-top:80px;"><!-- on fait une marge de la hauteur de la navbar -->
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-7">
+              <h2>Presentation of the problem</h2>
+              <p>The level set approach is complementary to the <a href="../projects/neumann_density_surface/index.html" alt="Density case">density one</a>. 
+              In this framework however we stick with the original shape optimization problem. Let's recall the main lines :
+              Let $\mathbb{S}^N \in \mathbb{R}^{N+1}$, $N \geq 1$ be the unit sphere and $\Omega \subset \mathbb{S}^N$ be an open set with Lipschitz boundary.
+              By the spectral theorem, there exists a sequence
+              $$
+                0 = \mu_0(\Omega) \leq \mu_1(\Omega) \leq ... \to \infty
+              $$
+              such that
+              $$
+                \begin{cases}
+                -\Delta u = \mu_k(\Omega) u \mbox { in } \Omega,\\
+                \frac{\partial u}{\partial n} = 0  \mbox { on } \partial \Omega,
+                \end{cases}
+              $$
+              for some $u \in H^1(\Omega) \setminus \{0\}$. Here, $\Delta$ denotes the Laplace-Beltrami operator (the generalization of the Lapalce operator on curved spaces). The $\mu_k(\Omega)$ are called the eigenvalues of the Laplace operator with Neumann boundary conditions and the associated $u$ is called an eigenfunction.
+
+              For a given $k \in \mathbb{N}$ and a given volume $m > 0$, the problem is to find the domain $\Omega$ which maximizes the eigenvalue $\mu_k(\Omega)$ with $|\Omega| = m$
+              $$
+                \max \left\{ \mu_k(\Omega) :  \Omega \subset \mathbb{R}^N, |\Omega| =m\right\}.
+              $$
+
+              The well knows Courant-Hilbert formula allows us to express the eigenvalues in the following manner :
+              $$
+                \mu_k(\Omega) = \min_{S\in{\mathcal S}_{k+1}} \max_{u \in S\setminus \{0\}} \frac{\int_\Omega |\nabla u|^2 dx}{\int_\Omega u^2 dx},
+              $$
+              where ${\mathcal S}_k$ is the family of all subspaces of dimension $k$ in $H^1(\Omega)$.</p>
+
+
+              <h2 class="mt-5">Principle of the level set method</h2>
+
+              <p>One concern in numerical shape optimization is to determine a good parametrization of the shape $\Omega$. The first idea that 
+                may come up is to represent it by a mesh. However, numerical optimization algorithm will make the shape move and this parametrization
+                might be inadapted if we want to handle some topological changes.
+              </p>
+              <p>
+                One way to handle this is throug the level set method. Instead 
+                of describing the evolving shape as a moving mesh, we describe it as an evolving function on a fixed mesh. More precisely, if we 
+                have a continuous family of shapes $\left(\Omega_t\right)_t$ then it will be represented as the zero sub-level set of a function $\phi$ :
+                $$
+                    \forall x \in \mathbb{S}^N, \forall t\in[0,T],
+                    \begin{cases}
+                    \phi(t,x) < 0 & \mbox{ if } x \in \Omega_t \\
+                    \phi(t, x) = 0 & \mbox{ if } x \in \partial \Omega_t \\
+                    \phi(t,x) > 0 & \mbox{ if } x \in \mathbb{S}^N \setminus \Omega_t
+                    \end{cases}.
+                $$
+                Let's now suppose that the family $\Omega_t$ is advected by a velocity field $V : \mathbb{R}^+\times \mathbb{S}^N \to T  \mathbb{S}^N$ in such a way that $\Omega_t = \chi(\Omega_0,t)$ where
+                $$
+                    \begin{cases}
+                    \chi'(x_0,t)= V(t,\chi(x_0,t)) \mbox{ for } (t,x_0) \in \mathbb{R}^+\times \mathbb{S}^N \\
+                    \chi(x_0,0)= x_0 \in \mathbb{S}^N
+                    \end{cases}
+                $$
+                The advantage of this representation is that the motion of $\Omega_t$ is equivalent to the advection of $\phi$ by the equation
+                $$
+                    \partial_t \phi(t,x) + V(t,x) \cdot \nabla \phi(t,x) = 0.
+                $$
+                During a single time step $t_m \to t_{m+1}$, we can consider $V(t,x) \approx V_m(x)$ and solve 
+                $$
+                    \partial_t \phi(t,x) + V_m(x) \cdot \nabla \phi(t,x) = 0
+                $$
+                instead. At each time step, this equation can be solved using, for instance, the method of characteristics. 
+              </p>
+              <p>
+                Knowing how to paramterize the shape, we should know find at each time step $t_m$ a velocity field $V_m$ which makes the eigenvalue 
+                $\mu_k(\Omega_{t_m})$ increase. This is done using the concept of shape derivative, which will be covered in another post.
+              </p>
+              <p>
+                You can learn more about the shape optimization using the level set method by checking the amazing web page of 
+                <a href="https://membres-ljk.imag.fr/Charles.Dapogny/" alt="Charles Dapogny">Charles Dapogny</a> which has a lot of wonderful resources. 
+                You can also check [1].
+              </p>
+
+
+              <h2 class="mt-5">Numerical explorations for the first three eigenvalues</h2>
+
+              <p>We use a gradient-based optimization algorithm with a penalization of the surface to take the constraint into account. For 
+                more information, we refer to the companion article.</p>
+
+              <div class="container mt-3">
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_1_2.03.png" class="img-fluid" alt="mu_1_2.0" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_1_5.1.png" class="img-fluid" alt="mu_1_4.98" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_1_8.0.png" class="img-fluid" alt="mu_1_8.05" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_1_10.85.png" class="img-fluid" alt="mu_1_11.2" />
+                  </div>
+                </div>
+
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_2_2.12.png" class="img-fluid" alt="mu_1_2.0" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_2_5.10.png" class="img-fluid" alt="mu_1_4.98" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_2_8.13.png" class="img-fluid" alt="mu_1_8.05" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_2_11.17.png" class="img-fluid" alt="mu_1_11.2" />
+                  </div>
+                </div>
+
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_3_2.0.png" class="img-fluid" alt="mu_1_2.0" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_3_5.22.png" class="img-fluid" alt="mu_1_4.98" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_3_8.0.png" class="img-fluid" alt="mu_1_8.05" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_mu_3_11.04.png" class="img-fluid" alt="mu_1_11.2" />
+                  </div>
+                </div>
+              </div>
+
+              <br/>
+              <p>The pictures above represents the optimal shapes for $\mu_1, \mu_2$ and $\mu_3$ (first, second and third row) obtained for $m \in \{2, 5, 8, 11\}$ (in column). 
+              The most important observation we can make is the following :
+                <div class="alert alert-dark conjecture mx-5">
+                  For every $m$ large enough, the optimal domain for $\mu_1$ is NOT the geodesic cap.
+                </div>
+              This observation goes in contrast to the theorem of Laugesen and Langford [2] where under the hypothesis of simple conectedness,
+              the geodesic ball is proven to be optimal for $0 < M < 0.94 |\mathbb{S}^N$. It shows that this topological assumption can't be 
+              dropped.
+              </p>
+
+
+              <h2 class="mt-5">Same simulations on the torus</h2>
+
+              <p>Only for the pleasure of the eyes, here are the same simulations on the torus :
+
+              <div class="container mt-3">
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_1_4.png" class="img-fluid" alt="mu_1_2.0" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_1_22.png" class="img-fluid" alt="mu_1_4.98" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_1_42.png" class="img-fluid" alt="mu_1_8.05" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_1_60.png" class="img-fluid" alt="mu_1_11.2" />
+                  </div>
+                </div>
+
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_2_4.png" class="img-fluid" alt="mu_1_2.0" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_2_22.png" class="img-fluid" alt="mu_1_4.98" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_2_42.png" class="img-fluid" alt="mu_1_8.05" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_2_60.png" class="img-fluid" alt="mu_1_11.2" />
+                  </div>
+                </div>
+
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_3_4.png" class="img-fluid" alt="mu_1_2.0" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_3_22.png" class="img-fluid" alt="mu_1_4.98" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_3_42.png" class="img-fluid" alt="mu_1_8.05" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="levelset_tore_mu_3_60.png" class="img-fluid" alt="mu_1_11.2" />
+                  </div>
+                </div>
+              </div>
+
+              </p>
+
+              <p>
+                Once again, I encourage you to check the associated paper and to send me an email if you need more informations !
+              </p>
+              <br/>
+            </div>
+
+
+            <!--       REFERENCES         -->
+            <div class="offset-lg-1 col-lg-4">
+                <div class="sticky-lg-top" style="top:80px">
+
+                  <h5>Companion articles :</h5>
+                  <small>
+                  <ul class="fa-ul">
+                    <li>
+                      <i class="fa-li bi bi-file-earmark"></i>
+                      <a class="link-primary" href="https://arxiv.org/abs/2303.12389" alt="Numerical optimization of Neumann eigenvalues of domains in the sphere">
+                        Numerical optimization of Neumann eigenvalues of domains in the sphere
+                      </a>
+                      (2023),<br />
+                        <small class="text-muted">Preprint.</small>
+                    </li>
+                  </ul>
+                </small>
+
+                <h5>References :</h5>
+                <small>
+                  <ul class="fa-ul">
+                    <li style="list-style-type: '[1] '">
+                      <a class="link-primary" href="https://hal.science/hal-03881641v1"
+                      alt="Shape optimization using a level set based mesh evolution method: an overview and tutorial">
+                      Shape optimization using a level set based mesh evolution method: an overview and tutorial</a>
+                      (2022),<br />
+                      <strong>C. DAPOGNY</strong> and <strong>F. FEPPON</strong>,<br>
+                      <small class="text-muted">Preprint.</small>
+                    </li>
+
+                    <li style="list-style-type: '[2] '">
+                      <a class="link-primary" href="https://link.springer.com/article/10.1007/s00208-022-02455-z" alt="Maximizers beyond the hemisphere for the second Neumann eigenvalue">Maximizers beyond the hemisphere for the second Neumann eigenvalue</a>
+                      (2022),<br />
+                      <strong>J.J. LANGFORD</strong> and <strong>R.S. LAUGESEN</strong>,<br>
+                      <small class="text-muted">Mathematische Annalen.</small>
+                    </li>
+                  </ul>
+                </small>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <br />
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>

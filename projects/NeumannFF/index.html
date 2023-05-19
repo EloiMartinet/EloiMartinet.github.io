@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/14273d579a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- My own stylesheets -->
+    <link rel="stylesheet" href="../../css/math.css">
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="../../index.html">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#projects">Projects</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+
+      <section id="article" style="margin-top:80px;"><!-- on fait une marge de la hauteur de la navbar -->
+        <div class="container">
+          <div class="row">
+
+            <!--        BODY OF THE ARTICLE       -->
+            <div class="col-lg-7">
+              <h2>Simulation of eigenvalue optimization.</h2>
+              <p>
+                In this article I provide a source code similar to the one that have been used to perform the simulations 
+                in <a href="../neumann_density_plane/" alt="Simulation of Neumann eigenvalues">this project</a>. The original source 
+                code was too messy to be shared and useful to anybody, but thanks to the joint work of Gregoire Allaire, Charles Dapogny,
+                Florian Feppon and Pascal Frey, I am able to provide a way cleaner code. Indeed, they put online code examples 
+                for shape and topology optimization written in <a href="https://freefem.org/" alt="FreeFem">FreeFem</a> and Python, called 
+                <a href="https://github.com/dapogny/sotuto/tree/master" alt="sotuto">SOTuto</a>.
+              </p>
+
+              <p>
+                This little library uses FreeFem to solve the Finite Element stuff and articulates the different FreeFem scripts by calling
+                them via Python. Whereas it can seem a bit complex in the begining since there is a lot of different files for each project,
+                it quickly become easy to modify the existing files to adapt to your favorite problem. That is exactly what I did in this 
+                project.
+              </p>  
+
+              <h2 class = "mt-5">Installation and setup</h2>
+
+              <p>
+                You can find the source code of the project <a href="https://github.com/EloiMartinet/NeumannFreeFem" alt="source code">here</a>. 
+                You will have to install <a href="https://www.python.org/" alt="Python">Python</a> and <a href="https://freefem.org/" alt="FreeFem">FreeFem</a>
+                first. Make sure that FreeFem has been added to your PATH variable by typing <kbd>FreeFem++ -?</kbd> in you favorite terminal. You should obtain 
+                something like 
+                <div class="alert alert-dark">
+                  <pre>
+                    <samp>
+FreeFem++ - version 4.12 (Tue Dec  6 19:14:11 CET 2022 - git v4.12) 64bits
+License: LGPL 3+ (https://www.gnu.org/licenses/lgpl-3.0.en.html)
+Usage: FreeFem++ [FreeFEM arguments] filename [script arguments]
+FreeFEM arguments:
+  -f:     [filename]  script file name
+  -v:     [verbosity] level of FreeFEM output (0 - 1000000)
+...</samp></pre>
+                </div>
+                If it is not the case, you can check <a href="https://phoenixnap.com/kb/linux-add-to-path">this page</a> to learn 
+                more about the PATH variable and how to add permanently a command to it.
+              </p>
+
+              <p>
+                Once you installation is ok, you have to clone the <a href="https://github.com/EloiMartinet/NeumannFreeFem" alt="source code">git repository</a>. 
+                To do this, first make sure you have Git installed on your computer by typing <kbd>git</kbd> in the terminal. Then go in the folder you want to
+                download the sources, open a terminal inside it and type 
+                <br><kbd>git clone https://github.com/EloiMartinet/NeumannFreeFem.git</kbd><br>
+                You should now see a new folder named NeumannFreeFem. Go inside it by typing 
+                <br><kbd>cd NeumannFreeFem</kbd><br>
+                You will find a folder named sources. This is where all the scripts necessary are.
+              </p>
+
+              <p>
+                Finally, to visualize the results, you will need a software called Medit. You can 
+                <a href="https://www.ljll.math.upmc.fr/frey/software.html">download it</a> on the webpage of the author as well as the 
+                <a href="https://inria.hal.science/inria-00069921/document" alt="Medit doc">documentation</a>.
+              </p>
+
+              <h2 class="mt-5">Run the project</h2>
+              <p>
+                To run the project, you just have to type 
+                <br><kbd>python3 sources/main.py</kbd><br>
+                This will create a new folder named res in the NeumannFreeFem one. When the optimization is finished (which may
+                take several minutes), you can visualize the results by typing 
+                <br><kbd>medit res/step -a 1 1000</kbd><br>
+                This command tells medit to animate all the files named res/step.*.mesh and res/step.*.sol. When the medit window opens
+                press <kbd>m</kbd> to make the colors appear and <kbd>l</kbd> to hide the mesh. Finally, right click and in the menu go 
+                to Animate > Play Sequence. You should see the different iterations of the algorithm.
+              </p>
+
+
+              <h2 class="mt-5">File structure and roles</h2>
+
+              <p>
+                In the source folder, the file that articulates all the other ones together is main.py. The configuration 
+                of the project can be changed in the file path.py where you can control the mesh size, number of iterations, 
+                gradient step size, regularization parameters etc.
+              </p>
+
+              <p>
+                I will surely do a more detailed tutorial on this when I wil have more time.
+              </p>
+            </div>
+
+
+            <!--       REFERENCES         -->
+            <div class="offset-lg-1 col-lg-4">
+                <div class="sticky-lg-top" style="top:80px">
+                  <h5>Softwares :</h5>
+                  <small>
+                  <ul class="">
+                    <li>
+                      <i class=""></i>
+                      <a href="https://freefem.org/" alt="FreeFem">FreeFem</a>
+                    </li>
+                    <li>
+                      <i class=""></i>
+                      <a class="link-primary" href="https://www.ljll.math.upmc.fr/frey/software.html" alt="Medit">
+                        Medit
+                      </a>
+                    </li>
+                    <li>
+                      <i class=""></i>
+                      <a href="https://www.python.org/" alt="Python">Python</a>
+                    </li>
+                  </ul>
+                </small>
+                
+                <h5>Repositories :</h5>
+                <small>
+                  <ul class="fa-ul">
+                    <li>
+                      <i class="fa-li bi bi-github"></i>
+                      <a class="link-primary" href="https://github.com/EloiMartinet/NeumannFreeFem" alt="NeumannFreeFem">NeumannFreeFem</a>
+                    </li>
+                    <li>
+                      <i class="fa-li bi bi-github"></i>
+                      <a class="link-primary" href="https://github.com/dapogny/sotuto/tree/master" alt="SOTuto">SOTuto</a>
+                    </li>
+                  </ul>
+                </small>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <br />
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
