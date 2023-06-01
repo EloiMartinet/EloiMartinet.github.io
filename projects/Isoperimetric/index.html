@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/14273d579a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- My own stylesheets -->
+    <link rel="stylesheet" href="../../css/math.css">
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="../../index.html">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#projects">Projects</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+
+      <section id="article" style="margin-top:80px;"><!-- on fait une marge de la hauteur de la navbar -->
+        <div class="container">
+          <div class="row">
+
+            <!--        BODY OF THE ARTICLE       -->
+            <div class="col-lg-7">
+              <h2>Simulation of the isoperimetric inequality using a phase field approximation.</h2>
+              <p>
+                The isoperimetric inequality is the most emblematic problem in shape optimization. It reads as follows :
+                <blockquote class="blockquote text-center">
+                  <p class="mx-5"><q>Among all the shapes of a given area, what is the shape that minimizes the perimeter ?</q></p>
+                  <footer class="blockquote-footer">Someone a long, long time ago (probably)</footer>
+                </blockquote>
+                The answer is know from a long time to be the circle. However, it needed a few millenia to give a rigorous proof. 
+                A nice overview of the isoperimetric problem, written by Mark Ashbaugh,
+                can be found <a href="http://www.fis.puc.cl/~rbenguri/117eng.pdf">here</a>. Some proofs and insight must be found in the 
+                <a href="https://mathproblems123.wordpress.com/?s=isoperimetric">blog</a> of Beniamin Bogosel. I assume here that you are a bit familliar to this problem.
+              </p>
+              <p>
+                In this article, I want to provide a simple code written exclusively in <a href="https://freefem.org/" alt="FreeFem">FreeFem</a> in order to illustrate the 
+                isoperimetric problem and the use of the so-called <i>phase field</i> method. Let first state the problem that we consider : let $D \subset \mathbb{R}^n$ be a "working domain". 
+                Our problem is to find $\Omega \subset\subset D$ which is solution to the problem 
+                $$
+                  \min_{Vol(\Omega)=m}{Per(\Omega)}
+                $$
+                with $m > 0$. The phase field method consists in replacing a set $\Omega \subset \subset D \subset \mathbb{R}^n$ with a 
+                function $u: D \to \mathbb{R}$. The right space of function to consider is the space of <i>functions of bounded variations</i>, noted 
+                $BV(D)$, consisting of $L^1$ function for which the weak derivative is a Radon measure. It can be seen roughly as functions that are piecewise $H^1$. 
+                An instersting thing about this space is that we can define the <i>total variation</i> of the function $u$ as 
+                $$
+                  |Du|(D) = \sup\left\{\int_D u \operatorname{div} \phi : \phi \in C^1_c(D, \mathbb{R}^n), \|\phi\|_\infty \leq 1\right\}
+                $$
+                and it turns out that of $\Omega$ has a smooth enough boundary, we have 
+                $$
+                  |D\chi_\Omega|(D) = Per(\Omega)
+                $$
+                where $\chi_\Omega$ is the characteristic function of $\Omega$. 
+              </p>
+
+              <p>
+                Why is it useful tho ? In fact, we have seen a way to generalise the nothing of perimeter of a shape into the notion of <i>total variation</i> of a function. In shape optimization,
+                it is often fruitful (and sometimes inevitable) to reformulate the original optimization problem in a broader sense. This is for instance the case for the homogenization method in 
+                conductivity or elasticity, or the porous media approach in fluid mechanics. Our new problem is now the following : find $u\in BV(D)$ such that 
+                $$
+                  \min_{\int_D u=m}{|Du(D)|}.
+                $$
+                As interesting as it is from a conceptual point of view (this reformulation allows notably to hadle the complex question of existence of an optimal isoperimetric set), it can not be 
+                handle numerically as it as long as we don't know how to approximate the $BV$ space by finite-dimensionnal spaces. This is where the <i>Modica-Mortola</i> functionnal comes into play :
+                define 
+                $$
+                  F_\varepsilon(u) = \begin{cases} 
+                   \int_D  \varepsilon |\nabla u|^2 + \frac 1 \varepsilon u^2(1-u)^2 \mbox{ if } u \in H^1(D), \int_D u = m \\
+                  +\infty \mbox{ otherwise }
+                  \end{cases}
+                $$
+                then by defining 
+                $$
+                  F(u) = \begin{cases} 
+                    Per(\Omega) \mbox{ if } u \in BV(D,\{0,1\}), \Omega = u^{-1}(1), Vol(\Omega)=m \\
+                    +\infty \mbox{ otherwise }
+                \end{cases}
+                $$
+                we have that 
+                $$
+                  F_\varepsilon \xrightarrow[\varepsilon \to 0]{\Gamma} F
+                $$
+                in the sense of $\Gamma$-convergence (in fact there is a constant factor that we don't consider here). Intuitively, the term in $\frac 1 \varepsilon u^2(1-u)^2$ will
+                force the function to be either $0$ or $1$ in $D$ while the term in $\varepsilon |\nabla u|^2$ will count for the perimeter of the "jumps" of $u$.
+              </p>
+              <p>
+                The notion of $\Gamma$-convergence implies that for a small $\varepsilon$, the minimum of $F_\varepsilon$ is close to the one of $F$. Thus, we can approximate our previous problem 
+                by the following one : find $u \in H^1(D)$ solution of 
+                $$
+                  \min_{\int_D u=m}{\int_D  \varepsilon |\nabla u|^2 + \frac 1 \varepsilon u^2(1-u)^2}.
+                $$
+                Now that our space is $H^1$, we can use finite element discretization and approximate $H^1(D)$ with a finite-dimensional $V_h = \langle \psi_1,...,\psi_n \rangle$. If 
+                $\bar{u} = (u_1,...,u_n)$ designates the components of $u = \sum u_i \psi_i$, the problem is now a finite-dimensional optimization problem in $\mathbb{R}^n$ under an equality constraint.
+                In order to make the code as easy as possible, we will transform our problem a bit further in order to consider an unconstraited optimization problem by replacing the volume constraint 
+                by a penalization. It reads as follows :
+                Find $\bar{u} \in \mathbb{R}^n$ solution of 
+                $$
+                   \min_{\bar{u}\in \mathbb{R}^n}{\int_D  \varepsilon |\nabla u|^2 + \frac 1 \varepsilon u^2(1-u)^2 + \alpha u}
+                $$
+                where $\alpha < 0$. To perform the optimization, we can then use a standard gradient descent algorithm. By denoting 
+                $$
+                  J : \bar{u} \mapsto \int_D  \varepsilon |\nabla u|^2 + \frac 1 \varepsilon u^2(1-u)^2 + \alpha u
+                $$
+                we can compute for $\bar{v} \in \mathbb{R}^n$ (with $v = \sum v_i \psi_i$) the differential of $J$ :
+                \begin{align*}
+                  dJ(\bar{u}).\bar{v} &=   \int_D 2\varepsilon \nabla u \cdot \nabla v +\frac 2 \varepsilon u(1-u)(1-2u)v + \alpha v\\
+                  &=   \sum v_i \int_D 2\varepsilon \nabla u \cdot \nabla \psi_i +\frac 2 \varepsilon u(1-u)(1-2u)\psi_i + \alpha \psi_i.
+                \end{align*}
+                Thus the gradient of $J$ reads :
+                $$
+                  \nabla J(\bar{u}) = \left( \int_D 2\varepsilon \nabla u \cdot \nabla \psi_i +\frac 2 \varepsilon u(1-u)(1-2u)\psi_i + \alpha \psi_i \right)_{1 \leq i \leq n}.
+                $$
+                It is then easy to implement a gradient descent algorithm to make $J$ decrease.
+              </p>
+
+              <h2>Implementation</h2>
+
+              <p>
+                The code is given in <a href="https://github.com/EloiMartinet/IsoperimetricPhaseField">this repository</a>. Clone it on your computer and then run 
+                <br><kbd>FreeFem++ isoperimetric.edp</kbd><br>
+                to launch the simulation. You will need <a href="https://www.ljll.math.upmc.fr/frey/software.html">MEDIT</a> in order to vizualize the results in the res/ folder.
+                Alternatively, you can replace the medit call in the code by the FreeFem <a href="https://doc.freefem.org/documentation/visualization.html#plot">plot</a> function. 
+
+                In the given code, the gradient can be quickly assembled using the following lines :
+                <div class="alert alert-dark">
+                  <pre>
+                    <samp>
+varf dPer(v,w) = int2d(Th)( 2*eps*(dx(u)*dx(w)+dy(u)*dy(w)) 
+                 + 2/eps*u*(1-u)*(1-2*u)*w + lambda*w)
+                 + on(1,2,3,4,v=0);
+gradPer[] = dPer(0, Vh);</samp></pre>
+                </div>
+                
+                One minor point is the fact that if the objective function $J$ decreases, then the step size is increased by a factor of $1.1$. If it increases,
+                the phase field function $u$ isn't updated and the step size is multiplied by $0.6$. This is some basic line search procedure.
+                
+                Also note that as the time passes, the convergence to a disk seems to become slower and slower. This is a well-know behaviour to a closely
+                related equation, namely the <i>Allen-Cahn</i> reaction-diffusion equation. You can find a <a href="https://www.youtube.com/watch?v=WahPHP4THrE&list=PLAZp3rbgWLo3X0WkOMfXgtKmhBxskOeWa&index=3">
+                video by Nils Berglund</a> where the time accelerates as the number of iterations steps increases. In our case, it may need a lot of iterations to get close to a disc.
+              </p>
+
+              <p>
+                If everithing went OK, you should see something similar to this :
+                <div class="container px-5">
+                  <video width="100%" height="auto" class="rounded border" autoplay loop controls>
+                    <source src="output-converted.mp4" type="video/mp4">
+                  </video>
+                </div>
+                At least I hope so. As you can see the convergence becomes reeeeeaaaaaallyyyyy slow.
+                <br>Don't hesitate to play with the parameters (mesh size, epsilon, step size etc). If you use MEDIT for vizualization, you can produce the previous type of video by executing 
+                <br><kbd>medit res/step -a 0 1000</kbd><br>
+                then right click on the medit window > Toggle ImSave then Play Sequence. It will create a sequence of images in the res/ folder that you can concatenated into 
+                a video by executing 
+                <br><kbd>sh video.sh</kbd><br>
+                (you will need ffmpeg).
+              </p>
+            </div>
+
+
+            <!--       REFERENCES         -->
+            <div class="offset-lg-1 col-lg-4">
+                <div class="sticky-lg-top" style="top:80px">
+                  <h5>Softwares :</h5>
+                  <small>
+                  <ul class="">
+                    <li>
+                      <i class=""></i>
+                      <a href="https://freefem.org/" alt="FreeFem">FreeFem</a>
+                    </li>
+                    <li>
+                      <i class=""></i>
+                      <a class="link-primary" href="https://www.ljll.math.upmc.fr/frey/software.html" alt="Medit">
+                        Medit
+                      </a>
+                    </li>
+                  </ul>
+                </small>
+                
+                <h5>Repositories :</h5>
+                <small>
+                  <ul class="fa-ul">
+                    <li>
+                      <i class="fa-li bi bi-github"></i>
+                      <a class="link-primary" href="https://github.com/EloiMartinet/IsoperimetricPhaseField" alt="Isoperimetric">IsoperimetricPhaseField</a>
+                    </li>
+                  </ul>
+                </small>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <br />
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
