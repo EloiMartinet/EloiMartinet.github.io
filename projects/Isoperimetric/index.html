@@ -61,60 +61,58 @@
               <p>
                 The isoperimetric inequality is the most emblematic problem in shape optimization. It reads as follows :
                 <blockquote class="blockquote text-center">
-                  <p class="mx-5"><q>Among all the shapes of a given area, what is the shape that minimizes the perimeter ?</q></p>
-                  <footer class="blockquote-footer">Someone a long, long time ago (probably)</footer>
+                  <p class="mx-5"><q>Among all the shapes of a given area, what is the shape that minimizes its perimeter ?</q></p>
+                  <footer class="blockquote-footer">Someone a long, long time ago</footer>
                 </blockquote>
-                The answer is know from a long time to be the circle. However, it needed a few millenia to give a rigorous proof. 
+                The answer is know from a long time to be the circle. However, it needed a few millenia for the mathematicians to give a rigorous proof. 
                 A nice overview of the isoperimetric problem, written by Mark Ashbaugh,
                 can be found <a href="http://www.fis.puc.cl/~rbenguri/117eng.pdf">here</a>. Some proofs and insight must be found in the 
                 <a href="https://mathproblems123.wordpress.com/?s=isoperimetric">blog</a> of Beniamin Bogosel. I assume here that you are a bit familliar to this problem.
               </p>
               <p>
                 In this article, I want to provide a simple code written exclusively in <a href="https://freefem.org/" alt="FreeFem">FreeFem</a> in order to illustrate the 
-                isoperimetric problem and the use of the so-called <i>phase field</i> method. Let first state the problem that we consider : let $D \subset \mathbb{R}^n$ be a "working domain". 
-                Our problem is to find $\Omega \subset\subset D$ which is solution to the problem 
+                isoperimetric problem and the use of the so-called <i>phase field</i> method. Let first clearly state the problem : let $D \subset \mathbb{R}^n$ be a "working domain", here the open unit hypercube. 
+                We want to find $\Omega \subset\subset D$ (compact inclusion) which is solution to the problem 
                 $$
                   \min_{Vol(\Omega)=m}{Per(\Omega)}
                 $$
-                with $m > 0$. The phase field method consists in replacing a set $\Omega \subset \subset D \subset \mathbb{R}^n$ with a 
-                function $u: D \to \mathbb{R}$. The right space of function to consider is the space of <i>functions of bounded variations</i>, noted 
-                $BV(D)$, consisting of $L^1$ function for which the weak derivative is a Radon measure. It can be seen roughly as functions that are piecewise $H^1$. 
-                An instersting thing about this space is that we can define the <i>total variation</i> of the function $u$ as 
+                with $m > 0$. Remark that the set $\Omega$ can equivalently be represented by its characteristic function $\chi_\Omega$. The phase field method consists in replacing such domains $\Omega$ with functions $u: D \to \mathbb{R}$ that can takes other values than $0$ and $1$. Hence the space of functions to consider still need to contain characteristic functions of smooth enough domains. One natural space to consider is the space of <i>functions of bounded variations</i>, noted 
+                $BV(D)$, consisting of $L^1$ function for which the weak derivative is a Radon measure. It can be seen roughly as functions that are piecewise $H^1$. While quite complicated, it presents nice propreties of compacity which allows to use standard methods of calculus of variations. An instersting thing about this space is that we can define the <i>total variation</i> of the function $u$ as 
                 $$
                   |Du|(D) = \sup\left\{\int_D u \operatorname{div} \phi : \phi \in C^1_c(D, \mathbb{R}^n), \|\phi\|_\infty \leq 1\right\}
                 $$
-                and it turns out that of $\Omega$ has a smooth enough boundary, we have 
+                and it turns out that if $u=\chi_\Omega$ where $\Omega$ has a smooth enough boundary, we have 
                 $$
-                  |D\chi_\Omega|(D) = Per(\Omega)
+                  |D\chi_\Omega|(D) = Per(\Omega).
                 $$
-                where $\chi_\Omega$ is the characteristic function of $\Omega$. 
               </p>
 
               <p>
-                Why is it useful tho ? In fact, we have seen a way to generalise the nothing of perimeter of a shape into the notion of <i>total variation</i> of a function. In shape optimization,
-                it is often fruitful (and sometimes inevitable) to reformulate the original optimization problem in a broader sense. This is for instance the case for the homogenization method in 
-                conductivity or elasticity, or the porous media approach in fluid mechanics. Our new problem is now the following : find $u\in BV(D)$ such that 
+                Why is it useful tho ? In fact, we just generalized the notion of perimeter of a shape into the notion of <i>total variation</i> of a function. In shape optimization,
+                it is often fruitful (and sometimes inevitable) to reformulate the original optimization problem in a broader sense. This is for instance the case for the homogenization method in conductivity or elasticity, or the porous media approach in fluid mechanics. 
+              </p>
+              <p>  
+                Our new problem is now the following : find $u\in BV(D)$ such that 
                 $$
                   \min_{\int_D u=m}{|Du(D)|}.
                 $$
-                As interesting as it is from a conceptual point of view (this reformulation allows notably to hadle the complex question of the
+                As interesting as it is from a conceptual point of view (this reformulation allows notably to handle the complex question of the
                 <a href="https://mathproblems123.wordpress.com/2011/11/05/existence-result-for-the-isoperimetric-problems/#more-2124" alt="existence">existence of an optimal isoperimetric set</a>), it can not be 
-                handle numerically as it as long as we don't know how to approximate the $BV$ space by finite-dimensionnal spaces. This is where the <i>Modica-Mortola</i> functionnal comes into play :
-                define 
+                treated numerically as it as long as we don't know how to approximate the $BV$ space by finite-dimensionnal spaces. This is where the <i>Modica-Mortola</i> functionnal comes into play. Define 
                 $$
                   F_\varepsilon(u) = \begin{cases} 
                    \int_D  \varepsilon |\nabla u|^2 + \frac 1 \varepsilon u^2(1-u)^2 \mbox{ if } u \in H^1(D), \int_D u = m \\
                   +\infty \mbox{ otherwise }
                   \end{cases}
                 $$
-                then by defining 
+                and 
                 $$
                   F(u) = \begin{cases} 
                     Per(\Omega) \mbox{ if } u \in BV(D,\{0,1\}), \Omega = u^{-1}(1), Vol(\Omega)=m \\
                     +\infty \mbox{ otherwise }
-                \end{cases}
+                \end{cases}.
                 $$
-                we have that 
+                Then the following convergence holds
                 $$
                   F_\varepsilon \xrightarrow[\varepsilon \to 0]{\Gamma} F
                 $$
@@ -127,7 +125,7 @@
                 $$
                   \min_{\int_D u=m}{\int_D  \varepsilon |\nabla u|^2 + \frac 1 \varepsilon u^2(1-u)^2}.
                 $$
-                Now that our space is $H^1$, we can use finite element discretization and approximate $H^1(D)$ with a finite-dimensional $V_h = \langle \psi_1,...,\psi_n \rangle$. If 
+                Now that our function space is $H^1(D)$, we can use finite element discretization to approximate it with a finite-dimensional space $V_h = Span(\psi_1,...,\psi_n)$ where the $(\psi_i)_i$ are basis functions. If 
                 $\bar{u} = (u_1,...,u_n)$ designates the components of $u = \sum u_i \psi_i$, the problem is now a finite-dimensional optimization problem in $\mathbb{R}^n$ under an equality constraint.
                 In order to make the code as easy as possible, we will transform our problem a bit further in order to consider an unconstraited optimization problem by replacing the volume constraint 
                 by a penalization. It reads as follows :
@@ -155,7 +153,7 @@
 
               <p>
                 The code is given in <a href="https://github.com/EloiMartinet/IsoperimetricPhaseField">this repository</a>. Clone it on your computer and then run 
-                <br><kbd>FreeFem++ isoperimetric.edp</kbd><br>
+                <br><kbd class="m-2">> FreeFem++ isoperimetric.edp</kbd><br>
                 to launch the simulation. You will need <a href="https://www.ljll.math.upmc.fr/frey/software.html">MEDIT</a> in order to vizualize the results in the res/ folder.
                 Alternatively, you can replace the medit call in the code by the FreeFem <a href="https://doc.freefem.org/documentation/visualization.html#plot">plot</a> function. 
 
@@ -169,12 +167,12 @@ varf dPer(v,w) = int2d(Th)( 2*eps*(dx(u)*dx(w)+dy(u)*dy(w))
 gradPer[] = dPer(0, Vh);</samp></pre>
                 </div>
                 
-                One minor point is the fact that if the objective function $J$ decreases, then the step size is increased by a factor of $1.1$. If it increases,
-                the phase field function $u$ isn't updated and the step size is multiplied by $0.6$. This is some basic line search procedure.
+                One minor implementation point is the fact that if the objective function $J$ decreases, then the step size is increased by a factor of $1.1$. If it increases,
+                the phase field function $u$ isn't updated and the step size is multiplied by $0.6$. This can be consider as some basic line search procedure.
                 
-                Also note that as the time passes, the convergence to a disk seems to become slower and slower. This is a well-know behaviour to a closely
+                Also note that as the time passes, for small $\varepsilon$, the convergence to a disk seems to become slower and slower. This is a well-know behaviour to a closely
                 related equation, namely the <i>Allen-Cahn</i> reaction-diffusion equation. You can find a <a href="https://www.youtube.com/watch?v=WahPHP4THrE&list=PLAZp3rbgWLo3X0WkOMfXgtKmhBxskOeWa&index=3">
-                video by Nils Berglund</a> where the time accelerates as the number of iterations steps increases. In our case, it may need a lot of iterations to get close to a disc.
+                nice video by Nils Berglund</a> where the time accelerates as the number of iterations steps increases. In our case, it may need a lot of iterations to get close to a disc.
               </p>
 
               <p>
@@ -186,12 +184,23 @@ gradPer[] = dPer(0, Vh);</samp></pre>
                 </div>
                 At least I hope so. As you can see the convergence becomes reeeeeaaaaaallyyyyy slow.
                 <br>Don't hesitate to play with the parameters (mesh size, epsilon, step size etc). If you use MEDIT for vizualization, you can produce the previous type of video by executing 
-                <br><kbd>medit res/step -a 0 1000</kbd><br>
+                <br><kbd class="m-2">> medit res/step -a 0 1000</kbd><br>
                 then right click on the medit window > Toggle ImSave then Play Sequence. It will create a sequence of images in the res/ folder that you can concatenated into 
                 a video by executing 
-                <br><kbd>sh video.sh</kbd><br>
+                <br><kbd class="m-2">> sh video.sh</kbd><br>
                 (you will need ffmpeg).
               </p>
+
+              <p>
+                Finally, by starting with a large $\varepsilon$ and making it go smaller and smaller each time the optimization has converged, we can approximate the isoperimetric problem. This should look like the following animation :
+                <div class="container px-5">
+                  <video width="100%" height="auto" class="border" autoplay loop controls>
+                    <source src="phase_field_1-converted.mp4" type="video/mp4">
+                  </video>
+                </div>
+                Once again, don't hesitate to contact me if you have any question/issue/remark with this simulation!
+              </p>
+
             </div>
 
 
