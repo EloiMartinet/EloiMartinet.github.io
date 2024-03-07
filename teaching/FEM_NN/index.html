@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/14273d579a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- My own stylesheets -->
+    <link rel="stylesheet" href="../../css/math.css">
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="../../index.html">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#projects">Projects</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+      <section id="article" style="margin-top:80px;"><!-- on fait une marge de la hauteur de la navbar -->
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-7">
+              
+
+              <h2 class="m-2 text-center">Numerical Methods for Partial Differential Equations : from
+                Finite Element Method to Neural Networks</h2>
+
+              <figure class="figure">
+                <img src="https://fenicsproject.org/pub/tutorial/sphinx1/_images/navier_stokes_cylinder_velocity.png" class="figure-img img-fluid rounded" alt="Fluid simulation"/>
+                <figcaption class="figure-caption text-center">Simulation of a fluid around a sphere using <a href="https://fenicsproject.org/pub/tutorial/sphinx1/._ftut1004.html">Fenics</a>.</figcaption>
+              </figure>
+
+              <p>In the vast majority of theoretical and real-world applications, the solution to a partial differential equation can not
+                be computed analytically. The aim of this course is to explore two methods allowing
+                to compute approximate solutions. The first, ”traditional” one, is the Finite Element
+                Method. The second one makes use of the recent developments in Deep Learning leading
+                to the so called ”Physics Informed Neural Networks”. In a first part, we will study the fundamental tools needed to solves elliptic partial differential equations, such as weak derivatives and Sobolev spaces. We will show how to approximate PDEs using basic finite elements tools. In the second part, we present the definition of au Neural Network and derive the proof of the so-called "Universal Approximation Theorem". Using backpropagation, we show how a network can be trained to solve some partial differential equations.
+              </p>
+
+              <p>This course will be given as an Arbeitsgemeinschaft (working group) in the University of Würzburg during the summer semester of 2024. This page will provide all the necessary resources for the students and more!</p>
+
+
+              <!--          OVERVIEW              -->
+              <h3 class="mt-5 text-center">Overview of the course</h3>
+
+              <h4 class="mx-2 mt-4">1. Finite Element Method</h4>
+
+              <h5 class="mx-4 mt-4">1.1. Introduction to the variational formulation</h5>
+              
+              <p>Consider the prototypal Poisson equation 
+              \begin{equation}
+                  \begin{cases}
+                      - \Delta u = f &\mbox{ in } \Omega \\
+                      u = 0 & \mbox{ on } \partial \Omega
+                  \end{cases}    
+              \end{equation}
+              on a domain $\Omega$. Using Stokes formula (that we will recall), we can show that $u \in C^2$ is a solution of this equation if and only if it verifies
+              $$
+                  \int_\Omega \nabla u \cdot \nabla v = \int_\Omega fv
+              $$
+              for all $v\in C^1$ such that $v=0$ in $\partial \Omega$. This motivates the introduction of the Lax-Milgram theorem, an abstract framework to prove the existence and uniqueness of solutions of such problems.</p>
+
+              <p>However, the theorem can not be applied in $C^n$ function spaces since it is not complete for the natural scalar product, making necessary to generalize the meaning of the Poisson equation to the so-called <it>Sobolev spaces</it>.</p>
+
+
+              <h5 class="mx-4 mt-4">1.2. A short introduction to Sobolev spaces: the case of $H^1$</h5>
+
+              <p>After a quick reminder of the $L^2$ space, we introduce the notion of <it>weak derivatives</it>. This allows to define the Sobolev space $H^1$ of square-integrable weakly differentiable functions, which can be proved to be an Hilbert space. While the structure of Hilbert space is amazingly useful, the functions of this space might not even be continous anymore. This will add further difficulties, like defining the notion of trace of an $H^1$ function on $\partial \Omega$ to make sense of the boundary conditions.</p>
+
+              <p>We then proceed to study canonical examples, such as the Poisson equation with various boundary conditions and other <it>elliptic</it> PDEs. We will show that often, the solutions to such problems can be seen as the minimizers of a certain energy.</p>
+
+
+              <h5 class="mx-4 mt-4">1.3. The Finite Element Method</h5>
+
+              <p>Solving a PDE algorithmically requires to approximate it by a problem of finite dimension. The most elementary way to do so may be the finite differences method, which amounts at discretizing the domain $\Omega$. The Finite Element Method consists in another approach, namely discretizing the Sobolev space $H^1(\Omega)$ (which, in turn, need to mesh $\Omega$). We will detail the principle of internal approximation of a variationnal problem. Then we proceed to explain the principles of the FEM, first for $P_1$ elements in $1$D, writing explicitly the mass and rigidity matrix corresponding to the Poisson problem. We then generalize to $n$D, with triangular meshes.</p>
+
+              <p>At last, we will use the theoretical knowledge of the previous sections to numerically approximate otherwise unsolvable problems. We will use <a href="https://doc.freefem.org/introduction/index.html">FreeFEM++</a>, a language and framework which allows to solve a variationnal formulation in an easy an transparent way.</p>
+
+
+              <h4 class="mx-2 mt-4">2. Neural Networks for PDEs</h4>
+              
+              <figure class="figure px-5">
+                <img src="https://editor.analyticsvidhya.com/uploads/30940indiaai1.png" class="figure-img img-fluid rounded" alt="Neural Network"/>
+                <figcaption class="figure-caption text-center">The mandatory eye-catching representation of a Neural Network you have to put on every serious article on Machine Learning.</figcaption>
+              </figure>
+
+              <h5 class="mx-4 mt-4">2.1. A brief introduction to Neural Networks</h5>
+
+              <p>We provide a brief overview of Deep Learning and its uses (supervised, unsupervised, reinforcement, generative, regression, classification). We define the notion of a dense neural network and state and prove the Universal Approximation Theorem, which state that every function can be approximated by a NN. </p>
+              
+              <p>Introducing the concept of loss function, gradient descent and backpropagation, the training of a NN is then tackled.</p>
+
+              <h5 class="mx-4 mt-4">2.2. Using Neural Networks as PDE solvers</h5>
+
+              <p>Through FEM, we have seen a precise and elegant way to approximate the solution of a PDE. Using approximation capabilities of NNs, we see how to solve complex PDEs using little to no data. We will discuss the recent developpements in the field, such as :
+                <ul>
+                  <li>Physics Informed Neural Networks (PINNs) [1]</li>
+                  <li>Deep Ritz Method (DRM) [2]</li>
+                  <li>Variational PINNs (vPINNs) [3]</li>
+                  <li>Weak Adversarial Neural Networks (wANN) [4]</li>
+                  <li>Deep Operator Networks (DeepONets) [5]</li>
+                </ul>
+              among others.</p>
+
+              <p>Using PyTorch, we will see how fast and easy it is to solve classical PDEs on an example.</p>
+
+            <!----------------PROJECT ------------------->
+            <h3 class="mt-5 text-center "><span class="bi bi-stars"></span> Project <span class="bi bi-stars"></span></h3>
+
+
+            <p class="mt-2">The course will end with a project, by groups of 2-3 students. While the subject is pretty free, the students will have to implement at least one simulation using FEM or NN. It will be possible to treat the chosen subject from a more theoretical or numerical point of view, depending on the taste of each student.</p>
+
+            <p>While the subject is free, I give here some ideas of possible projects (some of which may be difficult...):
+              <ul>
+                <li>Classical time-dependant equations (heat, wave, Schrödinger...)</li>
+                <li>Some non-linear problems (<a href="https://doc.freefem.org/tutorials/navierStokesNewton.html" alt="Navier Stokes">steady Navier-Stokes equation</a>...) </li>
+                <li><a href="https://arxiv.org/abs/2302.04107" alt="Can Physics-Informed Neural Networks beat the Finite Element Method?">Comparing the efficiency</a> of FEM and NNs on simple examples</li>
+                <li>Parametric optimization (<a href="https://membres-ljk.imag.fr/Charles.Dapogny/coursoptim.html" alt="Charles Dapogny web site">optimization of elastic structures</a>, <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/fld.426" alt="Optimal profile Stokes flow">optimal profile of an obstacle in a Stokes flow</a>...) </li>
+                <li>Eigenvalue simulation (<a href="https://www.youtube.com/watch?v=bkJZbyrfx-Q&list=PLv1_edDhmIL0GnBRq9d1v-iuDCVKShInn" alt="Can we hear the shape of a drum ?">can we hear the shape of a drum</a>, <a href="https://www.youtube.com/watch?v=d4F8BuPyqUM" alt="schrodinger">eigenstates of the Shrödinger operator</a>, vibrating structures...) </li>
+                <li>Reaction-diffusion systems (<a href="https://pmneila.github.io/jsexp/grayscott/" alt="Gray-Scott">Gray-Scott model</a>, <a href="https://www.youtube.com/watch?v=t1swj0QJUTw" alt="Allen-Cahn">Allen-Cahn equation</a>...)</li>
+              </ul>
+            </p>
+
+            <figure class="play p-5">
+              <img src="./cantilever.gif" class="figure-img img-fluid rounded" alt="Cantilever optimization"/>
+              <figcaption class="figure-caption text-center">Topology optimization of a cantilever using the SIMP method <a href="https://membres-ljk.imag.fr/Charles.Dapogny/coursoptim.html">(source)</a>.</figcaption>
+            </figure>
+
+            </div>
+
+
+            <!--       REFERENCES         -->
+            <div class="offset-lg-1 col-lg-4">
+                <div class="sticky-lg-top" style="top:80px">
+
+                  <h5>Companion books/notes:</h5>
+                  <small>
+                  <ul class="fa-ul">
+                    <li>
+                      <i class="fa-li bi bi-book"></i>
+                      <a class="link-primary" href="https://global.oup.com/academic/product/numerical-analysis-and-optimization-9780199205219?cc=de&lang=en&" alt="Numerical Analysis and Optimization">
+                        Numerical Analysis and Optimization
+                      </a>,<br />
+                      <strong>G. ALLAIRE</strong>.
+                    </li>
+
+                    <li>
+                      <i class="fa-li bi bi-book"></i>
+                      <a class="link-primary" href="https://59clc.files.wordpress.com/2011/01/real-and-complex-analysis.pdf" alt="Real and Complex Analysis">Real and Complex Analysis</a>,<br />
+                      <strong>W. RUDIN</strong>.
+                    </li>
+
+                    <li>
+                      <i class="fa-li bi bi-file-earmark-pdf"></i>
+                      <a class="link-primary" href="http://math.uchicago.edu/~may/REU2018/REUPapers/Guilhoto.pdf" alt="An Overview Of Artificial Neural Networks for Mathematicians">An Overview Of Artificial Neural Networks for Mathematicians</a>,<br />
+                      <strong>L. FERREIRA GUILHOTO</strong>.
+                    </li>
+
+                  </ul>
+                </small>
+
+                <h5>References :</h5>
+                <small>
+                  <ul class="fa-ul">
+                    <li style="list-style-type: '[1] '">
+                      <a class="link-primary" href="https://www.sciencedirect.com/science/article/abs/pii/S0021999118307125" alt="Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations">Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations</a>
+                      (2019),
+                      <strong>RAISSI</strong>, <strong>PERDIKARIS</strong> and <strong>KARNIADAKIS</strong>,<br>
+                      <small class="text-muted">Journal of Computational Physics.</small>
+                    </li>
+
+                    <li style="list-style-type: '[2] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1710.00211" alt="The Deep Ritz Method: A Deep Learning-Based Numerical Algorithm for Solving Variational Problems">The Deep Ritz Method: A Deep Learning-Based Numerical Algorithm for Solving Variational Problems</a>
+                      (2018),
+                      <strong>WEINANG E</strong> and <strong>BING YU</strong>,<br>
+                      <small class="text-muted">Communications in Mathematics and Statistics.</small>
+                    </li>
+
+                    <li style="list-style-type: '[3] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1912.00873" alt="Variational Physics-Informed Neural Networks For Solving Partial Differential Equations">Variational Physics-Informed Neural Networks For Solving Partial Differential Equations</a>
+                      (2019),
+                      <strong>KHARAZMI</strong>, <strong>ZHANG</strong> and <strong>KARNIADAKIS</strong>,<br>
+                      <small class="text-muted">ArXiv.</small>
+                    </li>
+
+                    <li style="list-style-type: '[4] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1907.08272" alt="Weak Adversarial Networks for High-dimensional Partial Differential Equations">Weak Adversarial Networks for High-dimensional Partial Differential Equations</a>
+                      (2019),
+                      <strong>ZANG</strong>, <strong>BAO</strong>, <strong>YE</strong> and <strong>ZHOU</strong>,<br>
+                      <small class="text-muted">Journal of Computational Physics.</small>
+                    </li>
+
+                    <li style="list-style-type: '[5] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1910.03193" alt="DeepONet: Learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators">DeepONet: Learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators</a>
+                      (2020),
+                      <strong>LU</strong>, <strong>JIN</strong> and <strong>KARNIADAKIS</strong>,<br>
+                      <small class="text-muted">Nature Machine Intelligence</small>.
+                    </li>
+                  </ul>
+                </small>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <br />
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
