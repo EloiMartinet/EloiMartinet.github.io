@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="../../index.html">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#projects">Projects</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#teaching">Teaching</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="article" style="margin-top:80px;"><!-- on fait une marge de la hauteur de la navbar -->
+        <div class="container">
+          <div class="row">
+            <div class="offset-md-0 col-md-7">
+                <h3>Level set method</h3>
+                <p>The level set method, widely used in shape optimization, consists in representing a shape $\Omega \subset D$ by a function $\phi$ which satisfies
+                $$
+                    \begin{cases}
+                         \phi(x) < 0 & x \in \Omega, \\
+                         \phi(x) = 0 & x \in \partial \Omega, \\
+                         \phi(x) > 0 & x \in D \setminus \bar{\Omega}, \\
+                     \end{cases}
+                $$
+                where $D$ is some "working domain" containing all possible shapes of interest. The main advantage of this method lies in its capacity to handle topological changes, contrary to geometric shape optimization approaches based on mesh deformation.
+                </p>
+                <p>Usually, the level set function is discretized as a piecewise linear function on a fixed mesh of the working domain $D$. However, this comes with certains shortcomings. For instance, the level of details of the shape is fixed in advance by the mesh of $D$, and it is necessary to approximate certain geometric quantity of interest, like the mean curvature of the boundary. Moreover, the fact that the domain $\Omega$ is not explicitly meshed makes necessary the use of some <italic>ersatz material</italic> on $D \setminus \Omega$ to solve the PDE associated to the shape optimization problem, for which the formulation might not be straightforward. Finally, some geometric constraints like convexity is not straightforward to take into account with this representation of the shape.</p> 
+
+            <br>
+                <h3>Neural Network parametrization</h3>
+
+                <p>One way to overcome some of the previous issues is to represent the level set function as a Neural Network $\phi_\theta$, where $\theta$ represents the parameters of the nework. This simple representation has several advantages.</p>
+
+                <h4>Computation of local quantities</h4>
+
+                <p>One of the main advantages of this representation is the easy and accurate computation of geometric quantities using automatic differentiation. For instance, the extended normal vector field $n_\Omega$ of $\partial \Omega$ is given by
+                $$
+                    n_\Omega(x) := \frac{\nabla \phi_\theta(x)}{|\nabla \phi_\theta(x)|}
+                $$
+                for all $x \in D$ with $\nabla\phi_\theta(x)\neq 0$, which can be automatically computed using backpropagation. The mean curvature, which appears for instance in the shape derivative of the perimeter functional, can be computed as
+                $$
+                    \kappa_\Omega(x) = \text{div} n_\Omega(x)  = \text{div} \left(\frac{\nabla \phi_\theta(x)}{|\nabla \phi_\theta(x)|}\right).
+                $$</p>
+
+                <h4>Computation of global quantities</h4>
+
+                <p>Using a Monte Carlo approach we approximate integral quantities like the volume $\text{Vol}(\Omega)$ and the perimeter 
+                $$
+                    \text{Per}(\Omega) := \int_{\partial \Omega} n_\Omega \cdot n_\Omega ds = \int_{\Omega} \text{div} n_\Omega d x = \int_{\Omega} \kappa_\Omega dx
+                $$
+                based on i.i.d. random variables $\{x_i\}_{1\leq i \leq N}$, distributed uniformly in $D$, as
+                $$
+                    \text{Vol}(\Omega) \approx \frac{1}{N} \sum_{i=1}^N  1_{\{\phi_\theta < 0\}}(x_i) \quad \mbox{and} \quad \text{Per}(\Omega)  \approx \frac{1}{N} \sum_{i=1}^N  1_{\{\phi_\theta < 0\}}(x_i) \kappa_\Omega(x_i).
+                $$
+                </p>
+                <p>Since Monte-Carlo doesn't suffer from the curse of dimensionality, this approach could be useful in high-dimensional shape optimization.</p>
+
+                <h4>Convexity constraint</h4>
+
+                <p>Theoretical shape optimization often deals with optimization in the class of convex sets. Being able to perform convex shape optimization numerically allows to provide powerful experimental conjectures. In our framework, we can "force" the convexity constraint in the architecture of the network: for $\sigma : \mathbb{R} \to \mathbb{R}$ we consider the following 1-layer neural network:
+                \begin{equation}
+                    \label{eq:convex_ls}
+                    \phi_\theta(x) := W_2 \sigma(W_1x+b_1) + b_2.
+                \end{equation}
+                If $\sigma$ is convex and all entries of $W_2$ are non-negative, then $\phi_\theta : \mathbb{R}^d \to \mathbb{R}$ is a convex function and the shape $\Omega := \{\phi_\theta < 0\}$ is convex.</p>
+            
+            <br>
+            <h3>Numerical results</h3>
+
+            <p>Using the previously described approach, we are interested in the shape optimization problem
+            $$
+                \max_{\text{Vol}(\Omega)=1}  \mu_k(\Omega)
+            $$
+            where $\mu_k(\Omega)$ is the $k$-th eigenvalue of the Neumann eigenvalue problem 
+            $$
+                \begin{cases}
+                    -\Delta u = \mu_k(\Omega) u &\mbox { in } \Omega,\\
+                    \frac{\partial u}{\partial n} = 0  &\mbox { on } \partial \Omega.
+                \end{cases}
+            $$
+            The choice of this particular problem is motivated by the graph-based PDE solver that we used, for which the previous problem is the natural continuous counterpart. More details can be found <a href="../graph_pde/index.html">here</a> and in the companion article.</p>
+
+            <h4>2D results</h4>
+            
+            <p>We present the results of the method in 2D. We plot the level set function $\phi_\theta$, where the thick black line represents the $0$ level set (the shape). From left to right, we have: the initial level set, and the optimized shapes for $\mu_1, \mu_2$ and $\mu_3$.</p>
+            
+
+            <div class="container mt-3">
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <img src="init_2d.png" class="img-fluid" alt="mu_1_2.0" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_1_2d.png" class="img-fluid" alt="mu_1_4.98" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_2_2d.png" class="img-fluid" alt="mu_1_8.05" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <img src="mu_3_2d.png" class="img-fluid" alt="mu_1_11.2" />
+                  </div>
+                </div>
+            </div>
+            <br>
+
+            <h4>3D results</h4>
+            
+            <p>We represent the convergence of the method for the optimization of $\mu_1, \mu_2$ and $\mu_3$. Only the $0$ level set is plotted.</p>
+
+            <div class="container">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                    <video width="100%" height="auto" class="rounded border" autoplay muted loop controls>
+                        <source src="mu_1_3d.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="col-md-6">
+                    <video width="100%" height="auto" class="rounded border" autoplay muted loop controls>
+                        <source src="mu_2_3d.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-6">
+                    <video width="100%" height="auto" class="rounded border" autoplay muted loop controls>
+                        <source src="mu_3_3d.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <p>This project was a lot of fun and brought a lot of simple yet nice ideas. I think there is still plenty that can be done using neural networks for the representation of shapes. More information can be found in the companion article.</p>
+            </div>
+
+            <!--       REFERENCES         -->
+            <div class="offset-lg-1 col-lg-4">
+                <div class="sticky-lg-top" style="top:80px">
+
+                  <h5>Companion articles :</h5>
+                  <small>
+                  <ul class="fa-ul">
+                    <li>
+                      <i class="fa-li bi bi-file-earmark"></i>
+                      <a class="link-primary" href="https://arxiv.org/abs/2502.14821" alt="Meshless Shape Optimization using Neural Networks and Partial Differential Equations on Graphs">
+                        Meshless Shape Optimization using Neural Networks and Partial Differential Equations on Graphs
+                      </a>
+                      (2025),<br />
+                      with <strong>L. BUNGERT</strong> ,<br>
+                        <small class="text-muted">Scale Space and Variational Methods in Computer Vision.</small>
+                    </li>
+                  </ul>
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <br />
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Webpage of Eloi Martinet</title>
     <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/14273d579a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Bootstrap icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <!-- To use MathJAX -->
     <script type="text/x-mathjax-config">
@@ -58,9 +60,15 @@
               <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="1" aria-label="Slide 2"></button>
               <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="2" aria-label="Slide 3"></button>
               <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="3" aria-label="Slide 4"></button>
+              <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="4" aria-label="Slide 5"></button>
             </div>
             <div class="carousel-inner vh-100">
                 <div class="carousel-item active">
+                    <div class="d-flex justify-content-center vw-100 vh-100 bg-dark">
+                      <img src="img/frontpage_carousel/graph.png" class="w-100 h-100 object-fit-cover" alt="Coucou 1">
+                    </div>
+                  </div>
+                <div class="carousel-item">
                   <div class="d-flex justify-content-end vw-100 vh-100 bg-primary">
                     <img src="img/frontpage_carousel/torus_density.png" class="d-flex vh-100" alt="Coucou 1">
                   </div>
@@ -119,7 +127,6 @@
               <p>
                 You can download my CV <a href="CV.pdf" alt="CV">here</a>.
               </p>
-              <div class="row">
 
                 <div class="col">
                   <h4>Education</h4>
@@ -129,6 +136,7 @@
                         Postdoc in Variational Methods in Machine Learning.<br />
                         <span class="fw-light text-light">JMU (Würzburg, Germany)</span>
                     </li>
+                    <li>
                       <i class="fa-li fas fa-graduation-cap"></i>
                           PhD in Spectral Shape Optimization, 2019-2023 <br />
                           <span class="fw-light text-light">LAMA (Chambéry), LJK (Grenoble)</span>
@@ -145,7 +153,6 @@
                         </div>
                       </li>
                     </ul>
-                </div>
               </div>
 
               <div class="offset-1 col-10 offset-1 col-md-3  offset-md-1">
@@ -173,15 +180,22 @@
                 <h4>Research interests</h4>
                   <ul> 
                     <li>Shape and topology optimization</li>
-                    <li>Numerical methods</li>
+                    <li>Numerical methods for PDEs</li>
                     <li>Level set method</li>
-                    <li>Machine Learning</li>
+                    <li>Neural Networks</li>
+                    <li>Graph-based Machine Learning</li>
                   </ul>
               </div>
 
               <div class="col-12 col-md-7 offset-md-1">
                 <h4>Teaching</h4>
                   <ul>
+                    <li>2025 : Lab of Machine Learning,
+                        <span class="fw-light text-light">JMU (Würzburg)</span>                      
+                    </li>
+                    <li>2025 :  <a href="teaching/FEM_NN/index.html">Working Group on FEM and the use of Neural Networks as PDE solver</a>,
+                        <span class="fw-light text-light">JMU (Würzburg)</span>                      
+                      </li>
                     <li>2024-2025 : Lectures and exercise session of Mathematical Foundations of Data Science,
                         <span class="fw-light text-light">JMU (Würzburg)</span>                      
                     </li>
@@ -210,6 +224,8 @@
 
                   <h4>Supervision</h4>
                   <ul>
+                    <li>2025 : Co-supervison of the MSc Internship of Nick Burk with <a href="https://sites.google.com/view/leon-bungert/home">Leon Bungert</a> about <strong>Phase Field on Graphs</strong>.
+                    </li>
                     <li>2024 : Co-supervison of the MSc Internship of Nicolas Roblet with <a href="https://www-fourier.ujf-grenoble.fr/~rjoly/">Romain Joly</a> titled 
                         <strong>Spectrum of unbounded operators and applications to PDEs</strong> (<a href="Report_Roblet.pdf">report</a>).
                     </li>
@@ -236,12 +252,28 @@
               <ul class="fa-ul">
                 <li>
                     <i class="fa-li bi-file-earmark"></i>
+                    <a class="link-primary" href="" alt="Spherical caps do not always maximize Neumann eigenvalues on the sphere">Spherical caps do not always maximize Neumann eigenvalues on the sphere</a>
+                    (2025),<br />
+                    with <strong>D. BUCUR</strong>, <strong>R.S. LAUGESEN</strong> and <strong>M. NAHON</strong>,
+                      <small class="text-muted">Preprint.</small>
+                </li>
+                <hr />
+                <li>
+                    <i class="fa-li fa-solid fa-person-chalkboard"></i>
+                    <a class="link-primary" href="https://arxiv.org/abs/2502.14821" alt="Meshless Shape Optimization using Neural Networks and Partial Differential Equations on Graphs">Meshless Shape Optimization using Neural Networks and Partial Differential Equations on Graphs</a>
+                    (2025),<br />
+                    with <strong>L. BUNGERT</strong>,
+                      <small class="text-muted">Scale Space and Variational Methods in Computer Vision (to appear).</small>
+                </li>
+                <hr />
+                <li>
+                    <i class="fa-li bi-newspaper"></i>
                     <a class="link-primary" href="https://arxiv.org/abs/2208.11413" alt="Sharp inequalities for Neumann eigenvalues on the sphere">Sharp inequalities for Neumann eigenvalues on the sphere</a>
                     (2024),<br />
                     with <strong>D. BUCUR</strong> and <strong>M. NAHON</strong>,
                       <small class="text-muted">Journal of Differential Geometry (to appear).</small>
-                  </li>
-                  <hr />
+                </li>
+                <hr />
                 <li>
                   <i class="fa-li bi-newspaper"></i>
                   <a class="link-primary" href="https://www.sciencedirect.com/science/article/pii/S0021999124002511" alt="Numerical optimization of Neumann eigenvalues of domains in the sphere">
@@ -280,7 +312,7 @@
               <a class="text-decoration-none" href="projects/neumann_density_plane/index.html">
                     <div class="row align-items-center">
                       <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                        <img src="img/index_projects_cards/featured.png" class="img-fluid rounded-start" alt="...">
+                        <img src="img/index_projects_cards/featured.png" class="img-fluid" alt="...">
                       </div>
                       <div class="col-md-10 text-md-end">
                           <h5>Optimization of Neumann eigenvalues in the plane</h5>
@@ -296,11 +328,11 @@
                     <div class="row align-items-center">
 
                       <div class="col-md-10 text-md-start">
-                          <h5>Optimization of Neumann eigenvalues on the sphere</h5>
+                          <h5>Density optimization of Neumann eigenvalues on the sphere</h5>
                           <p class="text-secondary">While the planar case has been investigated theoretically since the 50's, the optimization of Neumann eigenvalues on the sphere is still mysterious. We try to identify numerically some behaviour of the optimal densities.</p>
                       </div>
                       <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                        <img src="img/index_projects_cards/mu_3_8.03.png" class="img-fluid rounded-start" alt="...">
+                        <img src="img/index_projects_cards/mu_3_8.03.png" class="img-fluid" alt="...">
                       </div>
                     </div>
               </a>
@@ -311,14 +343,46 @@
               <a class="text-decoration-none" href="projects/neumann_levelset_surfaces/index.html">
                 <div class="row align-items-center">
                   <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                    <img src="img/index_projects_cards/mu_1_8.0.png" class="img-fluid rounded-start" alt="...">
+                    <img src="img/index_projects_cards/mu_1_8.0.png" class="img-fluid" alt="...">
                   </div>
 
                   <div class="col-md-10 text-md-start">
-                      <h5>Optimization of Neumann eigenvalues on the sphere</h5>
+                      <h5>Level set optimization of Neumann eigenvalues on the sphere</h5>
                       <p class="text-secondary">We perfom an analysis of the shape optimization problem of Neumann eigenvalues for domains on the sphere thanks to the level set method.</p>
                   </div>
                   
+                </div>
+              </a>
+
+              <div class="px-5"><hr /></div>
+
+              <!-- FOURTH CARD -->
+              <a class="text-decoration-none" href="projects/graph_pde/index.html">
+                <div class="row align-items-center">
+
+                  <div class="col-md-10 text-md-start">
+                      <h5>Solving PDEs with Graphs</h5>
+                      <p class="text-secondary">Originally used in the context of unsupervised and semi-supervised learning, the graph laplacian can also be used as as a numerical PDE solver.</p>
+                  </div>
+                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                    <img src="img/index_projects_cards/graph_pde.png" class="img-fluid" alt="...">
+                  </div>
+                </div>
+          </a>
+
+              <div class="px-5"><hr /></div>
+
+              <!-- FIFTH CARD -->
+              <a class="text-decoration-none" href="projects/levelset_nn/index.html">
+                <div class="row align-items-center">
+                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                    <img src="img/index_projects_cards/levelset_nn.png" class="img-fluid" alt="...">
+                  </div>
+
+                  <div class="col-md-10 text-md-start">
+                      <h5>Neural-network-based level set method</h5>
+                      <p class="text-secondary">Parametrizing a level set function with a neural network proved to be useful for overcoming certain burdens of mesh-based level set methods and computing easily common geometric quantities.</p>
+                  </div>
                 </div>
               </a>
             </div>

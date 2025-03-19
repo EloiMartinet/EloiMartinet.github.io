@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- My own stylesheets -->
+    <link rel="stylesheet" href="../../css/math.css">
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="../../index.html">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#projects">Projects</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#teaching">Teaching</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="article" style="margin-top:80px;"><!-- on fait une marge de la hauteur de la navbar -->
+        <div class="container">
+          <div class="row">
+            <div class="offset-md-0 col-md-7">
+                <p>In Machine Learning, graph-based techniques can succesfully deal with tasks like semi-supervised learning or clustering of complex datasets. In the recent years, researchers managed to explain the successes and shortcomings of these approaches by showing that in the limit of infinite data, the graph laplacian actually converges to a weighted laplace operator. Using these results, we can use the graph laplacian as a numerical PDE solver.</p>
+
+                <h3>The Graph Laplacian</h3>
+
+                <p>Let $\Omega\subset \mathbb{R}^d$ and $\mu$ be a probability distribution supported on $\Omega$ with a positive continuous density $\rho $. Suppose that $V^{(n)} = \{x_1,\dots,x_n\}$ are i.i.d. samples of $\mu$ and let $\eta:(0,\infty)\to [0,\infty)$ be a compactly supported and non-increasing kernel.</p>
+            
+                <p>We define the <i>weight matrix</i> $W^{(n)}$ as
+                \begin{equation*}
+                    W_{ij}^{(n)} = \frac{2}{n\sigma_\eta\varepsilon_n^{d+2}} \eta\left( \frac{|x_i - x_j|}{\varepsilon_n} \right),
+                    \qquad 
+                    i,j=1,\dots,n,\,i\neq j,
+                \end{equation*}
+                where $\varepsilon_n>0$ is a scaling parameter and $\sigma_\eta>0$ is a constant depending only on $\eta$ and $d$.
+                
+                <div class="alert alert-primary mx-5">
+                    $W_{ij}^{(n)}$ quantifies how strong is the link between the two vertices $x_i$ and $x_j$. Due to the non-increasing property of $\eta$, the closer two vertices are, the stronger they interact.
+                </div>
+
+                The <i>degree matrix</i> $D^{(n)}$ is defined as the diagonal matrix with entries $D^{(n)}_{ii} = \sum_{i=j}^{(n)} W^{(n)}_{ij}$.</p>
+                <p>The <i>graph Laplacian</i> $L^{(n)}$ is then defined as
+                $$
+                    L^{(n)} := D^{(n)} - W^{(n)}
+                $$
+                As a positive semi-definite symmetric matrix, the graph Laplacian has eigenvalues
+                $$
+                    0 = \lambda_0^{(n)} \leq \lambda_1^{(n)} \leq \dots \leq \lambda_{n-1}^{(n)}.
+                $$</p>
+
+                <p>In the following figure, you can see the set of vertices, the graph built on it and the eigenfunction associated to $\lambda_1^{(n)}$: 
+                    <div class="container mt-3">
+                        <div class="row g-3">
+                          <div class="col-6 col-md-4">
+                            <img src="2.png" class="img-fluid" alt="mu_1" />
+                          </div>
+                          <div class="col-6 col-md-4">
+                            <img src="4.png" class="img-fluid" alt="mu_2" />
+                          </div>
+                          <div class="col-6 col-md-4">
+                            <img src="5.png" class="img-fluid" alt="mu_2" />
+                          </div>
+                        </div>
+                      </div>
+                </p>
+
+                <p>In the context of <i>spectral clustering</i>, the eigenvectors associated to the Graph Laplacian are used to embbed the vertices of the graph into a space where the different clusters are easier to distinguish. Contrary to more straightforward techniques like $k$-means, spectral clustering is able to deal with dataset with complex geometries, as it is illustrated <a href="https://scikit-learn.org/stable/auto_examples/cluster/plot_cluster_comparison.html" alt="scikit-learn">here</a>.</p>
+                
+                <h3>Continuum limit</h3>
+
+                <p>Now, let's imagine that the number of data samples goes to infinity. What is the limit, if it exists, of the eigenvalues of $L^{(n)}$ ?</p>  
+
+                <p>This question was first studied in [1]. Later, researchers managed to give complete proof of convergence along with rates (see for instance [2]). Formally, the results can be stated the following way:
+                    <div class="alert alert-dark theorem mx-5">
+                        For a suitable choice of $\varepsilon_n$, for every $k \in \mathbb{N}$ it holds that
+                        $$
+                            \lim_{n \to \infty}  \lambda_k^{(n)} = \tilde\lambda_k,
+                        $$
+                        where $\tilde \lambda_k$ is the $k^\text{th}$ non-trivial eigenvalue of 
+                        $$
+                            \begin{cases}
+                                -\frac{1}{\rho} \text{div}(\rho^2 \nabla u) = \tilde \lambda_k u &\mbox{ in } \Omega,\\
+                                \partial_n u = 0 &\mbox{ on } \partial \Omega.
+                            \end{cases}
+                        $$
+                      </div>
+                </p>
+
+                <p>Hence, for $n$ large enough, the graph Laplacian approximate the previous weighted Laplacian and hence can be used as a numerical solver for this equation. In particular, when taking a constant $\rho$, we actually compute the usual Neumann eigenvalue problem
+                $$
+                    \begin{cases}
+                        -\Delta u = \mu_k(\Omega) u &\mbox { in } \Omega,\\
+                        \frac{\partial u}{\partial n} = 0  &\mbox { on } \partial \Omega.
+                    \end{cases}
+                $$
+                </p>
+
+                <p>Coupling this graph Laplacian approach with a <a href="../levelset_nn/index.html">network-based level set approach</a>, we managed to provide a fully meshless shape optimization method.</p>
+
+                <p>Note that the graph laplacian do not only allow to solve Neumann eigenvalue problems; it can for instance be used to compute approximate solutions to the Poisson equation, as is shown in the companion article.</p>
+
+              
+              </div>
+
+              <div class="offset-md-1 col-md-4">
+                <div class="sticky-md-top" style="top:80px">
+                  <h5>Companion articles :</h5>
+                  <small>
+                  <ul class="fa-ul">
+                    <li>
+                        <i class="fa-li bi bi-file-earmark"></i>
+                        <a class="link-primary" href="https://arxiv.org/abs/2502.14821" alt="Meshless Shape Optimization using Neural Networks and Partial Differential Equations on Graphs">
+                          Meshless Shape Optimization using Neural Networks and Partial Differential Equations on Graphs
+                        </a>
+                        (2025),<br />
+                        with <strong>L. BUNGERT</strong> ,<br>
+                          <small class="text-muted">Scale Space and Variational Methods in Computer Vision.</small>
+                      </li>
+                  </ul>
+                </small>
+
+                <h5>References :</h5>
+                <small>
+                  <ul class="fa-ul">
+                    <li style="list-style-type: '[1] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/0804.0678"
+                      alt="Consistency of spectral clustering">
+                      Consistency of spectral clustering</a>
+                      (2008),<br />
+                      <strong>U. VON LUXBURG</strong>, <strong>M. BELKIN</strong> and <strong>O. BOUSQUET</strong>,<br>
+                      <small class="text-muted">The Annals of Statistics.</small>
+                    </li>
+
+                    <li style="list-style-type: '[2] '">
+                      <a class="link-primary" href="https://link.springer.com/article/10.1007/s10208-019-09436-w" alt="Error estimates for spectral convergence of the graph Laplacian on random geometric graphs towards the Laplace-Beltrami operator">Error estimates for spectral convergence of the graph Laplacian on random geometric graphs towards the Laplace-Beltrami operator</a>
+                      (2018),<br />
+                      <strong>N. GARCIA TRILLOS</strong>, <strong>M. GERLACH</strong> and <strong>D. SLEPCEV</strong>,<br>
+                      <small class="text-muted">Foundations of Computational Mathematics.</small>
+                    </li>
+                  </ul>
+                </small>
+
+                </div>
+              </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <br />
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
