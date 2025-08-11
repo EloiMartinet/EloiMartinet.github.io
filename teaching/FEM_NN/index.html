@@ -106,7 +106,7 @@
 
               <p>Solving a PDE algorithmically requires to approximate it by a problem of finite dimension. The most elementary way to do so may be the finite differences method, which amounts at discretizing the domain $\Omega$. The Finite Element Method consists in another approach, namely discretizing the Sobolev space $H^1(\Omega)$ (which, in turn, need to mesh $\Omega$). We will detail the principle of internal approximation of a variationnal problem. Then we proceed to explain the principles of the FEM, first for $P_1$ elements in $1$D, writing explicitly the mass and rigidity matrix corresponding to the Poisson problem. We then generalize to $n$D, with triangular meshes.</p>
 
-              <p>At last, we will use the theoretical knowledge of the previous sections to numerically approximate otherwise unsolvable problems. We will use <a href="https://doc.freefem.org/introduction/index.html">FreeFEM++</a>, a language and framework which allows to solve a variationnal formulation in an easy an transparent way.</p>
+              <p>At last, we will use the theoretical knowledge of the previous sections to numerically approximate otherwise unsolvable problems. We will use Fenicsx, a Python FEM framwork.</p>
 
 
               <h4 class="mx-2 mt-4">2. Neural Networks for PDEs</h4>
@@ -153,14 +153,23 @@
               </ul>
             </p>
             <h5 class="mt-2">
-                Examples of previous projects :
+                Examples of previous projects (I warmly thank my students for allowing me to share those):
             </h5>
             <p class="mt-1">
+                <strong>2024:</strong>
                 <ul>
-                    <li>Testing Physics-Informed Neural Networks for the
-                        Solution of Hyperbolic Conservation Laws, <strong>Leon Jacobi</strong> and <strong>Simon Krotsch</strong> 
+                    <li>Testing Physics-Informed Neural Networks for the Solution of Hyperbolic Conservation Laws, <strong>Leon Jacobi</strong> and <strong>Simon Krotsch</strong> 
                         (<a href="Jakobi, Krotsch - Testing Physics-Informed Neural Networks for the Solution of Hyperbolic Conservation Laws.pdf" alt="report">report</a>)
                         (<a href="Codes.zip" alt="code">code</a>)</li>
+                </ul>
+                <strong>2025:</strong>
+                <ul>
+                    <li>On the Numerical Treatment of the Time-Dependent Schrödinger Equation in Two Dimensions, <strong>Lasse Kreimendahl</strong> and <strong>Simon Wenchel</strong> 
+                        (<a href="Kreimendahl_Wenchel.pdf" alt="report">report</a>)
+                        (<a href="https://github.com/SimonW1898/AG_FEM_PINN.git" alt="code">GitHub</a>)</li>
+                    <li>A Comparison of FEM and PINN with Variations of the Stokes Equation, <strong>Christoph Roth</strong> and <strong>Florian Eich</strong> 
+                        (<a href="report_AG_FEM_PINN_Roth_Eich_V2.pdf" alt="report">report</a>)
+                        (<a href="https://github.com/Christoph-98/Comparison-of-FEM-and-PINN" alt="code">GitHub</a>)</li>
                 </ul>
             </p>
             <figure class="play p-5">
@@ -226,7 +235,7 @@
                     <li style="list-style-type: '[2] '">
                       <a class="link-primary" href="https://arxiv.org/abs/1710.00211" alt="The Deep Ritz Method: A Deep Learning-Based Numerical Algorithm for Solving Variational Problems">The Deep Ritz Method: A Deep Learning-Based Numerical Algorithm for Solving Variational Problems</a>
                       (2018),
-                      <strong>WEINANG E</strong> and <strong>BING YU</strong>,<br>
+                      <strong>WEINAN E</strong> and <strong>BING YU</strong>,<br>
                       <small class="text-muted">Communications in Mathematics and Statistics.</small>
                     </li>
 
