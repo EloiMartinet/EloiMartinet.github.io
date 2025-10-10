@@ -1,0 +1,223 @@
+<!-- Nice chatGPT generated utility file. To run, please run
+python3 -m http.server 8000
+and open
+http://localhost:8000/plot_diagram.html?folder=res/shapes
+in the browser -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Media Hover Scatter</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    #plot {
+      width: 90vw;
+      height: 90vh;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="plot"></div>
+
+  <script>
+    // Read folder name from ?folder= query param
+    const params = new URLSearchParams(window.location.search);
+    const folder = params.get("folder") || "res/shapes"; // default fallback
+
+    const csvPath = `${folder}/diagram.csv`;
+
+    fetch(csvPath)
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.text();
+      })
+      .then(text => {
+        const rows = text.trim().split(/\r?\n/).map(r => r.split(','));
+        const header = rows.shift();
+
+        const idxMedia = header.indexOf('img_src');
+        const idxX = header.indexOf('x');
+        const idxY = header.indexOf('y');
+
+        if (idxMedia === -1 || idxX === -1 || idxY === -1) {
+          throw new Error("CSV header must contain: img_src,x,y");
+        }
+
+        const x = [];
+        const y = [];
+        const hoverMedia = [];
+
+        rows.forEach(r => {
+          const xi = parseFloat(r[idxX]);
+          const yi = parseFloat(r[idxY]);
+          if (!isNaN(xi) && !isNaN(yi)) {
+            x.push(xi);
+            y.push(yi);
+
+            let src = r[idxMedia].trim();
+
+            // Prepend folder only if it's a bare filename
+            if (!/^https?:\/\//.test(src) && !src.startsWith("/") && !src.includes("/")) {
+              src = `${folder}/${src}`;
+            }
+
+            hoverMedia.push(src);
+          }
+        });
+
+        if (x.length === 0) {
+          throw new Error("No valid numeric coordinates found in CSV.");
+        }
+
+        // Marker style parameters
+        const defaultMarkerSize = 10;
+        const hoverMarkerSize = 16;
+        const defaultMarkerColor = 'teal';
+        const hoverMarkerColor = 'teal';
+
+        const markerSizes = new Array(x.length).fill(defaultMarkerSize);
+        const markerColors = new Array(x.length).fill(defaultMarkerColor);
+
+        const trace = {
+          x: x,
+          y: y,
+          mode: 'markers',
+          type: 'scatter',
+          customdata: hoverMedia,
+          hoverinfo: 'none',
+          marker: {
+            size: markerSizes,
+            color: markerColors,
+          }
+        };
+
+        const layout = {
+          title: 'Hover to see media',
+          xaxis: { title: 'X' },
+          yaxis: { title: 'Y' },
+          annotations: [],
+          hovermode: 'closest'
+        };
+
+        Plotly.newPlot('plot', [trace], layout);
+
+        const plotDiv = document.getElementById('plot');
+
+        // Create hover media tooltip div
+        const hoverDiv = document.createElement('div');
+        hoverDiv.style.position = 'absolute';
+        hoverDiv.style.pointerEvents = 'none';
+        hoverDiv.style.display = 'none';
+        hoverDiv.style.border = '1px solid black';
+        hoverDiv.style.background = 'white';
+        hoverDiv.style.padding = '5px';
+        hoverDiv.style.zIndex = 1000;
+        hoverDiv.style.textAlign = 'center';
+        hoverDiv.style.fontFamily = 'Arial, sans-serif';
+        hoverDiv.style.fontSize = '12px';
+        hoverDiv.style.color = '#333';
+        document.body.appendChild(hoverDiv);
+
+        let lastHoverIndex = null;
+
+        plotDiv.on('plotly_hover', function(eventData) {
+          const point = eventData.points[0];
+          const src = point.customdata;
+          const idx = point.pointIndex;
+
+          // Highlight hovered marker
+          if (lastHoverIndex !== null && lastHoverIndex !== idx) {
+            markerSizes[lastHoverIndex] = defaultMarkerSize;
+            markerColors[lastHoverIndex] = defaultMarkerColor;
+          }
+          markerSizes[idx] = hoverMarkerSize;
+          markerColors[idx] = hoverMarkerColor;
+          lastHoverIndex = idx;
+
+          Plotly.restyle(plotDiv, {
+            'marker.size': [markerSizes],
+            'marker.color': [markerColors]
+          });
+
+          const filename = src.split('/').pop();
+          const lower = filename.toLowerCase();
+
+          // Decide whether it's an image or video
+          let mediaHTML = "";
+          if (/\.(png|jpg|jpeg|gif|webp)$/i.test(lower)) {
+            mediaHTML = `<img src="${src}" 
+                           style="max-width:200px; max-height:200px; display:block; margin-bottom:4px;">`;
+          } else if (/\.(mp4|webm|ogg)$/i.test(lower)) {
+            mediaHTML = `<video src="${src}" autoplay muted loop 
+                           style="max-width:200px; max-height:200px; display:block; margin-bottom:4px;"></video>`;
+          } else {
+            mediaHTML = `<div style="color:red">Unsupported file: ${filename}</div>`;
+          }
+
+          hoverDiv.innerHTML = `${mediaHTML}`;
+          hoverDiv.style.display = 'block';
+
+          // Position tooltip near cursor
+          const x = eventData.event.clientX;
+          const y = eventData.event.clientY;
+          hoverDiv.style.left = (x + 15) + 'px';
+          hoverDiv.style.top = (y + 15) + 'px';
+
+          // Show annotations for x and y
+          const update = {
+            annotations: [
+              {
+                x: point.x,
+                yref: 'paper',
+                y: 0,
+                xanchor: 'center',
+                yanchor: 'top',
+                text: `x: ${point.x}`,
+                showarrow: false,
+                font: { size: 12, color: 'black' },
+                bgcolor: 'rgba(255,255,255,0.8)',
+                bordercolor: 'black',
+                borderwidth: 1,
+              },
+              {
+                y: point.y,
+                xref: 'paper',
+                x: 1,
+                yanchor: 'middle',
+                xanchor: 'left',
+                text: `y: ${point.y}`,
+                showarrow: false,
+                font: { size: 12, color: 'black' },
+                bgcolor: 'rgba(255,255,255,0.8)',
+                bordercolor: 'black',
+                borderwidth: 1,
+              }
+            ]
+          };
+          Plotly.relayout(plotDiv, update);
+        });
+
+        plotDiv.on('plotly_unhover', function() {
+          hoverDiv.style.display = 'none';
+
+          if (lastHoverIndex !== null) {
+            markerSizes[lastHoverIndex] = defaultMarkerSize;
+            markerColors[lastHoverIndex] = defaultMarkerColor;
+            Plotly.restyle(plotDiv, {
+              'marker.size': [markerSizes],
+              'marker.color': [markerColors]
+            });
+            lastHoverIndex = null;
+          }
+
+          Plotly.relayout(plotDiv, { annotations: [] });
+        });
+      })
+      .catch(err => {
+        console.error("Failed to load or parse CSV:", err);
+        document.body.innerHTML = `<p style="color:red">Error: ${err.message}</p>`;
+      });
+  </script>
+</body>
+</html>
