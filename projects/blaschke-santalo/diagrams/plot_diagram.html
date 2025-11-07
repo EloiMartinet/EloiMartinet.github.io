@@ -1,13 +1,8 @@
-<!-- Nice chatGPT generated utility file. To run, please run
-python3 -m http.server 8000
-and open
-http://localhost:8000/plot_diagram.html?folder=res/shapes
-in the browser -->
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Media Hover Scatter</title>
+  <title>Media Hover/Click Scatter</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
     #plot {
@@ -21,16 +16,14 @@ in the browser -->
   <div id="plot"></div>
 
   <script>
-    // Read folder name from ?folder= query param
     const params = new URLSearchParams(window.location.search);
-    const folder = params.get("folder") || "res/shapes"; // default fallback
-
+    const folder = params.get("folder") || "res/shapes";
     const csvPath = `${folder}/diagram.csv`;
 
     fetch(csvPath)
-      .then(response => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.text();
+      .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.text();
       })
       .then(text => {
         const rows = text.trim().split(/\r?\n/).map(r => r.split(','));
@@ -39,72 +32,49 @@ in the browser -->
         const idxMedia = header.indexOf('img_src');
         const idxX = header.indexOf('x');
         const idxY = header.indexOf('y');
-
         if (idxMedia === -1 || idxX === -1 || idxY === -1) {
           throw new Error("CSV header must contain: img_src,x,y");
         }
 
-        const x = [];
-        const y = [];
-        const hoverMedia = [];
-
+        const x = [], y = [], hoverMedia = [];
         rows.forEach(r => {
           const xi = parseFloat(r[idxX]);
           const yi = parseFloat(r[idxY]);
           if (!isNaN(xi) && !isNaN(yi)) {
             x.push(xi);
             y.push(yi);
-
             let src = r[idxMedia].trim();
-
-            // Prepend folder only if it's a bare filename
-            if (!/^https?:\/\//.test(src) && !src.startsWith("/") && !src.includes("/")) {
+            if (!/^https?:\/\//.test(src) && !src.startsWith("/") && !src.includes("/"))
               src = `${folder}/${src}`;
-            }
-
             hoverMedia.push(src);
           }
         });
 
-        if (x.length === 0) {
-          throw new Error("No valid numeric coordinates found in CSV.");
-        }
-
-        // Marker style parameters
         const defaultMarkerSize = 10;
         const hoverMarkerSize = 16;
         const defaultMarkerColor = 'teal';
         const hoverMarkerColor = 'teal';
-
         const markerSizes = new Array(x.length).fill(defaultMarkerSize);
         const markerColors = new Array(x.length).fill(defaultMarkerColor);
 
         const trace = {
-          x: x,
-          y: y,
+          x, y,
           mode: 'markers',
           type: 'scatter',
           customdata: hoverMedia,
           hoverinfo: 'none',
-          marker: {
-            size: markerSizes,
-            color: markerColors,
-          }
+          marker: { size: markerSizes, color: markerColors }
         };
-
         const layout = {
-          title: 'Hover to see media',
+          title: 'Hover or click to see media',
           xaxis: { title: 'X' },
           yaxis: { title: 'Y' },
           annotations: [],
           hovermode: 'closest'
         };
-
         Plotly.newPlot('plot', [trace], layout);
-
         const plotDiv = document.getElementById('plot');
 
-        // Create hover media tooltip div
         const hoverDiv = document.createElement('div');
         hoverDiv.style.position = 'absolute';
         hoverDiv.style.pointerEvents = 'none';
@@ -120,13 +90,12 @@ in the browser -->
         document.body.appendChild(hoverDiv);
 
         let lastHoverIndex = null;
+        let pinnedIndex = null;
 
-        plotDiv.on('plotly_hover', function(eventData) {
-          const point = eventData.points[0];
+        function showMedia(point, xClient, yClient) {
           const src = point.customdata;
           const idx = point.pointIndex;
 
-          // Highlight hovered marker
           if (lastHoverIndex !== null && lastHoverIndex !== idx) {
             markerSizes[lastHoverIndex] = defaultMarkerSize;
             markerColors[lastHoverIndex] = defaultMarkerColor;
@@ -142,29 +111,19 @@ in the browser -->
 
           const filename = src.split('/').pop();
           const lower = filename.toLowerCase();
-
-          // Decide whether it's an image or video
           let mediaHTML = "";
-          if (/\.(png|jpg|jpeg|gif|webp)$/i.test(lower)) {
-            mediaHTML = `<img src="${src}" 
-                           style="max-width:200px; max-height:200px; display:block; margin-bottom:4px;">`;
-          } else if (/\.(mp4|webm|ogg)$/i.test(lower)) {
-            mediaHTML = `<video src="${src}" autoplay muted loop 
-                           style="max-width:200px; max-height:200px; display:block; margin-bottom:4px;"></video>`;
-          } else {
+          if (/\.(png|jpg|jpeg|gif|webp)$/i.test(lower))
+            mediaHTML = `<img src="${src}" style="max-width:200px; max-height:200px; display:block; margin-bottom:4px;">`;
+          else if (/\.(mp4|webm|ogg)$/i.test(lower))
+            mediaHTML = `<video src="${src}" autoplay muted loop style="max-width:200px; max-height:200px; display:block; margin-bottom:4px;"></video>`;
+          else
             mediaHTML = `<div style="color:red">Unsupported file: ${filename}</div>`;
-          }
 
           hoverDiv.innerHTML = `${mediaHTML}`;
           hoverDiv.style.display = 'block';
+          hoverDiv.style.left = (xClient + 15) + 'px';
+          hoverDiv.style.top = (yClient + 15) + 'px';
 
-          // Position tooltip near cursor
-          const x = eventData.event.clientX;
-          const y = eventData.event.clientY;
-          hoverDiv.style.left = (x + 15) + 'px';
-          hoverDiv.style.top = (y + 15) + 'px';
-
-          // Show annotations for x and y
           const update = {
             annotations: [
               {
@@ -196,11 +155,11 @@ in the browser -->
             ]
           };
           Plotly.relayout(plotDiv, update);
-        });
+        }
 
-        plotDiv.on('plotly_unhover', function() {
+        function hideMedia() {
+          if (pinnedIndex !== null) return; // keep showing if pinned
           hoverDiv.style.display = 'none';
-
           if (lastHoverIndex !== null) {
             markerSizes[lastHoverIndex] = defaultMarkerSize;
             markerColors[lastHoverIndex] = defaultMarkerColor;
@@ -210,8 +169,36 @@ in the browser -->
             });
             lastHoverIndex = null;
           }
-
           Plotly.relayout(plotDiv, { annotations: [] });
+        }
+
+        plotDiv.on('plotly_hover', ev => {
+          if (pinnedIndex !== null) return; // don't override pinned media
+          const pt = ev.points[0];
+          showMedia(pt, ev.event.clientX, ev.event.clientY);
+        });
+
+        plotDiv.on('plotly_unhover', () => hideMedia());
+
+        plotDiv.on('plotly_click', ev => {
+          const pt = ev.points[0];
+          const idx = pt.pointIndex;
+          // toggle pinning
+          if (pinnedIndex === idx) {
+            pinnedIndex = null;
+            hideMedia();
+          } else {
+            pinnedIndex = idx;
+            showMedia(pt, ev.event.clientX, ev.event.clientY);
+          }
+        });
+
+        document.body.addEventListener('click', e => {
+          // click outside unpins
+          if (!plotDiv.contains(e.target)) {
+            pinnedIndex = null;
+            hideMedia();
+          }
         });
       })
       .catch(err => {
