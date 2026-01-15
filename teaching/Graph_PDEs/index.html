@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- My own stylesheets -->
+    <link rel="stylesheet" href="../../css/math.css">
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="../../index.html">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#projects">Projects</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#teaching">Teaching</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+      <section id="article" style="margin-top:80px;"><!-- on fait une marge de la hauteur de la navbar -->
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-7">
+              
+              
+              <!-- Wrapper for background image -->
+            <div class="position-relative text-center">
+              <img src="Logo.png" style="width: 30%; height: auto; object-fit: contain; opacity: 1.0;" class="img-fluid background-image" alt="Background">
+              <h1 class="position-absolute top-50 start-50 translate-middle text-white w-100">
+                Partial Differential Equations on Graphs
+              </h1>
+            </div>
+            <div class="px-5">
+              <figcaption class="figure-caption text-center px-5">Logo of the team of Mathematics of ML created by Leon Bungert</figcaption>
+            </div>
+              <br>
+              <p>This lecture was first created by <a href="https://sites.google.com/view/leon-bungert/home">Leon Bungert</a> for Masters students in the winter semester 2024-2025. In the next winter semester, I inherited from this lecture, and added some material to it.  The lecture is paired up with practical sessions, involving both coding and theory exercises. A significant part of the lecture is based on this <a href="https://www-users.cse.umn.edu/~jwcalder/CalculusOfVariations.pdf">CalVar course</a> by Jeff Calder. Please <a href="lecture_notes.pdf">click here</a> for the lecture notes.
+              </p>
+
+              
+
+
+              <!--          OVERVIEW              -->
+              <h3 class="mt-5 text-center">Overview of the course</h3>
+
+              <h5 class="mx-2 mt-4">Graph-based learning</h5>
+                            
+              <p>In a first part, we introduce the concept of random graph, focusing on $k$-NN and $\epsilon$-ball graphs, that naturally arises in the context of machine learning. We show a first result showing that in the large data limit, an $\epsilon$-ball graph is almost surelmy connected.</p>
+
+              <p>We then introduce, for a graph with weight matrix $W$ and degree matrix $D$, the Graph Laplacian 
+                $$
+                  L := D-W.
+                $$
+                This object is the central object that will be studied in the lecture. We study the elementary spectral properties of $L$, and show the <strong class="text-light">Cheeger inequality</strong> for graphs, which reads 
+                $$
+                  \frac{\lambda_2(G)}{2} \leq \text{Cheeg}(G) \leq \sqrt{2 \lambda_2(G)}.
+                $$
+                This motivates the fact that <strong class="text-light">spectral clustering</strong> is a reasonable approximation of the normalized cut problem.
+              </p>
+
+              <p>We then review other well-known graph-based algorithms, like <strong class="text-light">PageRank</strong>, <strong class="text-light">t-SNE</strong> and <strong class="text-light">Semi-Supervised Learning</strong> (SSL). When possible, we try to give different perspectives on each problem, either one from PDE or calculus of variation or random walks.</p>
+
+
+              <h5 class="mx-2 mt-4">Discrete to continuum</h5>
+
+              <p>A currently very active area of research is concerned with the following question: <i class="text-light">what happens in the large data limit ?</i> In many contexts, we can show that the Graph Laplacian converges (in some sense) toward a weighted Laplace operator
+              $$
+                \Delta_\rho u := \rho^{-1} \text{div}\left( \rho^2 u\right)
+              $$
+              where $\rho$ is the distribution of the data. This kind of result can be proven in two different ways:
+              <ul>
+                <li><strong class="text-light">Uniform convergence:</strong> Using concentration inequalities (in our case, Bernstein's) and Taylor expansion, we can show that the Graph Laplacian is a consistent approximation of the weighted Laplacian. Using the maximum principle, we can show convergence of the solutions;</li>
+                <li><strong class="text-light">$\Gamma$-convergence:</strong> By leveraging tools from calculus of variations and Sobolev spaces, we can show that the Dirichlet energy of the graph Laplacian $\Gamma$-converges toward its continous counterpart.</li>
+              </ul>
+            </p>
+
+            </div>
+
+
+            <!--       REFERENCES         -->
+            <div class="offset-lg-1 col-lg-4">
+                <div class="sticky-lg-top" style="top:80px">
+                
+                <h5>Lecture notes:</h5>
+                  <small>
+                    <ul class="fa-ul">
+                    <li>
+                        <i class="fa-li bi bi-file-earmark-pdf"></i>
+                        <a class="link-primary" href="lecture_notes.pdf" alt="lecture notes">
+                        Lecture notes
+                        </a>
+                    </li>
+                  </ul>
+                </small>
+
+                <h5>Companion books/notes:</h5>
+                  <small>
+                    <ul class="fa-ul">
+                    <li>
+                      <i class="fa-li bi bi-file-earmark-pdf"></i>
+                      <a class="link-primary" href="https://www-users.cse.umn.edu/~jwcalder/CalculusOfVariations.pdf" alt="Calculus of Variations lecture notes">
+                        Calculus of Variations lecture notes
+                      </a>,<br />
+                      <strong>J. CALDER</strong>.
+                    </li>
+                  </ul>
+                </small>
+
+                <!-- <h5>References :</h5>
+                <small>
+                  <ul class="fa-ul">
+                    <li style="list-style-type: '[1] '">
+                      <a class="link-primary" href="https://www.sciencedirect.com/science/article/abs/pii/S0021999118307125" alt="Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations">Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations</a>
+                      (2019),
+                      <strong>RAISSI</strong>, <strong>PERDIKARIS</strong> and <strong>KARNIADAKIS</strong>,<br>
+                      <small class="text-muted">Journal of Computational Physics.</small>
+                    </li>
+
+                    <li style="list-style-type: '[2] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1710.00211" alt="The Deep Ritz Method: A Deep Learning-Based Numerical Algorithm for Solving Variational Problems">The Deep Ritz Method: A Deep Learning-Based Numerical Algorithm for Solving Variational Problems</a>
+                      (2018),
+                      <strong>WEINAN E</strong> and <strong>BING YU</strong>,<br>
+                      <small class="text-muted">Communications in Mathematics and Statistics.</small>
+                    </li>
+
+                    <li style="list-style-type: '[3] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1912.00873" alt="Variational Physics-Informed Neural Networks For Solving Partial Differential Equations">Variational Physics-Informed Neural Networks For Solving Partial Differential Equations</a>
+                      (2019),
+                      <strong>KHARAZMI</strong>, <strong>ZHANG</strong> and <strong>KARNIADAKIS</strong>,<br>
+                      <small class="text-muted">ArXiv.</small>
+                    </li>
+
+                    <li style="list-style-type: '[4] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1907.08272" alt="Weak Adversarial Networks for High-dimensional Partial Differential Equations">Weak Adversarial Networks for High-dimensional Partial Differential Equations</a>
+                      (2019),
+                      <strong>ZANG</strong>, <strong>BAO</strong>, <strong>YE</strong> and <strong>ZHOU</strong>,<br>
+                      <small class="text-muted">Journal of Computational Physics.</small>
+                    </li>
+
+                    <li style="list-style-type: '[5] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1910.03193" alt="DeepONet: Learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators">DeepONet: Learning nonlinear operators for identifying differential equations based on the universal approximation theorem of operators</a>
+                      (2020),
+                      <strong>LU</strong>, <strong>JIN</strong> and <strong>KARNIADAKIS</strong>,<br>
+                      <small class="text-muted">Nature Machine Intelligence</small>.
+                    </li>
+                  </ul>
+                </small> -->
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <br />
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
