@@ -62,14 +62,10 @@
               <h2 class="m-2 text-center">Solving Partial Differential Equations : from
                 Finite Elements to Neural Networks</h2>
 
-              <p>In the vast majority of theoretical and real-world applications, the solution to a partial differential equation can not
-                be computed analytically. The aim of this course is to explore two methods allowing
-                to compute approximate solutions. The first, traditional” one, is the Finite Element
-                Method. The second one makes use of the recent developments in Deep Learning leading
-                to the so called ”Physics Informed Neural Networks”. In a first part, we will study the fundamental tools needed to solve elliptic partial differential equations, such as weak derivatives and Sobolev spaces. We will show how to approximate PDEs using basic finite elements tools. In the second part, we present the definition of a Neural Network and derive the proof of the so-called "Universal Approximation Theorem". Using backpropagation, we show how a network can be trained to solve some partial differential equations.
+              <p>In the vast majority of theoretical and real-world applications, the solution to a partial differential equation can not be computed analytically. The aim of this course is to explore different methods allowing to compute approximate solutions. The first one, "traditional” one, is the Finite Element Method. The other ones make use of the recent developments in Deep Learning leading including the Physics Informed Neural Networks and Neural Operators. At the end of the semester, the students have to implement a project using both the FEM and NN-based methods.
               </p>
 
-              <p>This course has been given as an Arbeitsgemeinschaft (working group) in the University of Würzburg during the summer semesters of 2024 and 2025. This page will provide all the necessary resources for the students, starting with the <a href="lecture_notes.pdf" alt="lecture notes">lecture notes</a>!</p>
+              <p>This course has been given as an Arbeitsgemeinschaft (working group) in the University of Würzburg during the summer semesters of 2024, 2025 and 2026. This page aims at providing necessary resources for the students, starting with the <a href="lecture_notes.pdf" alt="lecture notes">lecture notes</a>!</p>
 
 
               <!--          OVERVIEW              -->
@@ -124,25 +120,21 @@
 
               <h5 class="mx-4 mt-4">2.2. Using Neural Networks as PDE solvers</h5>
 
-              <p>Through FEM, we have seen a precise and elegant way to approximate the solution of a PDE. Using approximation capabilities of NNs, we see how to solve complex PDEs using little to no data. We will discuss the recent developpements in the field, such as :
-                <ul>
-                  <li>Physics Informed Neural Networks (PINNs) [1]</li>
-                  <li>Deep Ritz Method (DRM) [2]</li>
-                  <li>Variational PINNs (vPINNs) [3]</li>
-                  <li>Weak Adversarial Neural Networks (wANN) [4]</li>
-                  <li>Deep Operator Networks (DeepONets) [5]</li>
-                </ul>
-              among others.</p>
-
-              <p>Using PyTorch, we will see how fast and easy it is to solve classical PDEs on an example.</p>
+              <p>Through FEM, we have seen a precise and elegant way to approximate the solution of a PDE. Using approximation capabilities of NNs, we see how to solve complex PDEs using little to no data. We will discuss the recent developments in the field, such as "vanilla" PINNs and the Deep Ritz Method, along with error estimates. In a second part, we will discuss Neural Operators.</p>
 
             <!----------------PROJECT ------------------->
             <h3 class="mt-5 text-center "><span class="bi bi-stars"></span> Project <span class="bi bi-stars"></span></h3>
 
 
-            <p class="mt-2">The course will end with a project, by groups of 2-3 students. While the subject is pretty free, the students will have to implement at least one simulation using FEM or NN. It will be possible to treat the chosen subject from a more theoretical or numerical point of view, depending on the taste of each student.</p>
+            <p class="mt-2">The course will end with a project, by groups of 2-3 students. Each group has the freedom to chose between:
+              <ul>
+                <li>Comparing the performance of the FEM and PINNs on a given PDE;</li>
+                <li>Implementing a Neural Operator and train it on a dataset generated using the FEM.</li>
+              </ul>
+              The NN part has to be implemented in PyTorch. The FEM library is free to choose, but I would suggest Fenicsx, FreeFem++ or scikit-fem.
+            </p>
 
-            <p>While the subject is free, I give here some ideas of possible projects (some of which may be difficult...):
+            <!-- <p>While the subject is free, I give here some ideas of possible projects (some of which may be difficult...):
               <ul>
                 <li>Classical time-dependant equations (heat, wave, Schrödinger...)</li>
                 <li>Some non-linear problems (<a href="https://doc.freefem.org/tutorials/navierStokesNewton.html" alt="Navier Stokes">steady Navier-Stokes equation</a>...) </li>
@@ -151,7 +143,7 @@
                 <li>Eigenvalue simulation (<a href="https://www.youtube.com/watch?v=bkJZbyrfx-Q&list=PLv1_edDhmIL0GnBRq9d1v-iuDCVKShInn" alt="Can we hear the shape of a drum ?">can we hear the shape of a drum</a>, <a href="https://www.youtube.com/watch?v=d4F8BuPyqUM" alt="schrodinger">eigenstates of the Shrödinger operator</a>, vibrating structures...) </li>
                 <li>Reaction-diffusion systems (<a href="https://pmneila.github.io/jsexp/grayscott/" alt="Gray-Scott">Gray-Scott model</a>, <a href="https://www.youtube.com/watch?v=t1swj0QJUTw" alt="Allen-Cahn">Allen-Cahn equation</a>...)</li>
               </ul>
-            </p>
+            </p> -->
             <h5 class="mt-2">
                 Examples of previous projects (I warmly thank my students for allowing me to share those):
             </h5>
@@ -222,7 +214,7 @@
                   </ul>
                 </small>
 
-                <h5>References :</h5>
+                <!-- <h5>References :</h5>
                 <small>
                   <ul class="fa-ul">
                     <li style="list-style-type: '[1] '">
@@ -260,7 +252,7 @@
                       <small class="text-muted">Nature Machine Intelligence</small>.
                     </li>
                   </ul>
-                </small>
+                </small> -->
 
               </div>
             </div>
