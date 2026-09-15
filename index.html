@@ -62,9 +62,22 @@
               <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="3" aria-label="Slide 4"></button>
               <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="4" aria-label="Slide 5"></button>
               <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="5" aria-label="Slide 6"></button>
+              <button type="button" data-bs-target="#carouselFrontpage" data-bs-slide-to="6" aria-label="Slide 7"></button>
             </div>
             <div class="carousel-inner vh-100">
-                <div class="carousel-item active">
+                  <div class="carousel-item active"  data-bs-interval="10000">
+                    <div class="d-flex justify-content-center vw-100 vh-100 bg-dark">
+                      <video class="w-100 h-100 object-fit-cover"
+                            autoplay
+                            loop
+                            muted
+                            playsinline>
+                          <source src="vid/lenia_1.mp4" type="video/mp4">
+                          Your browser does not support HTML5 video.
+                      </video>
+                    </div>
+                </div>
+                <div class="carousel-item">
                   <div class="d-flex justify-content-center vw-100 vh-100 bg-dark">
                     <img src="img/frontpage_carousel/graph.jpg" class="w-100 h-100 object-fit-cover" alt="Coucou 1">
                   </div>
@@ -342,35 +355,69 @@
 
           <div class="row">
             <div class="col-md-8 offset-md-2">
+              <div class="px-5"><hr /></div>
+
+              <!-- SIXTH CARD -->
+              <a class="text-decoration-none" href="https://github.com/EloiMartinet/ConvexShapeOpt">
+                <div class="row align-items-center">
+                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                    <img src="img/index_projects_cards/bs.png" class="img-fluid" alt="...">
+                  </div>
+                  <div class="col-md-10 text-md-start">
+                    <h5>Numerical exploration of Blaschke-Santalo diagrams</h5>
+                    <p class="text-secondary">How a new neural network architecture provides a constraint-free parametrization of convex sets. Try it yourself with example notebooks online!</p>
+                  </div>
+                </div>
+              </a>      
+
 
               <div class="px-5"><hr /></div>
-              <!-- FIRST CARD -->
-              <a class="text-decoration-none" href="projects/neumann_density_plane/index.html">
-                    <div class="row align-items-center">
-                      <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                        <img src="img/index_projects_cards/featured.png" class="img-fluid" alt="...">
-                      </div>
-                      <div class="col-md-10 text-md-end">
-                          <h5>Optimization of Neumann eigenvalues in the plane</h5>
-                          <p class="text-secondary">What is the shape of the drum that has the largest eigenfrencies ? We investigate this issue by implementing some density-based optimization procedure.</p>
-                      </div>
-                    </div>
+
+              <!-- SIXTH CARD -->
+              <a class="text-decoration-none" href="https://github.com/EloiMartinet/SublinearNet">
+                <div class="row align-items-center">
+
+                  <div class="col-md-10 text-md-start">
+                      <h5>Convex shape optimization using neural networks</h5>
+                      <p class="text-secondary">How a new neural network architecture provides a constraint-free parametrization of convex sets. Try it yourself with example notebooks online!</p>
+                  </div>
+                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                    <img src="img/index_projects_cards/convex_nn.png" class="img-fluid" alt="...">
+                  </div>
+                </div>
+              </a>             
+              
+              <div class="px-5"><hr /></div>
+
+              <!-- FIFTH CARD -->
+              <a class="text-decoration-none" href="projects/levelset_nn/index.html">
+                <div class="row align-items-center">
+                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                    <img src="img/index_projects_cards/levelset_nn.png" class="img-fluid" alt="...">
+                  </div>
+
+                  <div class="col-md-10 text-md-start">
+                      <h5>Neural-network-based level set method</h5>
+                      <p class="text-secondary">Parametrizing a level set function with a neural network proved to be useful for overcoming certain burdens of mesh-based level set methods and computing easily common geometric quantities.</p>
+                  </div>
+                </div>
               </a>
 
+
               <div class="px-5"><hr /></div>
 
-              <!--SECOND CARD -->
-              <a class="text-decoration-none" href="projects/neumann_density_surfaces/index.html">
-                    <div class="row align-items-center">
+              <!-- FOURTH CARD -->
+              <a class="text-decoration-none" href="projects/graph_pde/index.html">
+                <div class="row align-items-center">
 
-                      <div class="col-md-10 text-md-start">
-                          <h5>Density optimization of Neumann eigenvalues on the sphere</h5>
-                          <p class="text-secondary">While the planar case has been investigated theoretically since the 50's, the optimization of Neumann eigenvalues on the sphere is still mysterious. We try to identify numerically some behaviour of the optimal densities.</p>
-                      </div>
-                      <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                        <img src="img/index_projects_cards/mu_3_8.03.png" class="img-fluid" alt="...">
-                      </div>
-                    </div>
+                  <div class="col-md-10 text-md-start">
+                      <h5>Solving PDEs with Graphs</h5>
+                      <p class="text-secondary">Originally used in the context of unsupervised and semi-supervised learning, the graph laplacian can also be used as as a numerical PDE solver.</p>
+                  </div>
+                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                    <img src="img/index_projects_cards/graph_pde.png" class="img-fluid" alt="...">
+                  </div>
+                </div>
               </a>
 
               <div class="px-5"><hr /></div>
@@ -392,68 +439,35 @@
 
               <div class="px-5"><hr /></div>
 
-              <!-- FOURTH CARD -->
-              <a class="text-decoration-none" href="projects/graph_pde/index.html">
+              <!--SECOND CARD -->
+              <a class="text-decoration-none" href="projects/neumann_density_surfaces/index.html">
                 <div class="row align-items-center">
 
                   <div class="col-md-10 text-md-start">
-                      <h5>Solving PDEs with Graphs</h5>
-                      <p class="text-secondary">Originally used in the context of unsupervised and semi-supervised learning, the graph laplacian can also be used as as a numerical PDE solver.</p>
+                      <h5>Density optimization of Neumann eigenvalues on the sphere</h5>
+                      <p class="text-secondary">While the planar case has been investigated theoretically since the 50's, the optimization of Neumann eigenvalues on the sphere is still mysterious. We try to identify numerically some behaviour of the optimal densities.</p>
                   </div>
                   <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                    <img src="img/index_projects_cards/graph_pde.png" class="img-fluid" alt="...">
+                    <img src="img/index_projects_cards/mu_3_8.03.png" class="img-fluid" alt="...">
                   </div>
                 </div>
               </a>
 
               <div class="px-5"><hr /></div>
 
-              <!-- FIFTH CARD -->
-              <a class="text-decoration-none" href="projects/levelset_nn/index.html">
-                <div class="row align-items-center">
-                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                    <img src="img/index_projects_cards/levelset_nn.png" class="img-fluid" alt="...">
-                  </div>
-
-                  <div class="col-md-10 text-md-start">
-                      <h5>Neural-network-based level set method</h5>
-                      <p class="text-secondary">Parametrizing a level set function with a neural network proved to be useful for overcoming certain burdens of mesh-based level set methods and computing easily common geometric quantities.</p>
-                  </div>
-                </div>
+              <!-- FIRST CARD -->
+              <a class="text-decoration-none" href="projects/neumann_density_plane/index.html">
+                    <div class="row align-items-center">
+                      <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                        <img src="img/index_projects_cards/featured.png" class="img-fluid" alt="...">
+                      </div>
+                      <div class="col-md-10 text-md-end">
+                          <h5>Optimization of Neumann eigenvalues in the plane</h5>
+                          <p class="text-secondary">What is the shape of the drum that has the largest eigenfrencies ? We investigate this issue by implementing some density-based optimization procedure.</p>
+                      </div>
+                    </div>
               </a>
-
-
-              <div class="px-5"><hr /></div>
-
-              <!-- SIXTH CARD -->
-              <a class="text-decoration-none" href="https://github.com/EloiMartinet/SublinearNet">
-                <div class="row align-items-center">
-
-                  <div class="col-md-10 text-md-start">
-                      <h5>Convex shape optimization using neural networks</h5>
-                      <p class="text-secondary">How a new neural network architecture provides a constraint-free parametrization of convex sets. Try it yourself with example notebooks online!</p>
-                  </div>
-                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                    <img src="img/index_projects_cards/convex_nn.png" class="img-fluid" alt="...">
-                  </div>
-                </div>
-              </a>             
               
-              <div class="px-5"><hr /></div>
-
-              <!-- SIXTH CARD -->
-              <a class="text-decoration-none" href="https://github.com/EloiMartinet/ConvexShapeOpt">
-                <div class="row align-items-center">
-                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                    <img src="img/index_projects_cards/bs.png" class="img-fluid" alt="...">
-                  </div>
-                  <div class="col-md-10 text-md-start">
-                    <h5>Numerical exploration of Blaschke-Santalo diagrams</h5>
-                    <p class="text-secondary">How a new neural network architecture provides a constraint-free parametrization of convex sets. Try it yourself with example notebooks online!</p>
-                  </div>
-                </div>
-              </a>             
-
             </div>
           </div>
 
@@ -509,6 +523,84 @@
             <div class="col-md-8 offset-md-2">
 
               <div class="px-5"><hr /></div>
+
+              
+              <!-- FIRST CARD -->
+              <a class="text-decoration-none" href="projects/lenia/index.html">
+                <div class="row align-items-center">
+                  <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                    <video width="100%" height="auto" class="rounded border" autoplay loop>
+                      <source src="img/index_projects_cards/lenia.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="col-md-10 text-md-end">
+                      <h5>Lenia: Artifical Life</h5>
+                      <p class="text-secondary">
+                        Here we show how to implement a simple continuous cellular automaton that reproduces certain aspects of Conway's Game of Life.
+                      </p>
+                  </div>
+                </div>
+          </a>
+
+          <div class="px-5"><hr /></div>
+
+
+          <!-- FOURTH CARD -->
+          <a class="text-decoration-none" href="https://drive.google.com/drive/folders/1scGPTZ7R73nomcVHJSyIVnwz4JPEwGxd?usp=drive_link">
+            <div class="row align-items-center">
+                <div class="col-md-10 text-md-start">
+                    <h5>Solving PDEs with neural networks</h5>
+                    <p class="text-secondary">
+                        A folder of notebooks used in the context of my lecture on FEM and PINNs, showing different methods to solve PDEs with neural networks: PINNs, DRM, Natural Gradient Descent and Sampled Neural Networks.
+                    </p>
+                </div>
+                <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                    <img src="img/index_projects_cards/pinns.png" class="img-fluid rounded-start" alt="...">
+                </div>
+            </div>
+          </a>
+
+          <div class="px-5"><hr /></div>
+          
+            <!-- THIRD CARD -->
+            <a class="text-decoration-none" href="https://colab.research.google.com/drive/1XnrFz79OU4nIEL8uu-1m3qBuwQJ73kX8">
+              <div class="row align-items-center">
+                <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                  <img src="img/index_projects_cards/cat_segmentation.png" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-10 text-md-end">
+                  <h5>Image segmentation using Semi Supervised Learning</h5>
+                  <p class="text-secondary">
+                      A notebook developed in the context of an outreach activity at the University of Würzburg. It shows how to perform semi-supervised segmentation using a graph approach.
+                  </p>
+                </div>
+              </div>
+            </a>
+
+            <div class="px-5"><hr /></div>
+
+            <!--SECOND CARD -->
+            <a class="text-decoration-none" href="projects/Isoperimetric/index.html">
+              <div class="row align-items-center">
+
+                <div class="col-md-10 text-md-start">
+                    <h5>A phase-field demonstration of the isoperimetric problem</h5>
+                    <p class="text-secondary">The legendary isoperimetric problem is the most famous and ancient 
+                      problem in shape optimization. It consists in finding the shape minimizing its perimeter while 
+                      keeping its volume fixed. Here we simulate the solution to this problem using a relaxed formulation
+                      of the perimeter.
+                    </p>
+                </div>
+                <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
+                  <video width="100%" height="auto" class="rounded border" autoplay loop>
+                    <source src="img/index_projects_cards/phase_field_1.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+        </a>
+
+        <div class="px-5"><hr /></div>
+
               <!-- FIRST CARD -->
               <a class="text-decoration-none" href="projects/NeumannFF/index.html">
                     <div class="row align-items-center">
@@ -524,59 +616,8 @@
                     </div>
               </a>
 
-              <div class="px-5"><hr /></div>
-
-              <!--SECOND CARD -->
-              <a class="text-decoration-none" href="projects/Isoperimetric/index.html">
-                    <div class="row align-items-center">
-
-                      <div class="col-md-10 text-md-start">
-                          <h5>A phase-field demonstration of the isoperimetric problem</h5>
-                          <p class="text-secondary">The legendary isoperimetric problem is the most famous and ancient 
-                            problem in shape optimization. It consists in finding the shape minimizing its perimeter while 
-                            keeping its volume fixed. Here we simulate the solution to this problem using a relaxed formulation
-                            of the perimeter.
-                          </p>
-                      </div>
-                      <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                        <video width="100%" height="auto" class="rounded border" autoplay loop>
-                          <source src="img/index_projects_cards/phase_field_1.mp4" type="video/mp4">
-                        </video>
-                      </div>
-                    </div>
-              </a>
-
-              <div class="px-5"><hr /></div>
-              <!-- THIRD CARD -->
-              <a class="text-decoration-none" href="https://colab.research.google.com/drive/1XnrFz79OU4nIEL8uu-1m3qBuwQJ73kX8">
-                    <div class="row align-items-center">
-                      <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                        <img src="img/index_projects_cards/cat_segmentation.png" class="img-fluid rounded-start" alt="...">
-                      </div>
-                      <div class="col-md-10 text-md-end">
-                        <h5>Image segmentation using Semi Supervised Learning</h5>
-                        <p class="text-secondary">
-                            A notebook developed in the context of an outreach activity at the University of Würzburg. It shows how to perform semi-supervised segmentation using a graph approach.
-                        </p>
-                      </div>
-                    </div>
-              </a>
-
-              <div class="px-5"><hr /></div>
-              <!-- FOURTH CARD -->
-              <a class="text-decoration-none" href="https://drive.google.com/drive/folders/1scGPTZ7R73nomcVHJSyIVnwz4JPEwGxd?usp=drive_link">
-                    <div class="row align-items-center">
-                        <div class="col-md-10 text-md-start">
-                            <h5>Solving PDEs with neural networks</h5>
-                            <p class="text-secondary">
-                                A folder of notebooks used in the context of my lecture on FEM and PINNs, showing different methods to solve PDEs with neural networks: PINNs, DRM, Natural Gradient Descent and Sampled Neural Networks.
-                            </p>
-                        </div>
-                        <div class="offset-3 col-6 offset-md-0 col-md-2 p-2">
-                            <img src="img/index_projects_cards/pinns.png" class="img-fluid rounded-start" alt="...">
-                        </div>
-                    </div>
-              </a>
+              <div class="px-5"><hr /></div>            
+              
             </div>
           </div>
 
