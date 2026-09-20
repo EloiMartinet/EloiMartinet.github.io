@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <title>Quantum Pong - Schrödinger–Newton WebGL</title>
+    <style>
+        :root {
+            --bg: #050b16;
+            --panel-bg: #0a1526;
+            --panel-border: #16283f;
+            --text: #e7eef8;
+            --muted: #93a8c2;
+            --left: #5fd4ff;
+            --right: #ff7fa8;
+            --accent: #ffe27a;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px);
+        }
+
+        * { box-sizing: inherit; }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Charter, Georgia, "Iowan Old Style", serif;
+            /* Prevent accidental scroll/refresh on mobile */
+            overscroll-behavior: none; 
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 16px;
+            gap: 14px;
+        }
+
+        .title {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: .02em;
+            color: var(--text);
+            margin: 0;
+            text-align: center;
+        }
+
+        .title span {
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        .layout {
+            width: 100%;
+            max-width: 1500px;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .court-wrap {
+            position: relative;
+            flex: 1 1 auto;
+            width: min(100%, 1200px);
+            max-width: 1200px;
+            min-width: 0;
+            aspect-ratio: 3/2;
+            height: auto;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--panel-border);
+        }
+
+        canvas#field {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .fps-badge {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            background: rgba(10, 21, 38, .82);
+            border: 1px solid var(--panel-border);
+            color: var(--accent);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, SFMono-Regular, monospace;
+            font-size: .75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            pointer-events: none;
+            letter-spacing: .04em;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .4);
+            z-index: 5;
+        }
+
+        .panel {
+            flex: 0 0 280px;
+            width: 280px;
+            min-width: 280px;
+            max-width: 280px;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+
+        .score {
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .score .sep {
+            color: var(--muted);
+            font-weight: 400;
+            padding: 0 8px;
+        }
+
+        .readyrow {
+            font-size: .8rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .controls {
+            font-size: .82rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .controls b { color: var(--text); font-weight: 600; }
+        .controls .side-left { color: var(--left); }
+        .controls .side-right { color: var(--right); }
+        .restart-hint { font-size: .78rem; color: var(--muted); }
+
+        .res-control, .conf-control, .kink-control {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: .82rem;
+            color: var(--muted);
+        }
+
+        .res-control label, .conf-control label, .kink-control label {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .conf-control .conf-label {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .conf-control .conf-label b { color: var(--text); font-weight: 600; }
+        .conf-value { color: var(--accent); font-variant-numeric: tabular-nums; font-weight: 700; }
+        
+        .conf-control input[type=range] {
+            width: 100%;
+            margin: 2px 0 0;
+            accent-color: var(--left);
+            cursor: pointer;
+        }
+
+        .res-control select, .res-control button, .kink-btn {
+            background: #101f34;
+            color: var(--text);
+            border: 1px solid var(--panel-border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-family: inherit;
+            font-size: .82rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .res-control select:hover, .res-control select:focus, 
+        .res-control button:hover, .res-control button:focus, 
+        .kink-btn:hover, .kink-btn:focus {
+            border-color: var(--left);
+        }
+
+        .kink-row { display: flex; gap: 7px; }
+        
+        .kink-btn {
+            flex: 1;
+            min-width: 0;
+            padding: 8px 7px;
+            transition: box-shadow .15s, border-color .15s, opacity .15s;
+        }
+
+        .kink-btn.left { border-color: rgba(95, 212, 255, .45); }
+        .kink-btn.right { border-color: rgba(255, 127, 168, .45); }
+        .kink-btn.active {
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 12px rgba(255, 226, 122, .28);
+            color: var(--accent);
+        }
+        .kink-btn.cooldown { opacity: .65; }
+        .kink-btn:disabled { cursor: not-allowed; }
+
+        .status {
+            width: 100%;
+            max-width: 1500px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: .88rem;
+            color: var(--text);
+            min-height: 1.3em;
+            text-align: center;
+        }
+
+        .touch-controls {
+            display: none;
+            width: 100%;
+            max-width: 1500px;
+            justify-content: flex-start;
+            gap: 12px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+
+        .touch-side {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+            max-width: 50%;
+        }
+
+        .touch-side.kinks { margin-top: 6px; }
+
+        button.ctl {
+            flex: 1;
+            background: #101f34;
+            color: var(--text);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 12px 6px;
+            font-size: .85rem;
+            /* Prevents scrolling/zooming on mobile while holding down buttons */
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .touch-side .kink-ctl { padding: 10px 6px; }
+        
+        .touch-side .kink-ctl.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(255, 226, 122, .25);
+            color: var(--accent);
+        }
+
+        button.ctl:active { background: #182c48; }
+        button.ctl.measure { color: var(--accent); font-weight: bold; }
+
+        /* Mobile Breakpoints */
+        @media (max-width: 1200px) {
+            .layout { max-width: 1080px; gap: 18px; }
+            .court-wrap { max-width: calc(100% - 298px); }
+            .panel { flex-basis: 280px; }
+        }
+
+        @media (max-width: 820px) {
+            .layout { flex-wrap: wrap; }
+            .court-wrap {
+                width: 100%;
+                max-width: 100%;
+                flex: 0 1 100%;
+                aspect-ratio: 3/2;
+            }
+            .panel {
+                width: 100%;
+                max-width: 100%;
+                flex: 0 1 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .controls { display: none; } /* Hide keyboard instructions on mobile */
+        }
+
+        @media (max-width: 720px), (pointer: coarse) {
+            body { padding: 14px 10px; gap: 12px; }
+            .layout { gap: 12px; }
+            .touch-controls { display: flex; flex-wrap: wrap; }
+            .touch-side { min-width: calc(50% - 6px); }
+        }
+
+        @media (max-width: 500px) {
+            .touch-side { min-width: 100%; }
+            .court-wrap { border-radius: 6px; }
+            .panel { padding: 14px; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title">Quantum Pong <span>&mdash; Schrödinger–Newton WebGL</span></h1>
+    
+    <div class="layout">
+        <div class="court-wrap">
+            <div class="fps-badge" id="fpsBadge">-- FPS</div>
+            <canvas id="field"></canvas>
+        </div>
+        
+         <!-- Touch / Mobile Controls -->
+      <div class="touch-controls">
+          <div class="touch-side">
+              <button class="ctl" id="lUp">Up &uarr;</button>
+              <button class="ctl measure" id="lMeasure">Measure</button>
+              <button class="ctl kink-ctl" id="lKinkTouch">Kink</button>
+              <button class="ctl" id="lDown">Down &darr;</button>
+          </div>
+      </div>
+
+        <div class="panel">
+            <div>
+                <div class="score">
+                    <span id="scoreLeft" style="color:var(--left)">0</span>
+                    <span class="sep">&middot;</span>
+                    <span id="scoreRight" style="color:var(--right)">0</span>
+                </div>
+                <div class="readyrow" id="readyRow">measure: ready / ready</div>
+            </div>
+            
+            <div class="controls">
+                <div class="side-left"><b>Player</b></div>
+                &uarr; / &darr; &mdash; move barrier<br>
+                M &mdash; measure<br>
+                K &mdash; left kink<br>
+                The AI measures when enough probability has crossed your barrier.<br><br>
+                Land beyond your opponent's barrier to score.
+            </div>
+            
+            <div class="kink-control">
+                <label>Kink barrier:</label>
+                <div class="kink-row">
+                    <button class="kink-btn left" id="lKink">Kink Ready</button>
+                </div>
+            </div>
+            
+            <div class="conf-control">
+                <div class="conf-label">
+                    <b>Newton coupling G</b><span class="conf-value" id="confGValue">100</span>
+                </div>
+                <input id="confGSlider" type="range" min="0" max="500" step="1" value="100" aria-label="Newton gravitational coupling">
+            </div>
+            
+            <div class="res-control">
+                <label for="togglePhaseBtn">Visualization Mode:</label>
+                <button id="togglePhaseBtn">Phase: OFF</button>
+            </div>
+            
+            <div class="res-control">
+                <label for="resSelect">Grid Resolution:</label>
+                <select id="resSelect">
+                    <option value="127x63">127 &times; 63 (Fast)</option>
+                    <option value="255x127">255 &times; 127 (Default)</option>
+                    <option value="511x255" selected>511 &times; 255 (HD)</option>
+                    <option value="1023x511">1023 &times; 511 (Ultra HD)</option>
+                </select>
+            </div>
+            
+            <div class="restart-hint">R &mdash; restart match</div>
+        </div>
+    </div>
+    
+    <div class="status" id="status">The packet begins in a superposition. Place your barrier and measure.</div>
+    
+   
+
+<script>
+(function() {
+    "use strict";
+
+    // ==========================================
+    // Math & Physics Utilities
+    // ==========================================
+
+    function createFFT(n) {
+        const bitRev = new Uint32Array(n);
+        let j = 0;
+        for (let i = 0; i < n; i++) {
+            bitRev[i] = j;
+            let bit = n >> 1;
+            while (j & bit) { j ^= bit; bit >>= 1; }
+            j ^= bit;
+        }
+        const cosTable = new Float32Array(n / 2);
+        const sinTable = new Float32Array(n / 2);
+        for (let i = 0; i < n / 2; i++) {
+            const a = -2 * Math.PI * i / n;
+            cosTable[i] = Math.cos(a);
+            sinTable[i] = Math.sin(a);
+        }
+        return function transform(re, im, inverse) {
+            for (let i = 0; i < n; i++) {
+                const r = bitRev[i];
+                if (i < r) {
+                    let t = re[i]; re[i] = re[r]; re[r] = t;
+                    t = im[i]; im[i] = im[r]; im[r] = t;
+                }
+            }
+            for (let len = 2; len <= n; len <<= 1) {
+                const half = len >> 1, step = n / len;
+                for (let i = 0; i < n; i += len) {
+                    for (let k = 0; k < half; k++) {
+                        const tw = k * step;
+                        const c = cosTable[tw];
+                        const s = inverse ? -sinTable[tw] : sinTable[tw];
+                        const i1 = i + k, i2 = i1 + half;
+                        const re2 = re[i2], im2 = im[i2];
+                        const tr = re2 * c - im2 * s;
+                        const ti = re2 * s + im2 * c;
+                        re[i2] = re[i1] - tr;
+                        im[i2] = im[i1] - ti;
+                        re[i1] += tr;
+                        im[i1] += ti;
+                    }
+                }
+            }
+            if (inverse) {
+                const inv = 1 / n;
+                for (let i = 0; i < n; i++) {
+                    re[i] *= inv;
+                    im[i] *= inv;
+                }
+            }
+        };
+    }
+
+    function createDST1(N) {
+        const M = 2 * (N + 1);
+        const scale = -Math.sqrt(1 / (2 * (N + 1)));
+        const fft = createFFT(M);
+        const zRe = new Float32Array(M);
+        const zIm = new Float32Array(M);
+        
+        return function dst1(input, output) {
+            zRe.fill(0);
+            zIm.fill(0);
+            for (let i = 0; i < N; i++) {
+                zRe[i + 1] = input[i];
+                zRe[M - 1 - i] = -input[i];
+            }
+            fft(zRe, zIm, false);
+            for (let a = 0; a < N; a++) {
+                output[a] = zIm[a + 1] * scale;
+            }
+        };
+    }
+
+    function create2DDST(nx, ny) {
+        const dstX = createDST1(nx), dstY = createDST1(ny);
+        const tmp = new Float32Array(nx * ny);
+        const xIn = new Float32Array(nx), xOut = new Float32Array(nx);
+        const yIn = new Float32Array(ny), yOut = new Float32Array(ny);
+        
+        return function dst2(input, output) {
+            for (let j = 0; j < ny; j++) {
+                for (let i = 0; i < nx; i++) xIn[i] = input[i * ny + j];
+                dstX(xIn, xOut);
+                for (let i = 0; i < nx; i++) tmp[i * ny + j] = xOut[i];
+            }
+            for (let i = 0; i < nx; i++) {
+                const base = i * ny;
+                for (let j = 0; j < ny; j++) yIn[j] = tmp[base + j];
+                dstY(yIn, yOut);
+                for (let j = 0; j < ny; j++) output[base + j] = yOut[j];
+            }
+        };
+    }
+
+    function smoothStepTanh(d, halfWidth, sigma) {
+        return 0.5 * (1 - Math.tanh((Math.abs(d) - halfWidth) / sigma));
+    }
+
+    // ==========================================
+    // Constants & Global State
+    // ==========================================
+    const COURT_WIDTH = 1.5, COURT_HEIGHT = 1, MASS = 1000, DT = 0.05, SUBSTEPS = 2;
+    const SCORING_SPACE = 0.35;
+    const PADDLE_X = [SCORING_SPACE, COURT_WIDTH - SCORING_SPACE];
+    const PADDLE_LENGTH = 0.23, PADDLE_HALF_WIDTH = 2.5 * (COURT_WIDTH / 201);
+    const PADDLE_SPEED = 0.85, BARRIER_HEIGHT = 9, COOLDOWN = 0.85;
+    const MEASUREMENT_PAUSE = 2, MEASUREMENT_SIGMA = 0.01, SIGMA = 0.04;
+    
+    const KINK_ACTIVE_DURATION = 3, KINK_COOLDOWN_DURATION = 5;
+    const KINK_BARRIER_HEIGHT = 22, KINK_BARRIER_WIDTH = 0.028;
+    const KINK_BARRIER_LENGTH = 0.095, KINK_BARRIER_GAP = 0.008;
+    const KINK_EDGE_SOFTNESS = 0.0025;
+
+    let G_EFF = 100, SN_EPS = 0.001;
+    const AI_ENABLED = true, AI_REACTION_SPEED = 0.4, AI_FOLLOW_GAIN = 0.5;
+    const AI_MEASUREMENT_THRESHOLD = 0.30, AI_MEASUREMENT_CONFIRM_TIME = 0.08;
+    let aiMajoritySince = 0;
+
+    let NX = 255, NY = 511, dx, dy, xPts, yPts;
+    let kinCos, kinSin, dst2, V, newtonConvolver, showPhase = false, waveTextureData;
+    
+    const kink = [
+        { activeUntil: 0, cooldownUntil: 0 },
+        { activeUntil: 0, cooldownUntil: 0 }
+    ];
+    
+    const score = [0, 0];
+    const left = { y: 0.5, readyAt: 0 };
+    const right = { y: 0.5, readyAt: 0 };
+    const keys = new Set();
+    
+    let pauseUntil = 0, measurementMarker = null, pendingWinner = null;
+    let pendingRelaunchDirection = 1;
+    let status = "The packet begins in a superposition. Place your barrier and measure.";
+    
+    // ==========================================
+    // WebGL Setup
+    // ==========================================
+    const fieldCanvas = document.getElementById("field");
+    const wrap = document.querySelector(".court-wrap");
+    let gl = fieldCanvas.getContext("webgl2") || fieldCanvas.getContext("webgl");
+    
+    if (!gl) {
+        alert("WebGL is not supported by your browser.");
+        return;
+    }
+
+    const vsSource = `
+        attribute vec2 a_position;
+        varying vec2 v_uv;
+        void main() {
+            v_uv = (a_position + 1.0) * 0.5;
+            gl_Position = vec4(a_position, 0.0, 1.0);
+        }
+    `;
+
+    const fsSource = `
+        precision mediump float;
+        const float KINK_BARRIER_WIDTH = 0.028;
+        const float KINK_BARRIER_LENGTH = 0.095;
+        const float KINK_BARRIER_GAP = 0.008;
+        const float KINK_EDGE_SOFTNESS = 0.0025;
+
+        varying vec2 v_uv;
+        uniform sampler2D u_waveTex;
+        uniform vec2 u_courtDim;
+        uniform vec4 u_paddles;
+        uniform vec2 u_paddleSize;
+        uniform vec3 u_marker;
+        uniform float u_showPhase;
+        uniform vec4 u_kinkState;
+        uniform float u_time;
+
+        float rectMask(vec2 p, vec2 mn, vec2 mx, float soft) {
+            float x = smoothstep(mn.x - soft, mn.x + soft, p.x) * (1.0 - smoothstep(mx.x - soft, mx.x + soft, p.x));
+            float y = smoothstep(mn.y - soft, mn.y + soft, p.y) * (1.0 - smoothstep(mx.y - soft, mx.y + soft, p.y));
+            return x * y;
+        }
+
+        void main() {
+            vec2 courtPos = vec2(v_uv.x * u_courtDim.x, v_uv.y * u_courtDim.y);
+            vec2 psi = texture2D(u_waveTex, v_uv).rg * 2.0 - 1.0;
+            float amp = length(psi);
+            vec3 waveColor;
+
+            if (u_showPhase > 0.5) {
+                float phase = atan(psi.y, psi.x);
+                float hue = fract(phase / 6.28318530718 + 1.0);
+                vec3 K = vec3(1.0, 2.0 / 3.0, 1.0 / 3.0);
+                vec3 p = abs(fract(hue + K) * 6.0 - 3.0);
+                waveColor = mix(vec3(1.0), clamp(p - vec3(1.0), 0.0, 1.0), 0.85);
+            } else {
+                waveColor = vec3(0.35, 0.85, 1.0);
+            }
+
+            vec3 col = mix(vec3(0.02, 0.04, 0.09), waveColor, pow(amp, 1.5));
+            col += vec3(0.25) * pow(amp, 3.5);
+
+            float midX = u_courtDim.x * 0.5;
+            if (abs(courtPos.x - midX) < 0.003 && sin(v_uv.y * 110.0) > 0.0)
+                col += vec3(0.12, 0.22, 0.36);
+
+            vec2 p1 = vec2(u_paddles.x, u_paddles.y);
+            vec2 d1 = abs(courtPos - p1) - u_paddleSize;
+            if (d1.x < 0.0 && d1.y < 0.0) {
+                col = vec3(0.38, 0.85, 1.0);
+            } else {
+                float dist1 = length(max(d1, 0.0));
+                if (dist1 < 0.012) col += vec3(0.2, 0.6, 0.9) * (1.0 - dist1 / 0.012) * 0.5;
+            }
+
+            vec2 p2 = vec2(u_paddles.z, u_paddles.w);
+            vec2 d2 = abs(courtPos - p2) - u_paddleSize;
+            if (d2.x < 0.0 && d2.y < 0.0) {
+                col = vec3(1.0, 0.43, 0.62);
+            } else {
+                float dist2 = length(max(d2, 0.0));
+                if (dist2 < 0.012) col += vec3(0.9, 0.3, 0.5) * (1.0 - dist2 / 0.012) * 0.5;
+            }
+
+            // Kink rendering logic
+            float leftFront = u_paddles.x + u_paddleSize.x;
+            float rightFront = u_paddles.z - u_paddleSize.x;
+            float leftX0 = leftFront + KINK_BARRIER_GAP;
+            float leftX1 = leftX0 + KINK_BARRIER_WIDTH;
+            float rightX1 = rightFront - KINK_BARRIER_GAP;
+            float rightX0 = rightX1 - KINK_BARRIER_WIDTH;
+            float halfKinkY = KINK_BARRIER_LENGTH * 0.5;
+
+            vec2 leftMin = vec2(leftX0, p1.y - halfKinkY);
+            vec2 leftMax = vec2(leftX1, p1.y + halfKinkY);
+            vec2 rightMin = vec2(rightX0, p2.y - halfKinkY);
+            vec2 rightMax = vec2(rightX1, p2.y + halfKinkY);
+
+            float leftRect = rectMask(courtPos, leftMin, leftMax, KINK_EDGE_SOFTNESS);
+            float rightRect = rectMask(courtPos, rightMin, rightMax, KINK_EDGE_SOFTNESS);
+
+            if (u_kinkState.x > 0.5) {
+                float halo = rectMask(courtPos, leftMin - vec2(0.012), leftMax + vec2(0.012), 0.009) - leftRect;
+                float pulse = 0.85 + 0.15 * sin(u_time * 8.0);
+                col += vec3(0.08, 0.65, 1.0) * halo * 0.9;
+                col = mix(col, vec3(0.45, 0.94, 1.0), leftRect * 0.95 * pulse);
+            }
+            if (u_kinkState.y > 0.5) {
+                float halo = rectMask(courtPos, rightMin - vec2(0.012), rightMax + vec2(0.012), 0.009) - rightRect;
+                float pulse = 0.85 + 0.15 * sin(u_time * 8.0);
+                col += vec3(1.0, 0.16, 0.42) * halo * 0.9;
+                col = mix(col, vec3(1.0, 0.46, 0.67), rightRect * 0.95 * pulse);
+            }
+            if (u_kinkState.z > 0.0 && u_kinkState.x < 0.5) {
+                float halo = rectMask(courtPos, leftMin - vec2(0.009), leftMax + vec2(0.009), 0.008) - leftRect;
+                col += vec3(0.15, 0.5, 0.8) * halo * 0.2 * u_kinkState.z;
+            }
+            if (u_kinkState.w > 0.0 && u_kinkState.y < 0.5) {
+                float halo = rectMask(courtPos, rightMin - vec2(0.009), rightMax + vec2(0.009), 0.008) - rightRect;
+                col += vec3(0.8, 0.2, 0.4) * halo * 0.2 * u_kinkState.w;
+            }
+
+            if (u_marker.z > 0.5) {
+                vec2 delta = abs(courtPos - u_marker.xy);
+                float size = 0.022, thick = 0.0022;
+                if ((delta.x < size && delta.y < thick) || (delta.y < size && delta.x < thick))
+                    col = vec3(1.0, 0.92, 0.48);
+            }
+
+            gl_FragColor = vec4(col, 1.0);
+        }
+    `;
+
+    function createShader(type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            console.error(gl.getShaderInfoLog(shader));
+            gl.deleteShader(shader);
+            return null;
+        }
+        return shader;
+    }
+
+    const vertShader = createShader(gl.VERTEX_SHADER, vsSource);
+    const fragShader = createShader(gl.FRAGMENT_SHADER, fsSource);
+    if (!vertShader || !fragShader) return;
+    
+    const program = gl.createProgram();
+    gl.attachShader(program, vertShader);
+    gl.attachShader(program, fragShader);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.error(gl.getProgramInfoLog(program));
+        return;
+    }
+    gl.useProgram(program);
+
+    const quadBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+    
+    const posLoc = gl.getAttribLocation(program, "a_position");
+    gl.enableVertexAttribArray(posLoc);
+    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+    const uWaveTexLoc = gl.getUniformLocation(program, "u_waveTex");
+    const uCourtDimLoc = gl.getUniformLocation(program, "u_courtDim");
+    const uPaddlesLoc = gl.getUniformLocation(program, "u_paddles");
+    const uPaddleSizeLoc = gl.getUniformLocation(program, "u_paddleSize");
+    const uMarkerLoc = gl.getUniformLocation(program, "u_marker");
+    const uShowPhaseLoc = gl.getUniformLocation(program, "u_showPhase");
+    const uKinkStateLoc = gl.getUniformLocation(program, "u_kinkState");
+    const uTimeLoc = gl.getUniformLocation(program, "u_time");
+    
+    gl.uniform2f(uCourtDimLoc, COURT_WIDTH, COURT_HEIGHT);
+    gl.uniform2f(uPaddleSizeLoc, PADDLE_HALF_WIDTH, PADDLE_LENGTH / 2);
+    gl.uniform1i(uWaveTexLoc, 0);
+
+    const waveTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, waveTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    // ==========================================
+    // Simulation Initialization
+    // ==========================================
+
+    function initGrid(nx, ny) {
+        NX = nx; NY = ny;
+        dx = COURT_WIDTH / (NX + 1);
+        dy = COURT_HEIGHT / (NY + 1);
+        xPts = new Float32Array(NX);
+        for (let i = 0; i < NX; i++) xPts[i] = (i + 1) * dx;
+        yPts = new Float32Array(NY);
+        for (let j = 0; j < NY; j++) yPts[j] = (j + 1) * dy;
+        
+        kinCos = new Float32Array(NX * NY);
+        kinSin = new Float32Array(NX * NY);
+        for (let i = 0; i < NX; i++) {
+            const mx = i + 1;
+            for (let j = 0; j < NY; j++) {
+                const my = j + 1;
+                const energy = Math.PI * Math.PI * ((mx / COURT_WIDTH) ** 2 + (my / COURT_HEIGHT) ** 2) / (4 * MASS);
+                const theta = energy * DT;
+                const damp = Math.exp(-Math.pow(energy / 2600, 8));
+                const idx = i * NY + j;
+                kinCos[idx] = Math.cos(theta) * damp;
+                kinSin[idx] = Math.sin(theta) * damp;
+            }
+        }
+        
+        dst2 = create2DDST(NX, NY);
+        V = new Float32Array(NX * NY);
+        newtonConvolver = createNewtonConvolver(NX, NY);
+        waveTextureData = new Uint8Array(NX * NY * 4);
+        if (field) field.resize();
+    }
+
+    function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+
+    function createNewtonConvolver(nx, ny) {
+        let px = 1; while (px < 2 * nx - 1) px <<= 1;
+        let py = 1; while (py < 2 * ny - 1) py <<= 1;
+        const fftX = createFFT(px), fftY = createFFT(py);
+        const size = px * py;
+        const kernelRe = new Float32Array(size), kernelIm = new Float32Array(size);
+        const workRe = new Float32Array(size), workIm = new Float32Array(size);
+        const rowRe = new Float32Array(px), rowIm = new Float32Array(px);
+        const colRe = new Float32Array(py), colIm = new Float32Array(py);
+        const eps = Math.max(0.5 * Math.min(dx, dy), 1e-6);
+        SN_EPS = eps;
+        
+        for (let iy = -(ny - 1); iy <= ny - 1; iy++) {
+            const y = iy * dy;
+            const ky = iy < 0 ? py + iy : iy;
+            if (ky < 0 || ky >= py) continue;
+            for (let ix = -(nx - 1); ix <= nx - 1; ix++) {
+                const x = ix * dx;
+                const kx = ix < 0 ? px + ix : ix;
+                if (kx < 0 || kx >= px) continue;
+                kernelRe[ky * px + kx] = 1 / Math.sqrt(x * x + y * y + eps * eps);
+            }
+        }
+        
+        fft2D(kernelRe, kernelIm, false);
+        
+        function fft2D(re, im, inverse) {
+            for (let y = 0; y < py; y++) {
+                const base = y * px;
+                for (let x = 0; x < px; x++) {
+                    rowRe[x] = re[base + x];
+                    rowIm[x] = im[base + x];
+                }
+                fftX(rowRe, rowIm, inverse);
+                for (let x = 0; x < px; x++) {
+                    re[base + x] = rowRe[x];
+                    im[base + x] = rowIm[x];
+                }
+            }
+            for (let x = 0; x < px; x++) {
+                for (let y = 0; y < py; y++) {
+                    colRe[y] = re[y * px + x];
+                    colIm[y] = im[y * px + x];
+                }
+                fftY(colRe, colIm, inverse);
+                for (let y = 0; y < py; y++) {
+                    re[y * px + x] = colRe[y];
+                    im[y * px + x] = colIm[y];
+                }
+            }
+        }
+        
+        return function convolve(density, potential) {
+            workRe.fill(0); workIm.fill(0);
+            for (let i = 0; i < nx; i++)
+                for (let j = 0; j < ny; j++)
+                    workRe[j * px + i] = density[i * ny + j];
+                    
+            fft2D(workRe, workIm, false);
+            for (let k = 0; k < size; k++) {
+                const ar = workRe[k], ai = workIm[k];
+                const br = kernelRe[k], bi = kernelIm[k];
+                workRe[k] = ar * br - ai * bi;
+                workIm[k] = ar * bi + ai * br;
+            }
+            fft2D(workRe, workIm, true);
+            const cellArea = dx * dy;
+            for (let i = 0; i < nx; i++)
+                for (let j = 0; j < ny; j++)
+                    potential[i * ny + j] = -G_EFF * workRe[j * px + i] * cellArea;
+        };
+    }
+
+    class QuantumField {
+        constructor() { this.resize(); }
+        
+        resize() {
+            const n = NX * NY;
+            this.re = new Float32Array(n);
+            this.im = new Float32Array(n);
+            this._c1 = new Float32Array(n);
+            this._c2 = new Float32Array(n);
+            this.density = new Float32Array(n);
+            this.reset();
+        }
+        
+        reset() {
+            const x0 = COURT_WIDTH / 2, y0 = 0.5;
+            const speedX = 2, maxVy = 0.35, vy = (2 * Math.random() - 1) * maxVy;
+            const kx = MASS * speedX * pendingRelaunchDirection;
+            const ky = MASS * vy;
+            
+            for (let i = 0; i < NX; i++) {
+                const xr = xPts[i] - x0;
+                for (let j = 0; j < NY; j++) {
+                    const yr = yPts[j] - y0;
+                    const env = Math.exp(-(xr * xr + yr * yr) / (2 * SIGMA * SIGMA));
+                    const phase = kx * xr + ky * yr;
+                    const idx = i * NY + j;
+                    this.re[idx] = env * Math.cos(phase);
+                    this.im[idx] = env * Math.sin(phase);
+                }
+            }
+            this.normalize();
+        }
+        
+        normalize() {
+            let norm = 0;
+            for (let k = 0; k < NX * NY; k++) {
+                norm += this.re[k] * this.re[k] + this.im[k] * this.im[k];
+            }
+            norm = Math.sqrt(norm);
+            if (norm > 0) {
+                const inv = 1 / norm;
+                for (let k = 0; k < NX * NY; k++) {
+                    this.re[k] *= inv;
+                    this.im[k] *= inv;
+                }
+            }
+        }
+        
+        centerOfMass() {
+            let total = 0, xSum = 0, ySum = 0;
+            for (let i = 0; i < NX; i++) {
+                const x = xPts[i], base = i * NY;
+                for (let j = 0; j < NY; j++) {
+                    const idx = base + j;
+                    const p = this.re[idx] * this.re[idx] + this.im[idx] * this.im[idx];
+                    total += p;
+                    xSum += x * p;
+                    ySum += yPts[j] * p;
+                }
+            }
+            return total <= 1e-30 ? [COURT_WIDTH / 2, 0.5] : [xSum / total, ySum / total];
+        }
+        
+        probabilityMassLeftOf(xLimit) {
+            let mass = 0, total = 0;
+            for (let i = 0; i < NX; i++) {
+                const x = xPts[i], base = i * NY;
+                for (let j = 0; j < NY; j++) {
+                    const idx = base + j;
+                    const p = this.re[idx] * this.re[idx] + this.im[idx] * this.im[idx];
+                    total += p;
+                    if (x < xLimit) mass += p;
+                }
+            }
+            return total <= 1e-30 ? 0 : mass / total;
+        }
+        
+        addKinkPotential(out, paddle, player, now) {
+            if (!kinkIsActive(player, now)) return;
+            const front = player === 0 ? PADDLE_X[0] + PADDLE_HALF_WIDTH : PADDLE_X[1] - PADDLE_HALF_WIDTH;
+            const inward = player === 0 ? 1 : -1;
+            const halfWidth = KINK_BARRIER_WIDTH * 0.5;
+            const center = front + inward * (KINK_BARRIER_GAP + halfWidth);
+            const yHalf = KINK_BARRIER_LENGTH * 0.5;
+
+            for (let i = 0; i < NX; i++) {
+                const x = xPts[i];
+                if (Math.abs(x - center) > halfWidth + 4 * KINK_EDGE_SOFTNESS) continue;
+                const fx = smoothStepTanh(x - center, halfWidth, KINK_EDGE_SOFTNESS);
+                const base = i * NY;
+
+                for (let j = 0; j < NY; j++) {
+                    const y = yPts[j];
+                    if (Math.abs(y - paddle.y) > yHalf + 4 * KINK_EDGE_SOFTNESS) continue;
+                    const fy = smoothStepTanh(y - paddle.y, yHalf, KINK_EDGE_SOFTNESS);
+                    out[base + j] += KINK_BARRIER_HEIGHT * fx * fy;
+                }
+            }
+        }
+        
+        potential(left, right, out, now) {
+            const n = NX * NY;
+            for (let idx = 0; idx < n; idx++) {
+                this.density[idx] = this.re[idx] * this.re[idx] + this.im[idx] * this.im[idx];
+            }
+            newtonConvolver(this.density, out);
+            
+            const halfY = PADDLE_LENGTH / 2, sigmaX = 0.004, sigmaY = 0.006;
+            for (let i = 0; i < NX; i++) {
+                const x = xPts[i];
+                const fxl = smoothStepTanh(x - PADDLE_X[0], PADDLE_HALF_WIDTH, sigmaX);
+                const fxr = smoothStepTanh(x - PADDLE_X[1], PADDLE_HALF_WIDTH, sigmaX);
+                const base = i * NY;
+                
+                for (let j = 0; j < NY; j++) {
+                    const y = yPts[j];
+                    if (fxl >= 1e-4) out[base + j] += BARRIER_HEIGHT * fxl * smoothStepTanh(y - left.y, halfY, sigmaY);
+                    if (fxr >= 1e-4) out[base + j] += BARRIER_HEIGHT * fxr * smoothStepTanh(y - right.y, halfY, sigmaY);
+                }
+            }
+            this.addKinkPotential(out, left, 0, now);
+            this.addKinkPotential(out, right, 1, now);
+        }
+        
+        step(V) {
+            const n = NX * NY;
+            for (let idx = 0; idx < n; idx++) {
+                let theta = 0.5 * V[idx] * DT, c = Math.cos(theta), s = Math.sin(theta);
+                let r = this.re[idx], im = this.im[idx];
+                this.re[idx] = r * c + im * s;
+                this.im[idx] = im * c - r * s;
+            }
+            dst2(this.re, this._c1);
+            dst2(this.im, this._c2);
+            for (let idx = 0; idx < n; idx++) {
+                const c = kinCos[idx], s = kinSin[idx];
+                const a = this._c1[idx], b = this._c2[idx];
+                this._c1[idx] = a * c + b * s;
+                this._c2[idx] = b * c - a * s;
+            }
+            dst2(this._c1, this.re);
+            dst2(this._c2, this.im);
+            for (let idx = 0; idx < n; idx++) {
+                let theta = 0.5 * V[idx] * DT, c = Math.cos(theta), s = Math.sin(theta);
+                let r = this.re[idx], im = this.im[idx];
+                this.re[idx] = r * c + im * s;
+                this.im[idx] = im * c - r * s;
+            }
+        }
+        
+        measure() {
+            const n = NX * NY;
+            let total = 0;
+            for (let idx = 0; idx < n; idx++) {
+                const p = this.re[idx] * this.re[idx] + this.im[idx] * this.im[idx];
+                this.density[idx] = p;
+                total += p;
+            }
+            let r = Math.random() * total, chosen = n - 1;
+            for (let idx = 0; idx < n; idx++) {
+                r -= this.density[idx];
+                if (r <= 0) { chosen = idx; break; }
+            }
+            const i = Math.floor(chosen / NY), j = chosen % NY;
+            const x = xPts[i], y = yPts[j];
+            const s2 = 2 * MEASUREMENT_SIGMA * MEASUREMENT_SIGMA;
+            
+            for (let ii = 0; ii < NX; ii++) {
+                const xr = xPts[ii] - x, base = ii * NY;
+                for (let jj = 0; jj < NY; jj++) {
+                    const yr = yPts[jj] - y;
+                    this.re[base + jj] = Math.exp(-(xr * xr + yr * yr) / s2);
+                    this.im[base + jj] = 0;
+                }
+            }
+            this.normalize();
+            return [x, y];
+        }
+    }
+
+    let field;
+    initGrid(127, 63);
+    field = new QuantumField();
+
+    // ==========================================
+    // Interaction & Game Logic
+    // ==========================================
+
+    function kinkIsActive(player, now) { return now < kink[player].activeUntil; }
+    function kinkIsCoolingDown(player, now) { return now >= kink[player].activeUntil && now < kink[player].cooldownUntil; }
+    function kinkIsReady(player, now) { return now >= kink[player].cooldownUntil; }
+    function kinkRemaining(player, now) { return Math.max(0, kink[player].activeUntil - now); }
+    function kinkCooldownRemaining(player, now) { return Math.max(0, kink[player].cooldownUntil - now); }
+
+    function activateKink(player) {
+        const now = performance.now() / 1000;
+        if (!kinkIsReady(player, now)) {
+            const remaining = kinkIsActive(player, now) ? kinkRemaining(player, now) : kinkCooldownRemaining(player, now);
+            status = `${player === 0 ? "Left" : "Right"} kink is ${kinkIsActive(player, now) ? "active" : "cooling down"} (${remaining.toFixed(1)}s).`;
+            return false;
+        }
+        kink[player].activeUntil = now + KINK_ACTIVE_DURATION;
+        kink[player].cooldownUntil = kink[player].activeUntil + KINK_COOLDOWN_DURATION;
+        status = `${player === 0 ? "Left" : "Right"} paddle kink activated for ${KINK_ACTIVE_DURATION.toFixed(0)}s.`;
+        return true;
+    }
+
+    const kinkButtons = [document.getElementById("lKink"), document.getElementById("rKink")];
+    const touchKinkButtons = [document.getElementById("lKinkTouch"), document.getElementById("rKinkTouch")];
+
+    function updateKinkButtons(now) {
+        for (let p = 0; p < 2; p++) {
+            const active = kinkIsActive(p, now);
+            const cool = kinkIsCoolingDown(p, now);
+            const text = active ? `Kink ${kinkRemaining(p, now).toFixed(1)}s` : 
+                         cool ? `Cooldown ${kinkCooldownRemaining(p, now).toFixed(1)}s` : "Kink Ready";
+            for (const btn of [kinkButtons[p], touchKinkButtons[p]]) {
+                if(btn) {
+                    btn.textContent = text;
+                    btn.disabled = !kinkIsReady(p, now);
+                    btn.classList.toggle("active", active);
+                    btn.classList.toggle("cooldown", cool);
+                }
+            }
+        }
+    }
+
+    for (let p = 0; p < 2; p++) {
+        if (kinkButtons[p]) kinkButtons[p].addEventListener("click", () => activateKink(p));
+        if (touchKinkButtons[p]) touchKinkButtons[p].addEventListener("click", () => activateKink(p));
+    }
+
+    function resizeCanvas() {
+        const rect = wrap.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        fieldCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+        fieldCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+        gl.viewport(0, 0, fieldCanvas.width, fieldCanvas.height);
+    }
+    new ResizeObserver(resizeCanvas).observe(wrap);
+    resizeCanvas();
+
+    document.getElementById("resSelect").addEventListener("change", e => {
+        const [nx, ny] = e.target.value.split("x").map(Number);
+        status = `Building ${nx} × ${ny} Schrödinger–Newton grid...`;
+        setTimeout(() => {
+            initGrid(nx, ny);
+            status = `Grid changed to ${nx} × ${ny}.`;
+        }, 10);
+    });
+
+    const togglePhaseBtn = document.getElementById("togglePhaseBtn");
+    togglePhaseBtn.addEventListener("click", () => {
+        showPhase = !showPhase;
+        togglePhaseBtn.textContent = `Phase: ${showPhase ? "ON" : "OFF"}`;
+    });
+
+    const confGSlider = document.getElementById("confGSlider");
+    const confGValue = document.getElementById("confGValue");
+    function updateNewtonCoupling(value) {
+        G_EFF = clamp(Number(value), 0, 500);
+        confGValue.textContent = G_EFF.toFixed(0);
+    }
+    confGSlider.addEventListener("input", e => updateNewtonCoupling(e.target.value));
+    updateNewtonCoupling(confGSlider.value);
+
+    function tryMeasure(player) {
+        const now = performance.now() / 1000;
+        const paddle = player === 0 ? left : right;
+        const name = player === 0 ? "Left" : "Right";
+        
+        if (pauseUntil) {
+            status = "A measurement is already in progress.";
+            return false;
+        }
+        if (now < paddle.readyAt) {
+            status = `${name} measurement device is recharging.`;
+            return false;
+        }
+        
+        paddle.readyAt = now + COOLDOWN;
+        const [x, y] = field.measure();
+        measurementMarker = [x, y];
+        pauseUntil = now + MEASUREMENT_PAUSE;
+        pendingWinner = x > PADDLE_X[1] ? 0 : x < PADDLE_X[0] ? 1 : null;
+        pendingRelaunchDirection = player === 0 ? 1 : -1;
+        
+        status = `${name} measured (${x.toFixed(3)}, ${y.toFixed(3)}). Simulation paused for ${MEASUREMENT_PAUSE.toFixed(0)}s.${pendingWinner !== null ? ` ${pendingWinner === 0 ? "LEFT" : "RIGHT"} scores when play resumes.` : ""}`;
+        aiMajoritySince = 0;
+        return true;
+    }
+
+    function updateLeftPaddle(elapsed) {
+        if (keys.has("arrowup")) left.y += PADDLE_SPEED * elapsed;
+        if (keys.has("arrowdown")) left.y -= PADDLE_SPEED * elapsed;
+        left.y = clamp(left.y, PADDLE_LENGTH / 2, 1 - PADDLE_LENGTH / 2);
+    }
+    
+    function updateRightPaddle(elapsed) {
+        if (keys.has("r_up")) right.y += PADDLE_SPEED * elapsed;
+        if (keys.has("r_down")) right.y -= PADDLE_SPEED * elapsed;
+        right.y = clamp(right.y, PADDLE_LENGTH / 2, 1 - PADDLE_LENGTH / 2);
+    }
+
+    function updateAIPaddle(elapsed, now) {
+        if (!AI_ENABLED) return;
+        const [, ycm] = field.centerOfMass();
+        const targetY = clamp(ycm, PADDLE_LENGTH / 2, 1 - PADDLE_LENGTH / 2);
+        const delta = targetY - right.y;
+        const maxMove = AI_REACTION_SPEED * elapsed * AI_FOLLOW_GAIN;
+        
+        // Disable AI momentarily if touch inputs are engaged for right paddle
+        if(!keys.has("r_up") && !keys.has("r_down")) {
+            right.y += clamp(delta, -maxMove, maxMove);
+        }
+        right.y = clamp(right.y, PADDLE_LENGTH / 2, 1 - PADDLE_LENGTH / 2);
+        
+        const opponentPaddleEdge = PADDLE_X[0] - PADDLE_HALF_WIDTH;
+        const probabilityBehind = field.probabilityMassLeftOf(opponentPaddleEdge);
+        const majorityBehind = probabilityBehind > AI_MEASUREMENT_THRESHOLD;
+        
+        if (majorityBehind && !pauseUntil && now >= right.readyAt) {
+            if (aiMajoritySince === 0) aiMajoritySince = now;
+            if (now - aiMajoritySince >= AI_MEASUREMENT_CONFIRM_TIME) {
+                status = `Right AI measures: ${(probabilityBehind * 100).toFixed(1)}% of probability mass is beyond the left paddle.`;
+                tryMeasure(1);
+            }
+        } else {
+            aiMajoritySince = 0;
+        }
+    }
+
+    function renderWebGL(now) {
+        let maxD = 1e-30;
+        const n = NX * NY;
+        for (let idx = 0; idx < n; idx++) {
+            const d = field.re[idx] * field.re[idx] + field.im[idx] * field.im[idx];
+            if (d > maxD) maxD = d;
+        }
+        
+        const invMaxAmp = 1 / Math.sqrt(maxD);
+        for (let r = 0; r < NY; r++) {
+            for (let c = 0; c < NX; c++) {
+                const idx = c * NY + r;
+                const re = field.re[idx] * invMaxAmp;
+                const im = field.im[idx] * invMaxAmp;
+                const ptr = (r * NX + c) * 4;
+                waveTextureData[ptr] = Math.min(255, Math.max(0, Math.floor((re * 0.5 + 0.5) * 255)));
+                waveTextureData[ptr + 1] = Math.min(255, Math.max(0, Math.floor((im * 0.5 + 0.5) * 255)));
+                waveTextureData[ptr + 2] = 0;
+                waveTextureData[ptr + 3] = 255;
+            }
+        }
+        
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, waveTexture);
+        gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, NX, NY, 0, gl.RGBA, gl.UNSIGNED_BYTE, waveTextureData);
+        
+        gl.uniform4f(uPaddlesLoc, PADDLE_X[0], left.y, PADDLE_X[1], right.y);
+        gl.uniform1f(uShowPhaseLoc, showPhase ? 1 : 0);
+        gl.uniform4f(uKinkStateLoc, 
+            kinkIsActive(0, now) ? 1 : 0, 
+            kinkIsActive(1, now) ? 1 : 0, 
+            kinkIsCoolingDown(0, now) ? kinkCooldownRemaining(0, now) / KINK_COOLDOWN_DURATION : 0, 
+            kinkIsCoolingDown(1, now) ? kinkCooldownRemaining(1, now) / KINK_COOLDOWN_DURATION : 0
+        );
+        gl.uniform1f(uTimeLoc, now);
+        
+        if (measurementMarker) gl.uniform3f(uMarkerLoc, measurementMarker[0], measurementMarker[1], 1);
+        else gl.uniform3f(uMarkerLoc, 0, 0, 0);
+        
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
+
+    let frameCount = 0, lastFpsTime = performance.now();
+    const fpsBadge = document.getElementById("fpsBadge");
+    
+    function updateFpsCounter(nowMs) {
+        frameCount++;
+        const delta = nowMs - lastFpsTime;
+        if (delta >= 250) {
+            fpsBadge.textContent = `${Math.round(frameCount * 1000 / delta)} FPS`;
+            frameCount = 0;
+            lastFpsTime = nowMs;
+        }
+    }
+
+    let lastFrame = performance.now() / 1000;
+    
+    function restart() {
+        score[0] = 0; score[1] = 0;
+        field.reset();
+        pauseUntil = 0;
+        measurementMarker = null;
+        pendingWinner = null;
+        pendingRelaunchDirection = 1;
+        aiMajoritySince = 0;
+        left.y = 0.5; right.y = 0.5;
+        left.readyAt = 0; right.readyAt = 0;
+        kink[0].activeUntil = 0; kink[0].cooldownUntil = 0;
+        kink[1].activeUntil = 0; kink[1].cooldownUntil = 0;
+        status = "New match.";
+    }
+
+    function tick(nowMs) {
+        const now = nowMs / 1000;
+        const elapsed = Math.min(now - lastFrame, 0.05);
+        lastFrame = now;
+        updateFpsCounter(nowMs);
+        
+        if (pauseUntil && now >= pauseUntil) {
+            pauseUntil = 0;
+            measurementMarker = null;
+            const winner = pendingWinner;
+            if (winner !== null) {
+                score[winner]++;
+                pendingRelaunchDirection = winner === 0 ? 1 : -1;
+                status = `${winner === 0 ? "LEFT" : "RIGHT"} scores! New serve!`;
+            } else {
+                status = "Measurement complete. New centre serve launched.";
+            }
+            field.reset();
+            pendingWinner = null;
+            aiMajoritySince = 0;
+        }
+        
+        if (!pauseUntil) {
+            updateLeftPaddle(elapsed);
+            updateRightPaddle(elapsed); // Applied from touch controls if present
+            updateAIPaddle(elapsed, now);
+            field.potential(left, right, V, now);
+            for (let s = 0; s < SUBSTEPS; s++) field.step(V);
+        }
+        
+        renderWebGL(now);
+        
+        const uiNow = performance.now() / 1000;
+        const l = uiNow >= left.readyAt ? "ready" : `${(left.readyAt - uiNow).toFixed(1)}s`;
+        const r = uiNow >= right.readyAt ? "ready" : `${(right.readyAt - uiNow).toFixed(1)}s`;
+        
+        document.getElementById("scoreLeft").textContent = String(score[0]);
+        document.getElementById("scoreRight").textContent = String(score[1]);
+        document.getElementById("readyRow").textContent = `measure: ${l} / ${r}`;
+        document.getElementById("status").textContent = status;
+        
+        updateKinkButtons(uiNow);
+        requestAnimationFrame(tick);
+    }
+
+    const heldKeys = new Set(["arrowup", "arrowdown"]);
+    const handledKeys = new Set(["arrowup", "arrowdown", "r", "m", "k"]);
+    
+    window.addEventListener("keydown", e => {
+        const key = e.key.toLowerCase();
+        if (handledKeys.has(key)) e.preventDefault();
+        if (key === "r") { restart(); return; }
+        if (key === "m") { tryMeasure(0); return; }
+        if (key === "k") { activateKink(0); return; }
+        if (heldKeys.has(key)) keys.add(key);
+    });
+    
+    window.addEventListener("keyup", e => keys.delete(e.key.toLowerCase()));
+
+    // Robust pointer mapping (touch and mouse)
+    function bindHold(id, key) {
+        const el = document.getElementById(id);
+        if(!el) return;
+        const add = e => { e.preventDefault(); keys.add(key); };
+        const remove = e => { e.preventDefault(); keys.delete(key); };
+        el.addEventListener("pointerdown", add);
+        el.addEventListener("pointerup", remove);
+        el.addEventListener("pointercancel", remove);
+        el.addEventListener("pointerleave", remove);
+    }
+
+    // Bind left paddle to keyboard up/down simulation
+    bindHold("lUp", "arrowup");
+    bindHold("lDown", "arrowdown");
+    
+    // Bind right paddle to internal dummy keys so it can override AI locally via touch
+    bindHold("rUp", "r_up");
+    bindHold("rDown", "r_down");
+
+    document.getElementById("lMeasure").addEventListener("click", () => tryMeasure(0));
+    
+    requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
