@@ -880,6 +880,16 @@
           + 2 * CS.reduce((s, c) => s + Math.pow(1 / eta + c, 2), 0); // second-layer biases
         return Math.sqrt(first + second + 6);                          // + output weights
       }
+      // Bending points of u^eta: where the kink curves {x2 = c + λ h3 + h4} cross the tilted walls 4 and 3,
+      // and their mirror images. They lie three by three on the walls; eta = 0 gives BENDING, those of f.
+      function bendingPoints(eta) {
+        const pts = [];
+        for (const c of CS) {
+          const y = (1 + c) / (1 - eta);
+          pts.push([1 - 2 * eta * c, c], [2 - eta * y, y], [3 + eta * y, y], [4 + 2 * eta * c, c]);
+        }
+        return pts;
+      }
       // Must match eta_steps() in figures.py.
       const etaFromStep = (k) => (k >= 60 ? 0 : 0.4 * Math.pow(0.001 / 0.4, k / 59));
       const VMAX = 5.4;
@@ -959,7 +969,7 @@
             }
           }
           if (tog.points.checked) {
-            for (const [a, b] of BENDING) {
+            for (const [a, b] of bendingPoints(eta)) {
               ctx.beginPath(); ctx.arc(g.X(a), g.Y(b), 4, 0, 2 * Math.PI);
               ctx.fillStyle = "#fff"; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = C.surface; ctx.stroke();
             }
