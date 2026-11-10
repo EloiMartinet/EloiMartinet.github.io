@@ -1,0 +1,1145 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Webpage of Eloi Martinet</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- To use MathJAX -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!-- My own stylesheets -->
+    <link rel="stylesheet" href="../../css/math.css">
+
+    <!-- Interactive figures -->
+    <style>
+      .viz {
+        --surface: #212529;
+        --ink: #e9ecef;
+        --ink-2: #c3c2b7;
+        --muted: #898781;
+        --s1: #3987e5;
+        --s2: #e8833f;
+        position: relative;
+        border: 1px solid var(--bs-border-color);
+        border-radius: .5rem;
+        padding: .75rem;
+        margin: 1.5rem 0 .5rem;
+      }
+      .viz-plot > svg { display: block; overflow: visible; touch-action: none; }
+      .viz-plot > svg text { fill: var(--muted); font-size: 11px; }
+      .viz .form-label { color: var(--ink-2); }
+      .viz .stat-label { font-size: .75rem; color: var(--muted); }
+      .viz .stat-value { font-size: 1.05rem; color: var(--ink); }
+      .viz .swatch { display: inline-block; width: 16px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: .35rem; }
+      .viz .swatch-dash { background: repeating-linear-gradient(90deg, currentColor 0 4px, transparent 4px 7px); }
+      /* LaTeX labels, typeset by MathJax and positioned over a plot by the scripts below. */
+      .viz-plot { position: relative; }
+      .viz-label { position: absolute; left: 0; top: 0; pointer-events: none; white-space: nowrap; color: var(--ink-2); font-size: 13px; line-height: 1.2; }
+      .viz-tip {
+        position: absolute; display: none; pointer-events: none; z-index: 5;
+        background: rgba(18, 20, 23, .95); border: 1px solid rgba(255, 255, 255, .15);
+        border-radius: .375rem; padding: .25rem .5rem; font-size: .8rem; color: var(--ink, #e9ecef);
+        white-space: nowrap; font-variant-numeric: tabular-nums;
+      }
+      .viz-caption { font-size: .875em; color: var(--bs-secondary-color); text-align: center; margin-bottom: 1.5rem; }
+      /* Long display equations scroll on their own on small screens, instead of the whole page. */
+      #article .MathJax_Display { overflow-x: auto; overflow-y: hidden; }
+    </style>
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-expand-md bg-dark border-bottom fixed-top">
+        <div class="container">
+          <a class="navbar-brand text-uppercase fw-bold" href="../../index.html">
+            Eloi Martinet
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#aboutme">About Me</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#publications">Publications</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#projects">Projects</a>
+              </li>
+              <li class="nav-item m-1">
+                <a class="nav-link" href="../../index.html#teaching">Teaching</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+
+      <section id="article" style="margin-top:80px;"><!-- on fait une marge de la hauteur de la navbar -->
+        <div class="container">
+          <div class="row">
+
+            <!--        BODY OF THE ARTICLE       -->
+            <div class="col-lg-7">
+
+              <h2>On the (non-)closedness of the set of ReLU networks</h2>
+              <p class="lead text-secondary">If a sequence of neural networks of a fixed size converges, is the limit still a neural network of the same size?</p>
+
+              <div class="alert alert-secondary small py-2" role="note">
+                <i class="bi bi-info-circle me-1"></i> <strong>Disclaimer:</strong> this page was generated using AI, from the companion article. The article remains the reference for precise statements and proofs.
+              </div>
+
+              <h4 class="mx-2 mt-4">Why should we care?</h4>
+
+              <p>Training a neural network means minimizing some energy $E$ over a set consisting of neural networks of a fixed architecture. Minimizing such functional falls in the context of the <i>calculus of variations</i>, and under some standard assumptions on $E$, a minimizer exists in the classical function spaces, usually Sobolev spaces.</p>
+
+              <p>However, when minimizing over a subset (here, of neural networks), a necessary condition for existence of minimizers is the <strong>closedness</strong> of the set. If not, the weights may escape to infinity while the functions converge to something no network of that size can represent (this is the "coercivity gap" of [6]).</p>
+
+              <div class="alert alert-primary my-4 mx-md-4" role="alert">
+                <h5 class="alert-heading">The paper in a nutshell</h5>
+                <hr>
+                <ul class="mb-0">
+                  <li>Shallow ReLU networks of a fixed size are weakly <strong>closed</strong> in Sobolev spaces. So the Deep Ritz method, Sobolev training and Lipschitz learning always admit an optimal network of any fixed size.</li>
+                  <li class="mt-2">Two layers ReLU networks are <strong>not closed</strong> in Sobolev spaces. This disproves a conjecture of [1].</li>
+                </ul>
+              </div>
+
+              <h4 class="mx-2 mt-4">Shallow networks: neurons that collapse</h4>
+
+              <p>We consider shallow networks with at most $N$ neurons on a bounded, open and connected set $\Omega\subset\mathbb R^d$,
+              $$
+                \mathcal N_N = \left\{ u(x) = \sum_{i=1}^N a_i\,\sigma(w_i\cdot x + b_i) + c \right\}.
+              $$
+              The classical way to leave $\mathcal N_N$ is to make two neurons collapse onto each other:
+              $$
+                \frac{1}{\varepsilon}\Big(\sigma(x+\varepsilon) - \sigma(x)\Big) \xrightarrow[\varepsilon\to 0]{} \mathbf 1_{\{x>0\}}.
+              $$
+              The outer weights $\pm 1/\varepsilon$ explode and the limit jumps, so it is not a network. This is why $\mathcal N_N$ is not closed in $L^p$ [1] (nor in Sobolev spaces for smooth activations [2]).</p>
+
+              <!-- ===================== INTERACTIVE 1: COLLAPSING NEURONS ===================== -->
+              <div class="viz" id="viz-collapse">
+                <div class="row g-2 small">
+                  <div class="col-12 col-sm-5">
+                    <label for="collapse-eps" class="form-label mb-0">Gap $\varepsilon$ = <span data-out="eps"></span></label>
+                    <input type="range" class="form-range" id="collapse-eps" min="-3" max="0" step="0.01" value="-0.5">
+                  </div>
+                  <div class="col-6 col-sm-3 offset-sm-1">
+                    <label for="collapse-J" class="form-label mb-0">Jump $J$ = <span data-out="J"></span></label>
+                    <input type="range" class="form-range" id="collapse-J" min="-1" max="1" step="0.05" value="1">
+                  </div>
+                  <div class="col-6 col-sm-3">
+                    <label for="collapse-A" class="form-label mb-0">Slope $A$ = <span data-out="A"></span></label>
+                    <input type="range" class="form-range" id="collapse-A" min="-1" max="1" step="0.05" value="0.5">
+                  </div>
+                </div>
+                <div class="d-flex flex-wrap align-items-center gap-3 small mb-1">
+                  <span><span class="swatch" style="background: var(--s1)"></span>network $u_\varepsilon$</span>
+                  <span><span class="swatch swatch-dash" style="color: var(--ink-2)"></span>its two neurons</span>
+                  <span><span class="swatch" style="background: var(--s2); opacity: .7"></span>limit $u_0 = J\,\mathbf 1_{\{x>0\}} + A\,\sigma(x)$</span>
+                  <button type="button" class="btn btn-sm btn-outline-light ms-auto py-0" data-action="play"><i class="bi bi-play-fill"></i> Let ε → 0</button>
+                </div>
+                <div class="viz-plot">
+                  <svg class="w-100" style="height: 280px" role="img" aria-label="Two collapsing ReLU neurons, their sum and its limit"></svg>
+                  <div class="viz-label" data-label="n1">$\frac{J}{\varepsilon}\,\sigma(x+\varepsilon)$</div>
+                  <div class="viz-label" data-label="n2">$\big(A-\frac{J}{\varepsilon}\big)\,\sigma(x)$</div>
+                  <div class="viz-label" data-label="u">$u_\varepsilon$</div>
+                </div>
+                <div class="row g-2 mt-2 text-center">
+                  <div class="col-12 col-sm-4">
+                    <div class="stat-label">outer weights $\frac{J}{\varepsilon}$ and $A-\frac{J}{\varepsilon}$</div>
+                    <div class="stat-value" data-out="weights"></div>
+                  </div>
+                  <div class="col-6 col-sm-4">
+                    <div class="stat-label">distance to the limit $\|u_\varepsilon - u_0\|_{L^2}$</div>
+                    <div class="stat-value" data-out="dist"></div>
+                  </div>
+                  <div class="col-6 col-sm-4">
+                    <div class="stat-label">gradient norm $\|u_\varepsilon'\|_{L^2}$</div>
+                    <div class="stat-value" data-out="grad"></div>
+                  </div>
+                </div>
+                <div class="viz-tip"></div>
+              </div>
+              <p class="viz-caption">Dashed: the two neurons, whose outer weights explode. Blue: their sum $u_\varepsilon$ on $(-1,1)$, which converges to $u_0$, a jump of height $J$ plus the neuron $A\sigma(x)$.</p>
+
+              <p>The neurons explode, but their sum does not. To create a jump $J$, the sum has slope $J/\varepsilon$ on an interval of length $\varepsilon$, which costs
+              $$
+                \int_{-\varepsilon}^0 |u_\varepsilon'|^p\,dx = |J|^p\,\varepsilon^{1-p} \xrightarrow[\varepsilon\to 0]{} \infty \qquad \text{for } p > 1.
+              $$
+              So a sequence bounded in $W^{1,p}$ cannot create a jump, and without a jump ($J=0$) the two neurons merge into one. This is our first result:</p>
+
+              <div class="theorem my-3" text="Closedness">
+                Let $\Omega\subset\mathbb R^d$ be bounded, open and connected, and let $u_n\in\mathcal N_N$ converge to $u$ in $L^1_{loc}(\Omega)$, with $u\in W^{1,1}_{loc}(\Omega)$. Then $u\in\mathcal N_N$. In particular, $\mathcal N_N$ is weakly closed in $W^{1,p}(\Omega)$ for $1\le p<\infty$, and weakly-* closed in $W^{1,\infty}(\Omega)$.
+              </div>
+
+              <p>For $p>d$ this follows from the uniform closedness proved in [1]. The new case is $p\le d$, where Sobolev functions can be discontinuous: it includes the Deep Ritz method in $H^1$ for $d\ge 2$.</p>
+
+              <p><strong>Proof idea: clusters.</strong> Group the neurons whose break hyperplanes converge to the same hyperplane $H = \{z = 0\}$, with $z(x) = w\cdot x + b$. Away from a thin band around $H$, such a <i>cluster</i> is exactly $\mathbf 1_{\{z>0\}}P$ with $P$ affine, so it converges to $m + q\,\mathbf 1_{\{z>0\}}$ with $m, q$ affine: a "neuron with a jump", or <i>generalized response</i> [3]. A Sobolev limit has no jump, so $q$ vanishes on $H$, i.e. $q = Az$, and
+              $$
+                q\,\mathbf 1_{\{z>0\}} = A\,z\,\mathbf 1_{\{z>0\}} = A\,\sigma(z).
+              $$
+              Each cluster collapses to at most one neuron. For instance, take three neurons whose break lines rotate towards $\{x_1 = 0\}$:
+              $$
+                \begin{aligned}
+                  u_\varepsilon(x) = {} & \frac{\sigma(x_1+\varepsilon x_2) + \sigma(x_1-\varepsilon x_2)}{\sqrt\varepsilon} \\
+                  & + \Big(A - \frac{2}{\sqrt\varepsilon}\Big)\,\sigma(x_1).
+                \end{aligned}
+              $$
+              Here $P = Ax_1$ exactly: $u_\varepsilon = A\sigma(x_1)$ outside the wedge $\{|x_1| &lt; \varepsilon|x_2|\}$, and inside it only a tent of height at most $\sqrt\varepsilon$ remains. The weights explode, the gradients stay bounded in $L^2$, and the limit is the single neuron $A\sigma(x_1)$.</p>
+
+              <!-- ===================== INTERACTIVE 2: A CLUSTER OF THREE NEURONS IN 2D ===================== -->
+              <div class="viz" id="viz-cluster">
+                <div class="d-flex flex-wrap align-items-end gap-3 small">
+                  <div class="flex-grow-1" style="max-width: 20rem">
+                    <label for="cluster-eps" class="form-label mb-0">Gap $\varepsilon$ = <span data-out="eps"></span></label>
+                    <input type="range" class="form-range" id="cluster-eps" min="-3" max="0" step="0.01" value="-0.5">
+                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-light ms-auto py-0 mb-2" data-action="play"><i class="bi bi-play-fill"></i> Let ε → 0</button>
+                </div>
+                <div class="d-flex flex-wrap align-items-center gap-3 small mb-2">
+                  <span><span class="swatch swatch-dash" style="color: var(--ink)"></span>break lines of the three neurons</span>
+                  <span><span class="swatch" style="background: var(--s1)"></span>$u_\varepsilon$</span>
+                  <span><span class="swatch" style="background: var(--s2); opacity: .7"></span>limit $A\,\sigma(x_1)$</span>
+                </div>
+                <div class="row g-3">
+                  <div class="col-12 col-sm-6">
+                    <div class="stat-label mb-1">the cluster $u_\varepsilon$ on $(-1,1)^2$</div>
+                    <div class="viz-plot">
+                      <canvas class="w-100 d-block" style="touch-action: none" role="img" aria-label="Heatmap of three collapsing neurons on the square (-1,1)^2"></canvas>
+                      <div class="viz-label" data-label="x1">$x_1$</div>
+                      <div class="viz-label" data-label="x2">$x_2$</div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <div class="stat-label mb-1">profile along $x_2$ = <span data-out="x2"></span></div>
+                    <div class="viz-plot">
+                      <svg class="w-100" role="img" aria-label="Profile of the cluster along a horizontal line"></svg>
+                      <div class="viz-label" data-label="u">$u_\varepsilon$</div>
+                      <div class="viz-label" data-label="lim">$A\,\sigma(x_1)$</div>
+                      <div class="viz-label" data-label="x1">$x_1$</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row g-2 mt-2 text-center">
+                  <div class="col-12 col-sm-4">
+                    <div class="stat-label">outer weights $\frac{1}{\sqrt\varepsilon}$, $\frac{1}{\sqrt\varepsilon}$, $A - \frac{2}{\sqrt\varepsilon}$</div>
+                    <div class="stat-value" data-out="weights"></div>
+                  </div>
+                  <div class="col-6 col-sm-4">
+                    <div class="stat-label">$\sup|u_\varepsilon - A\sigma(x_1)|$</div>
+                    <div class="stat-value" data-out="sup"></div>
+                  </div>
+                  <div class="col-6 col-sm-4">
+                    <div class="stat-label">$\|\nabla(u_\varepsilon - A\sigma(x_1))\|_{L^2}$</div>
+                    <div class="stat-value" data-out="grad"></div>
+                  </div>
+                </div>
+                <div class="viz-tip"></div>
+              </div>
+              <p class="viz-caption">Left: the cluster $u_\varepsilon$ with $A = 1$. Right: its profile along the solid line; hover over the map to move it.</p>
+
+              <p><strong>Why connected?</strong> On $\Omega = (-1,0)\cup(0,1)$, the jump can hide in the hole: $(n+1)\sigma(x+1/n) - n\sigma(x)$ converges in $L^1_{loc}(\Omega)$ to $(x+1)\mathbf 1_{\{x>0\}}$, which is Lipschitz on $\Omega$ but is not a network.</p>
+
+              <h4 class="mx-2 mt-4">Deeper networks: a sneaky counterexample</h4>
+
+              <p>Networks with two hidden layers of widths $N$ and $M$ read
+              $$
+                u(x) = \sum_{k=1}^M a_k\,\sigma\Big(\sum_{e=1}^N c_{ke}\,\sigma(w_e\cdot x + b_e) + d_k\Big) + c,
+              $$
+              and we denote their set by $\mathcal N_{N,M}$. Petersen, Raslan and Voigtlaender [1] conjectured that, as for shallow networks, these sets are closed for uniform convergence. This is false:</p>
+
+              <div class="theorem my-3" text="Non-closedness">
+                Let $d\ge 2$ and let $\Omega\subset\mathbb R^d$ be bounded and open. There exist a Lipschitz, piecewise affine function $f$ and networks $u^\eta\in\mathcal N_{4,6}$ such that
+                $$
+                  \|u^\eta - f\|_{L^\infty(\Omega)}\le C\eta, \qquad \|\nabla u^\eta\|_{L^\infty(\Omega)}\le C,
+                $$
+                $$
+                  \int_\Omega|\nabla(u^\eta - f)|^p\,dx \le C_p\,\eta \quad \text{for every } 1 \leq p < \infty,
+                $$
+                but $f\notin\mathcal N_{4,M}$ for every $M\in\mathbb N$.
+              </div>
+
+              <p>No jump here: $f$ is continuous and piecewise affine, hence a ReLU network, only a larger one, with five first-layer neurons.</p>
+
+              <p><strong>The target.</strong> Four vertical walls
+              $$
+                \begin{aligned}
+                  h_1 &= \sigma(x_1 - 1), & h_2 &= \sigma(x_1 - 2), \\
+                  h_3 &= \sigma(3 - x_1), & h_4 &= \sigma(4 - x_1)
+                \end{aligned}
+              $$
+              give the broken line $K = \lambda h_3 + h_4$, which bends at $x_1 = 3$ and $x_1 = 4$. For offsets $c_1 &lt; c_2 &lt; c_3$, the second-layer neurons $g_j = \sigma(x_2 - c_j - K)$ switch on above the curves $\{x_2 = c_j + K\}$, and $f = \sum_j (g_j + g_j\circ S)$, where $S$ is the reflection across $\{x_1 = 5/2\}$. Passing $x_2$ itself through the first layer, e.g. as $x_2 = \sigma(x_2 + L) - L$, costs a fifth neuron: $f\in\mathcal N_{5,6}$.</p>
+
+              <p><strong>The trick.</strong> With four first-layer neurons only, $u^\eta$ slightly tilts the walls:
+              $$
+                \begin{aligned}
+                  h^\eta_1 &= \sigma(x_1 - 1 + 2\eta x_2), & h^\eta_2 &= \sigma(x_1 - 2 + \eta x_2), \\
+                  h^\eta_3 &= \sigma(3 - x_1 + \eta x_2), & h^\eta_4 &= \sigma(4 - x_1 + 2\eta x_2).
+                \end{aligned}
+              $$
+              On the right half, $h_1^\eta - h_2^\eta = 1 + \eta x_2$, so that
+              $$
+                \frac{h_1^\eta - h_2^\eta - 1}{\eta} = x_2 .
+              $$
+              The tilt carries information about $x_2$ of size $\eta$, which the second layer amplifies with weights of size $1/\eta$. Using this in place of $x_2$ (and $h_3^\eta, h_4^\eta$ on the left half) gives $u^\eta\in\mathcal N_{4,6}$, which converges to $f$ as $\eta\to 0$ while its weights blow up:</p>
+
+              <!-- ===================== INTERACTIVE 3: TWO-HIDDEN-LAYER COUNTEREXAMPLE ===================== -->
+              <div class="viz" id="viz-deep">
+                <div class="row g-2 small align-items-end mb-2">
+                  <div class="col-12 col-md-5">
+                    <label for="deep-eta" class="form-label mb-0">Tilt $\eta$ = <span data-out="eta"></span></label>
+                    <input type="range" class="form-range" id="deep-eta" min="0" max="60" step="1" value="7">
+                  </div>
+                  <div class="col-12 col-md-7 d-flex flex-wrap justify-content-md-end gap-3 pb-md-2">
+                    <div class="form-check form-switch mb-0">
+                      <input class="form-check-input" type="checkbox" id="deep-walls" checked>
+                      <label class="form-check-label" for="deep-walls">walls $h_i^\eta = 0$</label>
+                    </div>
+                    <div class="form-check form-switch mb-0">
+                      <input class="form-check-input" type="checkbox" id="deep-curves" checked>
+                      <label class="form-check-label" for="deep-curves">kink curves</label>
+                    </div>
+                    <div class="form-check form-switch mb-0">
+                      <input class="form-check-input" type="checkbox" id="deep-points">
+                      <label class="form-check-label" for="deep-points">bending points</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="viz-plot">
+                  <canvas class="w-100 d-block" role="img" aria-label="Heatmap of the network u eta on the rectangle (0,5) x (0,2)"></canvas>
+                  <div class="viz-label" data-label="x1">$x_1$</div>
+                  <div class="viz-label" data-label="x2">$x_2$</div>
+                </div>
+                <div class="row g-3 mt-1 align-items-center">
+                  <div class="col-12 col-md-7">
+                    <div class="stat-label mb-1">Sobolev training loss $\|u^\eta - f\|^2_{H^1}$ vs. parameter norm, for all values of $\eta$ (log-log; click to select)</div>
+                    <div class="viz-plot">
+                      <svg class="w-100" style="height: 190px" role="img" aria-label="Sobolev training loss against parameter norm, log-log"></svg>
+                      <div class="viz-label" data-label="norm">parameter norm $\|\theta\|_2$ →</div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-5">
+                    <div class="row g-2 text-center">
+                      <div class="col-4 col-md-12">
+                        <div class="stat-label">parameter norm $\|\theta\|_2$</div>
+                        <div class="stat-value" data-out="norm"></div>
+                      </div>
+                      <div class="col-4 col-md-12">
+                        <div class="stat-label">$\sup|u^\eta - f|$</div>
+                        <div class="stat-value" data-out="sup"></div>
+                      </div>
+                      <div class="col-4 col-md-12">
+                        <div class="stat-label">$\|u^\eta - f\|^2_{H^1}$</div>
+                        <div class="stat-value" data-out="loss"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="viz-tip"></div>
+              </div>
+              <p class="viz-caption">The networks $u^\eta\in\mathcal N_{4,6}$ on $(0,5)\times(0,2)$, with $\lambda = 5$ and $c_j = j/10$; the last slider position is the limit $f$. Orange: the curves where a second-layer neuron switches on. Dashed: the first-layer walls.</p>
+
+              <h4 class="mx-2 mt-4">Why the limit needs a fifth neuron</h4>
+
+              <p>Proving $u^\eta \to f$ is a computation; the real work is to show that $f\notin\mathcal N_{4,M}$. The key notion is that of a <i>locally shallow</i> function, which coincides with a shallow network near a point $P$. Kinks of a shallow network lie on full hyperplanes, whereas $\sigma(x_2 - \kappa(x_1))$, with $\kappa$ a broken line, has three half-lines of kinks meeting at a point $P$: it is not locally shallow at $P$.</p>
+
+              <figure class="figure text-center w-100">
+                <img src="kinks.png" class="figure-img img-fluid" alt="Left: a shallow network whose kinks are three full lines. Right: the function sigma(x2 - kappa(x1)), whose kinks are three half-lines meeting at a point P." />
+                <figcaption class="figure-caption text-center">Kinks (in orange) of a shallow network (left) and of a function with two hidden layers (right).</figcaption>
+              </figure>
+
+              <p>Away from its first-layer lines, a two-hidden-layer network is locally shallow, since its first-layer neurons are affine there. But $f$ is not locally shallow at its twelve <i>bending points</i>, where its kink curves bend across the walls. So any network in $\mathcal N_{4,M}$ representing $f$ must cover these twelve points with its four first-layer lines. Try it: click two points to draw the line through them.</p>
+
+              <!-- ===================== INTERACTIVE 4: COVERING PUZZLE ===================== -->
+              <div class="viz" id="viz-puzzle">
+                <div class="d-flex flex-wrap align-items-center gap-2 small mb-2">
+                  <span data-out="status"></span>
+                  <div class="ms-auto d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-light py-0" data-action="undo">Undo</button>
+                    <button type="button" class="btn btn-sm btn-outline-light py-0" data-action="reset">Reset</button>
+                    <button type="button" class="btn btn-sm btn-outline-light py-0" data-action="solve">Show the answer</button>
+                  </div>
+                </div>
+                <div class="viz-plot">
+                  <svg class="w-100" style="height: 300px; cursor: crosshair" role="img" aria-label="The twelve bending points of f; click two points to draw a line"></svg>
+                  <div class="viz-label" data-label="x1">$x_1$</div>
+                  <div class="viz-label" data-label="x2">$x_2$</div>
+                </div>
+                <p class="small mb-0 mt-2" data-out="verdict"></p>
+              </div>
+              <p class="viz-caption">The twelve bending points of $f$ (vertical axis stretched), with its kink curves in faint orange.</p>
+
+              <p>With $c_j = j/10$, a non-vertical line contains at most two bending points and a vertical one three. Since $4\times 3 = 12$, the four lines must be the walls $\{x_1 = k\}$. But then the first layer only sees $x_1$, while $f(x) = \sum_j \sigma(x_2 - c_j)$ for $x_1 > 4$: contradiction! In dimension $3$ the same argument works with segments, and a rescaled copy of the construction fits in any bounded open set.</p>
+
+              <h4 class="mx-2 mt-4">Consequences for learning</h4>
+
+              <p>With the direct method, closedness gives optimal shallow networks:</p>
+
+              <div class="theorem my-3" text="Existence">
+                Let $\Omega$ be bounded, open and connected, $1&lt;p\le\infty$, and let $E: W^{1,p}(\Omega)\to(-\infty,\infty]$ be coercive and weakly (weakly-* if $p = \infty$) lower semicontinuous, with $E(0)&lt;\infty$. Then for every $N\ge 1$, $\inf_{u\in\mathcal N_N}E(u)$ is attained.
+              </div>
+
+              <ul>
+                <li><strong>Deep Ritz</strong> [4]: convex energies
+                $$
+                  E(u) = \int_\Omega F(x,u,\nabla u)\,dx + \int_{\partial\Omega} G(x,u)\,d\mathcal H^{d-1},
+                $$
+                e.g. the Poisson equation with Robin conditions, or with Dirichlet conditions imposed exactly through networks $\varphi\,u$, $\varphi = 0$ on $\partial\Omega$.</li>
+                <li><strong>Sobolev training</strong> [5]: $E(u) = \alpha\|u - f\|^p_{L^p} + \gamma\|\nabla u - g\|^p_{L^p}$.</li>
+                <li><strong>Lipschitz learning</strong>: a loss plus a penalty $\lambda\,\mathrm{Lip}(u)$, for robust classifiers ($p=\infty$).</li>
+              </ul>
+              <p>For $p=1$, closedness holds but compactness fails, and some energies have no minimizer, neither over $\mathcal N_1$ nor over $W^{1,1}$.</p>
+
+              <p><strong>Which parameters?</strong> The theorem gives an optimal function, not optimal parameters: by positive homogeneity, $(a_i, w_i, b_i)\mapsto(a_i/t, t w_i, t b_i)$ leaves the network unchanged. Weight decay fixes this: the minimizers of $E(u_\theta) + \lambda\|\theta\|^2$ converge (up to subsequences), as $\lambda\to 0$, to a minimizer of $E$ with minimal parameter norm.</p>
+
+              <p><strong>Deeper networks.</strong> Existence fails even for the nicest energies: Sobolev training with target $f$ over $\mathcal N_{4,6}$ has infimum $0$ (take $u^\eta$), which is not attained, and the parameters of every minimizing sequence blow up (bottom chart of the third figure). For deep networks, regularization is not only good practice: it is needed for an optimal network to exist at all.</p>
+
+              <h4 class="mx-2 mt-4">Open questions</h4>
+              <ul>
+                <li>Is $\mathcal N_{N,M}$ closed in $C([a,b])$ in dimension one? Our counterexample needs a second coordinate to tilt the walls.</li>
+                <li>Networks with more than two hidden layers are probably not closed either, but our argument does not directly extend to them.</li>
+              </ul>
+              <p>Details and proofs are in the companion article.</p>
+            </div>
+
+
+            <!--       REFERENCES         -->
+            <div class="offset-lg-1 col-lg-4">
+                <div class="sticky-lg-top" style="top:80px">
+                  <h5>Companion article :</h5>
+                  <small>
+                  <ul class="fa-ul">
+                    <li>
+                      <i class="fa-li bi bi-file-earmark"></i>
+                      <a class="link-primary" href="https://arxiv.org/abs/2611.09887" alt="On the (non-)closedness of the set of ReLU networks">
+                        On the (non-)closedness of the set of ReLU networks
+                      </a>
+                      (2026),<br />
+                      with <strong>L. BUNGERT</strong>,<br>
+                        <small class="text-muted">Preprint.</small>
+                    </li>
+                  </ul>
+                </small>
+
+                <h5>References :</h5>
+                <small>
+                  <ul class="fa-ul">
+                    <li style="list-style-type: '[1] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1806.08459"
+                      alt="Topological properties of the set of functions generated by neural networks of fixed size">
+                      Topological properties of the set of functions generated by neural networks of fixed size</a>
+                      (2021),<br />
+                      <strong>P. PETERSEN</strong>, <strong>M. RASLAN</strong> and <strong>F. VOIGTLAENDER</strong>,<br>
+                      <small class="text-muted">Foundations of Computational Mathematics.</small>
+                    </li>
+                    <li style="list-style-type: '[2] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/2007.11730"
+                      alt="Nonclosedness of sets of neural networks in Sobolev spaces">
+                      Nonclosedness of sets of neural networks in Sobolev spaces</a>
+                      (2021),<br />
+                      <strong>S. MAHAN</strong>, <strong>E. J. KING</strong> and <strong>A. CLONINGER</strong>,<br>
+                      <small class="text-muted">Neural Networks.</small>
+                    </li>
+                    <li style="list-style-type: '[3] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/2303.03950"
+                      alt="On the existence of optimal shallow feedforward networks with ReLU activation">
+                      On the existence of optimal shallow feedforward networks with ReLU activation</a>
+                      (2024),<br />
+                      <strong>S. DEREICH</strong> and <strong>S. KASSING</strong>,<br>
+                      <small class="text-muted">Journal of Machine Learning.</small>
+                    </li>
+                    <li style="list-style-type: '[4] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1710.00211"
+                      alt="The Deep Ritz method">
+                      The Deep Ritz method: a deep learning-based numerical algorithm for solving variational problems</a>
+                      (2018),<br />
+                      <strong>W. E</strong> and <strong>B. YU</strong>,<br>
+                      <small class="text-muted">Communications in Mathematics and Statistics.</small>
+                    </li>
+                    <li style="list-style-type: '[5] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/1706.04859"
+                      alt="Sobolev training for neural networks">
+                      Sobolev training for neural networks</a>
+                      (2017),<br />
+                      <strong>W. M. CZARNECKI</strong> et al.,<br>
+                      <small class="text-muted">NeurIPS.</small>
+                    </li>
+                    <li style="list-style-type: '[6] '">
+                      <a class="link-primary" href="https://arxiv.org/abs/2606.04018"
+                      alt="The coercivity gap in neural PDE solvers">
+                      The coercivity gap in neural PDE solvers: parameter escape and functional convergence</a>
+                      (2026),<br />
+                      <strong>E. ZUAZUA</strong>,<br>
+                      <small class="text-muted">Preprint.</small>
+                    </li>
+                  </ul>
+                </small>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <br />
+    </footer>
+
+    <!-- Bootstrap script, don't touch of way explode -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <!-- Precomputed Sobolev losses of u^eta (generated by figures.py) -->
+    <script src="sobolev_loss.js"></script>
+
+    <!-- Interactive figures -->
+    <script>
+    (function () {
+      "use strict";
+
+      // ---------------------------------------------------------------
+      // Shared helpers
+      // ---------------------------------------------------------------
+      const NS = "http://www.w3.org/2000/svg";
+      const C = {
+        s1: "#3987e5", s2: "#e8833f", ink: "#e9ecef", ink2: "#c3c2b7", muted: "#898781",
+        grid: "rgba(255,255,255,0.07)", axis: "rgba(255,255,255,0.28)", surface: "#212529",
+      };
+      const relu = (t) => (t > 0 ? t : 0);
+
+      function el(tag, attrs, parent) {
+        const e = document.createElementNS(NS, tag);
+        for (const k in attrs) e.setAttribute(k, attrs[k]);
+        if (parent) parent.appendChild(e);
+        return e;
+      }
+      function scale(d0, d1, r0, r1) {
+        const s = (v) => r0 + ((v - d0) * (r1 - r0)) / (d1 - d0);
+        s.inv = (p) => d0 + ((p - r0) * (d1 - d0)) / (r1 - r0);
+        return s;
+      }
+      function logScale(d0, d1, r0, r1) {
+        const l = scale(Math.log10(d0), Math.log10(d1), r0, r1);
+        const s = (v) => l(Math.log10(v));
+        s.inv = (p) => Math.pow(10, l.inv(p));
+        return s;
+      }
+      function niceStep(span, count) {
+        const raw = span / count, p = Math.pow(10, Math.floor(Math.log10(raw)));
+        const m = raw / p;
+        return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p;
+      }
+      function ticks(lo, hi, count) {
+        const step = niceStep(hi - lo, count), out = [];
+        for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(Math.abs(v) < 1e-12 ? 0 : v);
+        return out;
+      }
+      function fmt(v, digits) {
+        if (!isFinite(v)) return "∞";
+        const s = Number(v.toPrecision(digits || 3));
+        return Math.abs(s) >= 1e5 ? s.toExponential(1) : String(s);
+      }
+      function path(points) {
+        return points.map((p, i) => (i ? "L" : "M") + p[0].toFixed(2) + "," + p[1].toFixed(2)).join("");
+      }
+      // Redraw when the element width changes (heights are fixed or derived from the width).
+      // The redraw waits for the next frame, since it may resize the element itself.
+      function onWidthChange(elem, cb) {
+        let last = -1;
+        new ResizeObserver(() => {
+          const w = Math.round(elem.getBoundingClientRect().width);
+          if (w !== last && w > 0) { last = w; requestAnimationFrame(cb); }
+        }).observe(elem);
+      }
+      function showTip(tip, root, html, px, py) {
+        tip.innerHTML = html;
+        tip.style.display = "block";
+        const rw = root.clientWidth, tw = tip.offsetWidth;
+        let left = px + 14;
+        if (left + tw > rw - 4) left = px - tw - 14;
+        tip.style.left = Math.max(4, left) + "px";
+        tip.style.top = Math.max(4, py - tip.offsetHeight - 10) + "px";
+      }
+      function pointerIn(elem, root, ev) {
+        const r = elem.getBoundingClientRect(), rr = root.getBoundingClientRect();
+        return { x: ev.clientX - r.left, y: ev.clientY - r.top, ox: r.left - rr.left, oy: r.top - rr.top };
+      }
+      // Put the point (ax, ay) of a LaTeX label, in fractions of its size, at (x + dx, y + dy) in its plot.
+      function place(label, x, y, ax, ay, dx, dy) {
+        label.style.left = x + (dx || 0) + "px";
+        label.style.top = y + (dy || 0) + "px";
+        label.style.transform = "translate(" + -100 * ax + "%, " + -100 * ay + "%)";
+      }
+      // Run cb once MathJax has typeset the page (the labels then change size), with MathJax 2 or 3.
+      function afterMath(cb) {
+        const MJ = window.MathJax;
+        if (MJ && MJ.Hub && MJ.Hub.Register) MJ.Hub.Register.StartupHook("End", cb);
+        else if (MJ && MJ.startup && MJ.startup.promise) MJ.startup.promise.then(cb);
+      }
+      // "Let ε → 0": animate a log10(ε) slider from its maximum down to its minimum.
+      function player(input, draw) {
+        let anim = null;
+        return () => {
+          cancelAnimationFrame(anim);
+          const from = +input.max, to = +input.min, t0 = performance.now(), dur = 4000;
+          (function step(now) {
+            const k = Math.min(1, (now - t0) / dur);
+            input.value = from + (to - from) * k;
+            draw();
+            if (k < 1) anim = requestAnimationFrame(step);
+          })(t0);
+        };
+      }
+
+      // Sequential ramp of the heatmaps: near-surface navy for 0, light blue for large values.
+      const RAMP = ["#152238", "#104281", "#1c5cab", "#2a78d6", "#5598e7", "#86b6ef", "#cde2fb"].map((h) =>
+        [1, 3, 5].map((i) => parseInt(h.substr(i, 2), 16)));
+      const LUT = [];
+      for (let i = 0; i < 256; i++) {
+        const t = (i / 255) * (RAMP.length - 1), k = Math.min(Math.floor(t), RAMP.length - 2), f = t - k;
+        LUT.push(RAMP[k].map((c, j) => Math.round(c + f * (RAMP[k + 1][j] - c))));
+      }
+      // Paint value(p, q), for (p, q) in [0,1]^2 with q = 0 at the top, into a PW x PH canvas.
+      function paintHeat(canvas, PW, PH, value, vmax) {
+        canvas.width = PW; canvas.height = PH;
+        const hctx = canvas.getContext("2d"), img = hctx.createImageData(PW, PH), d = img.data;
+        for (let j = 0; j < PH; j++) {
+          const q = (j + 0.5) / PH;
+          for (let i = 0; i < PW; i++) {
+            const c = LUT[Math.max(0, Math.min(255, Math.round((value((i + 0.5) / PW, q) / vmax) * 255)))], o = 4 * (j * PW + i);
+            d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; d[o + 3] = 255;
+          }
+        }
+        hctx.putImageData(img, 0, 0);
+      }
+      function colourBar(ctx, x, y, h, vmax, labels) {
+        for (let i = 0; i < h; i++) {
+          const c = LUT[Math.round((1 - i / h) * 255)];
+          ctx.fillStyle = "rgb(" + c.join(",") + ")"; ctx.fillRect(x, y + i, 10, 1.5);
+        }
+        ctx.fillStyle = C.muted; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+        for (const t of labels) ctx.fillText(String(t), x + 14, y + h * (1 - t / vmax));
+      }
+      const FONT = "11px system-ui, -apple-system, 'Segoe UI', sans-serif";
+
+      // ---------------------------------------------------------------
+      // 1. Two collapsing neurons in 1D
+      // ---------------------------------------------------------------
+      (function collapse() {
+        const root = document.getElementById("viz-collapse");
+        const svg = root.querySelector("svg"), tip = root.querySelector(".viz-tip");
+        const inEps = root.querySelector("#collapse-eps"), inJ = root.querySelector("#collapse-J"), inA = root.querySelector("#collapse-A");
+        const out = (k) => root.querySelector('[data-out="' + k + '"]');
+        const lab = (k) => root.querySelector('[data-label="' + k + '"]');
+        const H = 280;
+        let hoverX = null;
+
+        const st = () => ({ eps: Math.pow(10, +inEps.value), J: +inJ.value, A: +inA.value });
+        // The two neurons a σ(x − x0), as pairs [x0, a].
+        const neurons = (s) => [[-s.eps, s.J / s.eps], [0, s.A - s.J / s.eps]];
+        const u = (x, s) => neurons(s).reduce((t, [x0, a]) => t + a * relu(x - x0), 0);
+        const u0 = (x, s) => (x > 0 ? s.J + s.A * x : 0);
+
+        function draw() {
+          const s = st();
+          const W = svg.getBoundingClientRect().width, m = { l: 40, r: 10, t: 10, b: 22 };
+          svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+          svg.replaceChildren();
+          const X = scale(-1, 1, m.l, W - m.r);
+
+          // The range depends on J and A only, so that it stays still while epsilon moves.
+          const vals = [0, s.J, s.J + s.A], lo = Math.min(...vals), hi = Math.max(...vals);
+          const pad = Math.max(0.3 * (hi - lo), 0.5), ylo = lo - pad, yhi = hi + pad;
+          const Y = scale(ylo, yhi, H - m.b, m.t);
+
+          for (const t of ticks(ylo, yhi, 5)) {
+            el("line", { x1: m.l, x2: W - m.r, y1: Y(t), y2: Y(t), stroke: t === 0 ? C.axis : C.grid, "stroke-width": 1 }, svg);
+            el("text", { x: m.l - 6, y: Y(t) + 3.5, "text-anchor": "end" }, svg).textContent = fmt(t);
+          }
+          el("line", { x1: X(0), x2: X(0), y1: Y(ylo), y2: Y(yhi), stroke: C.grid }, svg);
+          for (const t of [-1, -0.5, 0, 0.5, 1]) {
+            el("text", { x: X(t), y: H - 6, "text-anchor": "middle" }, svg).textContent = fmt(t);
+          }
+          const clipId = "collapse-clip";
+          el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b }, el("clipPath", { id: clipId }, el("defs", {}, svg)));
+          const plot = el("g", { "clip-path": "url(#" + clipId + ")" }, svg);
+
+          // Limit (wide, translucent).
+          const lim = el("g", { stroke: C.s2, "stroke-width": 5, "stroke-opacity": 0.55, fill: "none", "stroke-linecap": "round" }, plot);
+          el("path", { d: path([[X(-1), Y(0)], [X(0), Y(0)]]) }, lim);
+          el("path", { d: path([[X(0), Y(s.J)], [X(1), Y(s.J + s.A)]]) }, lim);
+
+          // The two neurons (dashed), up to where they leave the plot.
+          const ends = neurons(s).map(([x0, a]) => {
+            const e = a > 0 && x0 + yhi / a < 1 ? { x: x0 + yhi / a, y: yhi }
+              : a < 0 && x0 + ylo / a < 1 ? { x: x0 + ylo / a, y: ylo }
+              : { x: 1, y: a * (1 - x0) };
+            el("path", { d: path([[X(-1), Y(0)], [X(x0), Y(0)], [X(e.x), Y(e.y)]]),
+                         stroke: C.ink2, "stroke-width": 1.5, "stroke-dasharray": "5 4", fill: "none" }, plot);
+            return e;
+          });
+
+          // Their sum. The near-vertical piece is at least 1.5px wide so that it stays visible.
+          const xe = Math.min(X(-s.eps), X(0) - 1.5);
+          el("path", { d: path([[X(-1), Y(0)], [xe, Y(0)], [X(0), Y(s.J)], [X(1), Y(s.J + s.A)]]),
+                       stroke: C.s1, "stroke-width": 2, fill: "none", "stroke-linejoin": "round" }, plot);
+
+          // Labels: each neuron near the end of its line, on the side away from it (above-left of a rising
+          // line, below-left of a falling one), moved along the line until it fits in the plot.
+          neurons(s).forEach(([x0, a], k) => {
+            const l = lab("n" + (k + 1)), e = ends[k];
+            if (a === 0) { place(l, X(1), Y(0), 1, 0, -4, 4); return; }
+            const py = a > 0 ? Math.max(Y(e.y), m.t + l.offsetHeight + 8) : Math.min(Y(e.y), H - m.b - l.offsetHeight - 8);
+            const px = X(x0 + Y.inv(py) / a), ay = a > 0 ? 1 : 0, dy = a > 0 ? -4 : 4;
+            if (px - l.offsetWidth - 4 < m.l) place(l, px, py, 0, 1 - ay, 6, -dy);
+            else place(l, px, py, 1, ay, -4, dy);
+          });
+          place(lab("u"), X(1), Y(s.J + s.A), 1, 0, -4, 9);
+
+          // Hover crosshair.
+          if (hoverX !== null) {
+            el("line", { x1: X(hoverX), x2: X(hoverX), y1: m.t, y2: H - m.b, stroke: C.ink2, "stroke-opacity": 0.5 }, svg);
+            el("circle", { cx: X(hoverX), cy: Y(u(hoverX, s)), r: 4, fill: C.s1, stroke: C.surface, "stroke-width": 2 }, svg);
+          }
+          const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+          hit.addEventListener("pointermove", (ev) => {
+            const p = pointerIn(svg, root, ev);
+            hoverX = Math.max(-1, Math.min(1, X.inv(p.x)));
+            draw();
+            const s2 = st(), [[x1, a1], [x2, a2]] = neurons(s2);
+            showTip(tip, root, "x = " + hoverX.toFixed(3) + "<br>u<sub>ε</sub>(x) = " + fmt(u(hoverX, s2)) +
+              "<br>u<sub>0</sub>(x) = " + fmt(u0(hoverX, s2)) +
+              "<br>neurons: " + fmt(a1 * relu(hoverX - x1)) + " and " + fmt(a2 * relu(hoverX - x2)), p.x + p.ox, p.y + p.oy);
+          });
+          hit.addEventListener("pointerleave", () => { hoverX = null; tip.style.display = "none"; draw(); });
+
+          // Read-outs.
+          out("eps").textContent = fmt(s.eps);
+          out("J").textContent = fmt(s.J);
+          out("A").textContent = fmt(s.A);
+          const [[, a1], [, a2]] = neurons(s);
+          out("weights").textContent = fmt(a1) + " and " + fmt(a2);
+          out("dist").textContent = fmt(Math.abs(s.J) * Math.sqrt(s.eps / 3));
+          out("grad").textContent = fmt(Math.sqrt((s.J * s.J) / s.eps + s.A * s.A));
+        }
+
+        for (const i of [inEps, inJ, inA]) i.addEventListener("input", draw);
+        root.querySelector('[data-action="play"]').addEventListener("click", player(inEps, draw));
+        onWidthChange(svg, draw);
+        afterMath(draw);
+      })();
+
+      // ---------------------------------------------------------------
+      // 2. A cluster of three neurons collapsing to one, in 2D
+      // ---------------------------------------------------------------
+      (function cluster() {
+        const root = document.getElementById("viz-cluster");
+        const canvas = root.querySelector("canvas"), ctx = canvas.getContext("2d");
+        const svg = root.querySelector("svg"), tip = root.querySelector(".viz-tip");
+        const inEps = root.querySelector("#cluster-eps");
+        const out = (k) => root.querySelector('[data-out="' + k + '"]');
+        const mapLab = (k) => canvas.parentNode.querySelector('[data-label="' + k + '"]');
+        const sliceLab = (k) => svg.parentNode.querySelector('[data-label="' + k + '"]');
+        const A = 1, heat = document.createElement("canvas");
+        let geom = null, cacheKey = "", x2s = 0.75;
+
+        const st = () => { const eps = Math.pow(10, +inEps.value); return { eps, a: 1 / Math.sqrt(eps) }; };
+        const u = (x1, x2, s) => s.a * (relu(x1 + s.eps * x2) + relu(x1 - s.eps * x2)) + (A - 2 * s.a) * relu(x1);
+
+        function layout() {
+          const W = canvas.getBoundingClientRect().width, m = { l: 26, r: 44, t: 8, b: 22 };
+          const side = W - m.l - m.r, H = side + m.t + m.b, dpr = window.devicePixelRatio || 1;
+          canvas.style.height = H + "px";
+          canvas.width = Math.round(W * dpr);
+          canvas.height = Math.round(H * dpr);
+          geom = { W, H, m, side, dpr, X: scale(-1, 1, m.l, m.l + side), Y: scale(-1, 1, m.t + side, m.t) };
+          cacheKey = "";
+        }
+
+        function draw() {
+          if (!geom) layout();
+          const g = geom, s = st(), key = s.eps + "|" + g.W;
+          if (key !== cacheKey) {
+            const P = Math.round(g.side * g.dpr);
+            paintHeat(heat, P, P, (p, q) => u(2 * p - 1, 1 - 2 * q, s), A);
+            cacheKey = key;
+          }
+          ctx.setTransform(g.dpr, 0, 0, g.dpr, 0, 0);
+          ctx.clearRect(0, 0, g.W, g.H);
+          ctx.imageSmoothingEnabled = true;
+          ctx.drawImage(heat, g.m.l, g.m.t, g.side, g.side);
+
+          ctx.save();
+          ctx.beginPath(); ctx.rect(g.m.l, g.m.t, g.side, g.side); ctx.clip();
+          // Break lines of the three neurons: x1 = -eps x2, x1 = eps x2 and x1 = 0.
+          ctx.setLineDash([5, 4]); ctx.lineWidth = 1.25; ctx.strokeStyle = "rgba(255,255,255,0.75)";
+          for (const k of [-1, 1, 0]) {
+            ctx.beginPath(); ctx.moveTo(g.X(-k * s.eps), g.Y(-1)); ctx.lineTo(g.X(k * s.eps), g.Y(1)); ctx.stroke();
+          }
+          ctx.setLineDash([]);
+          // The line of the profile on the right.
+          ctx.lineWidth = 1; ctx.strokeStyle = "rgba(255,255,255,0.55)";
+          ctx.beginPath(); ctx.moveTo(g.X(-1), g.Y(x2s)); ctx.lineTo(g.X(1), g.Y(x2s)); ctx.stroke();
+          ctx.restore();
+
+          ctx.font = FONT; ctx.fillStyle = C.muted;
+          ctx.textAlign = "center"; ctx.textBaseline = "top";
+          for (const t of [-1, 0, 1]) ctx.fillText(String(t), g.X(t), g.m.t + g.side + 6);
+          ctx.textAlign = "right"; ctx.textBaseline = "middle";
+          for (const t of [-1, 0, 1]) ctx.fillText(String(t), g.m.l - 6, g.Y(t));
+          colourBar(ctx, g.m.l + g.side + 8, g.m.t, g.side, A, [0, 0.5, 1]);
+          place(mapLab("x1"), g.X(0.5), g.m.t + g.side + 3, 0.5, 0);
+          place(mapLab("x2"), g.m.l - 6, g.Y(0.5), 1, 0.5);
+
+          drawSlice(s);
+          out("eps").textContent = fmt(s.eps);
+          out("x2").textContent = x2s.toFixed(2);
+          out("weights").textContent = fmt(s.a) + ", " + fmt(s.a) + ", " + fmt(A - 2 * s.a);
+          out("sup").textContent = fmt(Math.sqrt(s.eps));
+          out("grad").textContent = fmt(Math.sqrt(2 * (1 + s.eps * s.eps)));
+        }
+
+        function drawSlice(s) {
+          const W = svg.getBoundingClientRect().width, H = Math.min(geom.H, 260), m = { l: 30, r: 8, t: 8, b: 22 };
+          svg.style.height = H + "px";
+          svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+          svg.replaceChildren();
+          const X = scale(-1, 1, m.l, W - m.r), Y = scale(-0.1, 1.1, H - m.b, m.t);
+          for (const t of [0, 0.5, 1]) {
+            el("line", { x1: m.l, x2: W - m.r, y1: Y(t), y2: Y(t), stroke: t === 0 ? C.axis : C.grid }, svg);
+            el("text", { x: m.l - 6, y: Y(t) + 3.5, "text-anchor": "end" }, svg).textContent = fmt(t);
+          }
+          for (const t of [-1, 0, 1]) el("text", { x: X(t), y: H - 6, "text-anchor": "middle" }, svg).textContent = t;
+          el("path", { d: path([[X(-1), Y(0)], [X(0), Y(0)], [X(1), Y(A)]]), stroke: C.s2, "stroke-width": 5,
+                       "stroke-opacity": 0.55, fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
+          // The profile is affine between its breakpoints -eps|x2|, 0 and eps|x2|.
+          const w = s.eps * Math.abs(x2s), xs = [-1, -w, 0, w, 1];
+          el("path", { d: path(xs.map((x) => [X(x), Y(u(x, x2s, s))])), stroke: C.s1, "stroke-width": 2, fill: "none", "stroke-linejoin": "round" }, svg);
+          place(sliceLab("u"), X(0), Y(u(0, x2s, s)), 1, 1, -4, -6);
+          place(sliceLab("lim"), X(1), Y(A), 1, 1, -6, -4);
+          place(sliceLab("x1"), X(0.5), H - m.b + 3, 0.5, 0);
+        }
+
+        canvas.addEventListener("pointermove", (ev) => {
+          const p = pointerIn(canvas, root, ev), g = geom;
+          const x1 = g.X.inv(p.x), x2 = g.Y.inv(p.y);
+          if (Math.abs(x1) > 1 || Math.abs(x2) > 1) { tip.style.display = "none"; return; }
+          x2s = x2;
+          draw();
+          showTip(tip, root, "x = (" + x1.toFixed(2) + ", " + x2.toFixed(2) + ")<br>u<sub>ε</sub>(x) = " + u(x1, x2, st()).toFixed(3) +
+            "<br>Aσ(x<sub>1</sub>) = " + (A * relu(x1)).toFixed(3), p.x + p.ox, p.y + p.oy);
+        });
+        canvas.addEventListener("pointerleave", () => { tip.style.display = "none"; });
+        inEps.addEventListener("input", draw);
+        root.querySelector('[data-action="play"]').addEventListener("click", player(inEps, draw));
+        onWidthChange(canvas, () => { layout(); draw(); });
+      })();
+
+      // ---------------------------------------------------------------
+      // 3. The two-hidden-layer counterexample u^eta -> f
+      // ---------------------------------------------------------------
+      const LAM = 5, CS = [0.1, 0.2, 0.3];
+      const BENDING = [];
+      for (const c of CS) BENDING.push([1, c], [2, 1 + c], [3, 1 + c], [4, c]);
+
+      function walls(x1, x2, eta) {
+        return [relu(x1 - 1 + 2 * eta * x2), relu(x1 - 2 + eta * x2), relu(3 - x1 + eta * x2), relu(4 - x1 + 2 * eta * x2)];
+      }
+      // Pre-activations of the six second-layer neurons (eta = 0 gives the limit f).
+      function preacts(x1, x2, eta) {
+        const [h1, h2, h3, h4] = walls(x1, x2, eta);
+        const xr = eta > 0 ? (h1 - h2 - 1) / eta : x2, xl = eta > 0 ? (h4 - h3 - 1) / eta : x2;
+        return CS.map((c) => xr - c - LAM * h3 - h4).concat(CS.map((c) => xl - c - LAM * h2 - h1));
+      }
+      function net(x1, x2, eta) {
+        const [h1, h2, h3, h4] = walls(x1, x2, eta);
+        const xr = eta > 0 ? (h1 - h2 - 1) / eta : x2, xl = eta > 0 ? (h4 - h3 - 1) / eta : x2;
+        let s = 0;
+        for (let j = 0; j < 3; j++) s += relu(xr - CS[j] - LAM * h3 - h4) + relu(xl - CS[j] - LAM * h2 - h1);
+        return s;
+      }
+      function paramNorm(eta) {
+        const first = 4 + 10 * eta * eta + 1 + 4 + 9 + 16;            // first-layer weights and biases
+        const second = 6 * (2 / (eta * eta) + LAM * LAM + 1)          // second-layer weights
+          + 2 * CS.reduce((s, c) => s + Math.pow(1 / eta + c, 2), 0); // second-layer biases
+        return Math.sqrt(first + second + 6);                          // + output weights
+      }
+      // Must match eta_steps() in figures.py.
+      const etaFromStep = (k) => (k >= 60 ? 0 : 0.4 * Math.pow(0.001 / 0.4, k / 59));
+      const VMAX = 5.4;
+
+      // Marching squares: zero level set of a scalar field sampled on a grid, as a list of segments.
+      function zeroSet(field, nx, ny, x0, x1, y0, y1) {
+        const v = new Float64Array((nx + 1) * (ny + 1));
+        for (let j = 0; j <= ny; j++) for (let i = 0; i <= nx; i++)
+          v[j * (nx + 1) + i] = field(x0 + ((x1 - x0) * i) / nx, y0 + ((y1 - y0) * j) / ny);
+        const segs = [], X = (i) => x0 + ((x1 - x0) * i) / nx, Y = (j) => y0 + ((y1 - y0) * j) / ny;
+        for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+          const a = v[j * (nx + 1) + i], b = v[j * (nx + 1) + i + 1], c = v[(j + 1) * (nx + 1) + i + 1], d = v[(j + 1) * (nx + 1) + i];
+          const pts = [];
+          if ((a > 0) !== (b > 0)) pts.push([X(i + a / (a - b)), Y(j)]);
+          if ((b > 0) !== (c > 0)) pts.push([X(i + 1), Y(j + b / (b - c))]);
+          if ((d > 0) !== (c > 0)) pts.push([X(i + d / (d - c)), Y(j + 1)]);
+          if ((a > 0) !== (d > 0)) pts.push([X(i), Y(j + a / (a - d))]);
+          if (pts.length === 2) segs.push(pts);
+          else if (pts.length === 4) segs.push([pts[0], pts[1]], [pts[2], pts[3]]);
+        }
+        return segs;
+      }
+
+      (function deep() {
+        const root = document.getElementById("viz-deep");
+        const canvas = root.querySelector("canvas"), ctx = canvas.getContext("2d");
+        const chart = root.querySelector("svg"), tip = root.querySelector(".viz-tip");
+        const inEta = root.querySelector("#deep-eta");
+        const tog = { walls: root.querySelector("#deep-walls"), curves: root.querySelector("#deep-curves"), points: root.querySelector("#deep-points") };
+        const out = (k) => root.querySelector('[data-out="' + k + '"]');
+        const lab = (k) => root.querySelector('[data-label="' + k + '"]');
+        const table = typeof SOBOLEV_LOSS !== "undefined" ? SOBOLEV_LOSS : null;
+        const heat = document.createElement("canvas");
+        let geom = null, cacheKey = "", curves = [], hoverChart = -1;
+
+        function layout() {
+          const W = canvas.getBoundingClientRect().width;
+          const m = { l: 30, r: 54, t: 20, b: 36 };
+          const pw = W - m.l - m.r, ph = Math.round(pw * 0.4);
+          const H = ph + m.t + m.b, dpr = window.devicePixelRatio || 1;
+          canvas.style.height = H + "px";
+          canvas.width = Math.round(W * dpr);
+          canvas.height = Math.round(H * dpr);
+          geom = { W, H, m, pw, ph, dpr, X: scale(0, 5, m.l, m.l + pw), Y: scale(0, 2, m.t + ph, m.t) };
+          cacheKey = "";
+        }
+
+        function renderHeat(eta) {
+          const g = geom;
+          paintHeat(heat, Math.round(g.pw * g.dpr), Math.round(g.ph * g.dpr), (p, q) => net(5 * p, 2 - 2 * q, eta), VMAX);
+          curves = [];
+          for (let k = 0; k < 6; k++) curves.push(zeroSet((a, b) => preacts(a, b, eta)[k], 250, 100, 0, 5, 0, 2));
+        }
+
+        function draw() {
+          if (!geom) layout();
+          const g = geom, eta = etaFromStep(+inEta.value), key = eta + "|" + g.W;
+          if (key !== cacheKey) { renderHeat(eta); cacheKey = key; }
+          ctx.setTransform(g.dpr, 0, 0, g.dpr, 0, 0);
+          ctx.clearRect(0, 0, g.W, g.H);
+          ctx.imageSmoothingEnabled = true;
+          ctx.drawImage(heat, g.m.l, g.m.t, g.pw, g.ph);
+
+          ctx.save();
+          ctx.beginPath(); ctx.rect(g.m.l, g.m.t, g.pw, g.ph); ctx.clip();
+          if (tog.walls.checked) {
+            ctx.setLineDash([5, 4]); ctx.lineWidth = 1.25; ctx.strokeStyle = "rgba(255,255,255,0.75)";
+            const wallX = [(x2) => 1 - 2 * eta * x2, (x2) => 2 - eta * x2, (x2) => 3 + eta * x2, (x2) => 4 + 2 * eta * x2];
+            for (const w of wallX) { ctx.beginPath(); ctx.moveTo(g.X(w(0)), g.Y(0)); ctx.lineTo(g.X(w(2)), g.Y(2)); ctx.stroke(); }
+            ctx.setLineDash([]);
+          }
+          if (tog.curves.checked) {
+            for (const [lw, col] of [[4, "rgba(0,0,0,0.35)"], [2, C.s2]]) {
+              ctx.lineWidth = lw; ctx.strokeStyle = col; ctx.lineCap = "round"; ctx.beginPath();
+              for (const segs of curves) for (const [p, q] of segs) { ctx.moveTo(g.X(p[0]), g.Y(p[1])); ctx.lineTo(g.X(q[0]), g.Y(q[1])); }
+              ctx.stroke();
+            }
+          }
+          if (tog.points.checked) {
+            for (const [a, b] of BENDING) {
+              ctx.beginPath(); ctx.arc(g.X(a), g.Y(b), 4, 0, 2 * Math.PI);
+              ctx.fillStyle = "#fff"; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = C.surface; ctx.stroke();
+            }
+          }
+          ctx.restore();
+
+          // Axes.
+          ctx.fillStyle = C.muted; ctx.font = FONT;
+          ctx.textAlign = "center"; ctx.textBaseline = "top";
+          for (let t = 0; t <= 5; t++) ctx.fillText(String(t), g.X(t), g.m.t + g.ph + 6);
+          ctx.textAlign = "right"; ctx.textBaseline = "middle";
+          for (let t = 0; t <= 2; t++) ctx.fillText(String(t), g.m.l - 6, g.Y(t));
+          place(lab("x1"), g.m.l + g.pw / 2, g.m.t + g.ph + 19, 0.5, 0);
+          place(lab("x2"), g.m.l - 6, g.Y(1.5), 1, 0.5);
+          colourBar(ctx, g.m.l + g.pw + 14, g.m.t, g.ph, VMAX, [0, 1, 2, 3, 4, 5]);
+
+          // Read-outs.
+          const k = +inEta.value, row = table && k < 60 ? table[k] : null;
+          out("eta").textContent = eta > 0 ? fmt(eta) : "0, the limit f";
+          out("norm").textContent = eta > 0 ? fmt(paramNorm(eta)) : "—";
+          out("sup").textContent = eta > 0 ? (row ? fmt(row.sup) : "—") : "0";
+          out("loss").textContent = eta > 0 ? (row ? fmt(row.l2 + row.grad) : "—") : "0";
+          drawChart();
+        }
+
+        function drawChart() {
+          chart.replaceChildren();
+          if (!table) return;
+          const W = chart.getBoundingClientRect().width, H = 190, m = { l: 40, r: 10, t: 8, b: 32 };
+          chart.setAttribute("viewBox", "0 0 " + W + " " + H);
+          const pts = table.map((r) => [paramNorm(r.eta), r.l2 + r.grad]);
+          const X = logScale(10, 6000, m.l, W - m.r), Y = logScale(0.5, 300, H - m.b, m.t);
+          el("line", { x1: m.l, x2: W - m.r, y1: Y(0.5), y2: Y(0.5), stroke: C.axis }, chart);
+          for (const t of [1, 10, 100]) {
+            el("line", { x1: m.l, x2: W - m.r, y1: Y(t), y2: Y(t), stroke: C.grid }, chart);
+            el("text", { x: m.l - 6, y: Y(t) + 3.5, "text-anchor": "end" }, chart).textContent = fmt(t);
+          }
+          for (const t of [10, 100, 1000]) {
+            el("text", { x: X(t), y: H - m.b + 14, "text-anchor": "middle" }, chart).textContent = fmt(t);
+          }
+          place(lab("norm"), W - m.r, H, 1, 1);
+          el("path", { d: path(pts.map(([a, b]) => [X(a), Y(b)])), stroke: C.s1, "stroke-width": 2, fill: "none" }, chart);
+
+          const k = +inEta.value;
+          const mark = (i, r) => el("circle", { cx: X(pts[i][0]), cy: Y(pts[i][1]), r, fill: C.s1, stroke: C.surface, "stroke-width": 2 }, chart);
+          if (hoverChart >= 0) mark(hoverChart, 4);
+          if (k < 60) {
+            mark(k, 6);
+            const lx = X(pts[k][0]), anchor = lx > W * 0.7 ? "end" : "start";
+            el("text", { x: lx + (anchor === "end" ? -10 : 10), y: Y(pts[k][1]) - 8, "text-anchor": anchor, fill: C.ink }, chart).textContent = "η = " + fmt(etaFromStep(k));
+          } else {
+            el("text", { x: W - m.r, y: m.t + 10, "text-anchor": "end", fill: C.ink }, chart).textContent = "η = 0: zero loss, but f needs a 5th neuron";
+          }
+
+          const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent", style: "cursor: pointer" }, chart);
+          const nearest = (ev) => {
+            const p = pointerIn(chart, root, ev);
+            let best = 0, bd = Infinity;
+            pts.forEach(([a, b], i) => { const dd = Math.hypot(X(a) - p.x, Y(b) - p.y); if (dd < bd) { bd = dd; best = i; } });
+            return { i: best, p };
+          };
+          hit.addEventListener("pointermove", (ev) => {
+            const { i, p } = nearest(ev);
+            if (i !== hoverChart) { hoverChart = i; drawChart(); }
+            const r = table[i];
+            showTip(tip, root, "η = " + fmt(r.eta) + "<br>‖θ‖₂ = " + fmt(pts[i][0]) + "<br>loss = " + fmt(pts[i][1]), X(pts[i][0]) + p.ox, Y(pts[i][1]) + p.oy);
+          });
+          hit.addEventListener("pointerleave", () => { hoverChart = -1; tip.style.display = "none"; drawChart(); });
+          hit.addEventListener("click", (ev) => { inEta.value = nearest(ev).i; draw(); });
+        }
+
+        canvas.addEventListener("pointermove", (ev) => {
+          const p = pointerIn(canvas, root, ev), g = geom;
+          const x1 = g.X.inv(p.x), x2 = g.Y.inv(p.y);
+          if (x1 < 0 || x1 > 5 || x2 < 0 || x2 > 2) { tip.style.display = "none"; return; }
+          const eta = etaFromStep(+inEta.value), v = net(x1, x2, eta), f = net(x1, x2, 0);
+          showTip(tip, root, "x = (" + x1.toFixed(2) + ", " + x2.toFixed(2) + ")" + (eta > 0 ? "<br>u<sup>η</sup>(x) = " + v.toFixed(3) : "") +
+            "<br>f(x) = " + f.toFixed(3), p.x + p.ox, p.y + p.oy);
+        });
+        canvas.addEventListener("pointerleave", () => { tip.style.display = "none"; });
+        inEta.addEventListener("input", draw);
+        for (const t of Object.values(tog)) t.addEventListener("change", draw);
+        onWidthChange(canvas, () => { layout(); draw(); });
+      })();
+
+      // ---------------------------------------------------------------
+      // 4. Covering the twelve bending points with four lines
+      // ---------------------------------------------------------------
+      (function puzzle() {
+        const root = document.getElementById("viz-puzzle");
+        const svg = root.querySelector("svg");
+        const out = (k) => root.querySelector('[data-out="' + k + '"]');
+        const lab = (k) => root.querySelector('[data-label="' + k + '"]');
+        const H = 300, VIEW = { x0: 0.4, x1: 4.6, y0: -0.05, y1: 1.5 };
+        let lines = [], picked = -1, geom = null;
+
+        const onLine = (l, p) => Math.abs((l[1][0] - l[0][0]) * (p[1] - l[0][1]) - (l[1][1] - l[0][1]) * (p[0] - l[0][0])) < 1e-9;
+        const sameLine = (l, m) => onLine(l, m[0]) && onLine(l, m[1]);
+        const covered = () => BENDING.map((p) => lines.some((l) => onLine(l, p)));
+
+        function draw() {
+          const W = svg.getBoundingClientRect().width, m = { l: 30, r: 10, t: 8, b: 24 };
+          svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+          svg.replaceChildren();
+          const X = scale(VIEW.x0, VIEW.x1, m.l, W - m.r), Y = scale(VIEW.y0, VIEW.y1, H - m.b, m.t);
+          geom = { X, Y };
+          const clipId = "puzzle-clip";
+          el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b }, el("clipPath", { id: clipId }, el("defs", {}, svg)));
+          const plot = el("g", { "clip-path": "url(#" + clipId + ")" }, svg);
+
+          for (const t of [0, 0.5, 1, 1.5]) {
+            el("line", { x1: m.l, x2: W - m.r, y1: Y(t), y2: Y(t), stroke: C.grid }, svg);
+            el("text", { x: m.l - 6, y: Y(t) + 3.5, "text-anchor": "end" }, svg).textContent = fmt(t);
+          }
+          for (const t of [1, 2, 3, 4]) el("text", { x: X(t), y: H - 6, "text-anchor": "middle" }, svg).textContent = t;
+          place(lab("x1"), W - m.r, H, 1, 1, 0, -1);
+          place(lab("x2"), m.l + 4, m.t, 0, 0, 0, 1);
+
+          // Faint kink curves of f: {x2 = c + K(x1)} and their mirror images.
+          for (const c of CS) {
+            const pr = [], pl = [];
+            for (let i = 0; i <= 200; i++) {
+              const t = 2.5 + (2.1 * i) / 200, y = c + LAM * relu(3 - t) + relu(4 - t);
+              pr.push([X(t), Y(y)]); pl.push([X(5 - t), Y(y)]);
+            }
+            for (const p of [pr, pl]) el("path", { d: path(p), stroke: C.s2, "stroke-opacity": 0.35, "stroke-width": 2, fill: "none" }, plot);
+          }
+
+          // Lines drawn by the reader.
+          for (const l of lines) {
+            const [[a, b], [c, d]] = l;
+            const ends = a === c
+              ? [[X(a), Y(VIEW.y0)], [X(a), Y(VIEW.y1)]]
+              : [VIEW.x0, VIEW.x1].map((x) => [X(x), Y(b + ((d - b) * (x - a)) / (c - a))]);
+            el("path", { d: path(ends), stroke: C.s1, "stroke-width": 2 }, plot);
+          }
+
+          const cov = covered();
+          BENDING.forEach(([a, b], i) => {
+            const sel = i === picked;
+            el("circle", { cx: X(a), cy: Y(b), r: sel ? 7 : 5.5, fill: cov[i] ? C.s1 : C.surface,
+                           stroke: sel ? C.ink : cov[i] ? C.ink : C.ink2, "stroke-width": sel ? 2.5 : 1.75 }, svg);
+          });
+
+          // Status line and verdict.
+          const n = cov.filter(Boolean).length;
+          const per = lines.map((l, i) => "ℓ" + "₁₂₃₄"[i] + ": " + BENDING.filter((p) => onLine(l, p)).length);
+          out("status").innerHTML = "Lines: <b>" + lines.length + "/4</b> &nbsp;·&nbsp; points covered: <b>" + n + "/12</b>" +
+            (per.length ? " &nbsp;<span class='text-secondary'>(" + per.join(", ") + ")</span>" : "") +
+            (picked >= 0 ? " &nbsp;<span class='text-secondary'>pick a second point…</span>" : "");
+          const v = out("verdict");
+          if (lines.length < 4) v.textContent = lines.length ? "" : "Click on a point, then on a second one, to draw the line through them.";
+          else if (n === 12) v.innerHTML = "<b>All twelve covered</b>, but only with the four vertical walls {x₁ = k}. First-layer neurons along these walls cannot see x₂, whereas f depends on x₂: the first layer needs a fifth neuron.";
+          else v.innerHTML = "Only <b>" + n + "</b> of the 12 points are covered. A non-vertical line goes through at most two of them. Undo, or try again!";
+        }
+
+        svg.addEventListener("click", (ev) => {
+          if (!geom || lines.length >= 4) return;
+          const r = svg.getBoundingClientRect(), px = ev.clientX - r.left, py = ev.clientY - r.top;
+          let best = -1, bd = 24;
+          BENDING.forEach(([a, b], i) => { const d = Math.hypot(geom.X(a) - px, geom.Y(b) - py); if (d < bd) { bd = d; best = i; } });
+          if (best < 0) return;
+          if (picked < 0) picked = best;
+          else if (picked === best) picked = -1;
+          else {
+            const l = [BENDING[picked], BENDING[best]];
+            if (!lines.some((m) => sameLine(m, l))) lines.push(l);
+            picked = -1;
+          }
+          draw();
+        });
+        root.querySelector('[data-action="undo"]').addEventListener("click", () => { lines.pop(); picked = -1; draw(); });
+        root.querySelector('[data-action="reset"]').addEventListener("click", () => { lines = []; picked = -1; draw(); });
+        root.querySelector('[data-action="solve"]').addEventListener("click", () => {
+          lines = [1, 2, 3, 4].map((k) => [BENDING.find((p) => p[0] === k), BENDING.filter((p) => p[0] === k)[1]]);
+          picked = -1; draw();
+        });
+        onWidthChange(svg, draw);
+      })();
+    })();
+    </script>
+  </body>
+</html>

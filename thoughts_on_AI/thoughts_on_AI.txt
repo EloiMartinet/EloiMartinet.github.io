@@ -1,0 +1,60 @@
+# Thoughts on AI in math
+
+These notes began in reaction to three following things:
+- A projected team meeting about the use of AI in our reseach
+- The fact that I would be asked the very original question "What is you view on AI and mathematics" during interviews for permanent positions
+- The realization that I never heard a very convincing answer to this very question, even by the most brilliant mathematicians.
+
+This last point convinced me of the necessity to clarify, to myself, what is *my own* view on this topic, and how it completes or opposes the one of other colleagues.
+
+## Context
+
+Started 16 October 2026. In the last year: going from solving Olypiads problems, to small Erdös problems, to a central Edrös conjecture (unit distance), to Navier Stokes, to releasing 700 papers of proofs of major mathematical conjectures (3 of them retracted the following day), NLA, Explained project, Find, Attempt and REcommend project... TODO: make it a list with the precise dates.
+
+##
+
+Unlike most mathematicians, (I appreciate having a nice proof explained to me as much as discovering it myself. It is probably because in my short career, the struggle of arriving to any result always greatly exceeded the jubiltation of getting it. I have always had more a student mentality than one of a researcher: happy to discover anything that carries beauty, no matter who unveiled the beauty. That is why, to some extent and from a very personnal point of view, I consider that AI is an amazing opportunity to learn more. However, this raises several questions:
+- I am not paid to learn; doing exclusively so contributes nothing to society. But what are mathematicians paid for in the first place?
+- Can I refuse to use AI to elaborate proofs, relying on my own creativity, in the way of the artist or the artisan?
+- What happens when AI becomes a "mathematical oracle", able to answer any mathematical statement by "True" or "False"? Will mathematicians still be usefull, at least to ask the questions?
+
+## The mathematician as an artisan
+
+However, most of the artisans that could be replaced during the Industrial Revolution have been (source this), because the ultimate goal was production. Hence it would not be illogical to infer that if a mathematician is an artisan, and if AI is able to produce what he produces, then AI will replace the mathematicians. But what does the mathematician *produces* in the first place? True statements? Proofs? Theories? Understanding? This is, for me, not clear. What *is* however clear is that, until now, young mathematicians were expected to produce *papers* in order to get a permanent position, in other word more and better papers than your peers. This is a consequence of our cherrished "Publish or perish" system. 
+
+## The mathematician as an artist
+
+I know no mathematicians that doesn't consider creativity as one of the pillars of their research. Funnily, this is in stark contrast with the "lay-people" view of math, which often think of math as a cold, dry, systematic discipline with no imagination involved - almost robotic, a posteriori. However, the reality that is lived by mathematicians is very different. I personnally consider math very close to classical poetry, in two distinct senses. The first one is that beauty arrises from the rigitiy of the rules. According the the appocryphal citation sometimes attributed to Victor Hugo, "La rime est l'hameçon qui me pêche l'idée": the idea emerges from the very constraints of the framework in which the poets lives.  In a sense this is the "raison d'être" of the French "Oulipo". And I am not an exception in finding analogies between math and arts. Hardy, in his "Mathematician's Apology", wrote:
+
+"A mathematician, like a painter or a poet, is a maker of patterns. [...] The mathematician’s patterns, like the painter’s or the poet’s must be beautiful; the ideas like the colours or the words, must fit together in a harmonious way. Beauty is the first test: there is no permanent place in the world for ugly mathematics"
+
+Let us take some time on this very last assertion: in the era of AI, where proofs can be intensively harvested, formalized and checked outside of any human understanding, will the beauty criterium be able to survive? And if it dies, does math dies with it?
+ 
+ The second sense, very naive and personnal, is that I take a similar pleasure in elaborating a new theorem or numerical method than I took in my teenage days in writing poetry; and not only in degree, but most importantly in quality.
+
+Hence, it is why some mathematicians consider themselves, to some extent, as artists. However, it would be - in my opinion - symptomatic of a certain shortness of view to *identify* the mathematician to an artist, as he has an impact on society that is very different to the one of the artist both in structure and in nature. One could discuss about the nature aspect, which may be the most philosophically appealing, but the one which is probably of better interest in the question at hand is the one of structure. Unlike any art, mathematics is at the foundation of the most mature sciences. As Kant said in the Metaphysical Foundations of Natural Science (that I did not read), "in any special doctrine of nature there is only as much proper science as there is mathematics therein". While the quote is debatable, it illustrate the important role that mathematics have played in the most important recent revolutions that the world has undergone (good or bad): the atomic bomb, internet, the quantum revolutions, and AI itself, to only name those. By its impact of the world, it would be naive, irresponsible and hypocritical to consider that mathematicians don't owe to society (in the first place, because they are often paid by the taxes of the people of the country they live in), as well as society doesn't owe mathematicians. I think that this bidirectional responsibility between mathematicians and society bear no comparison to the responsibility artists holds toward society.
+
+## A common look
+
+All these questions actually boils down to a single one: what is the role of mathematics in the society? I think that a careful historical retrospective could shed some light of what *have been* the role of math in the modern society, and maybe extract its more fundamental social characteristics.
+
+
+## Possible answers to the role of mathematicians
+
+### Auditing AI
+
+Some of the passages of the present text where obviously reminiscent of the question of Grothendieck, "Should we continue scientific research?". Now that a handful of big tech companies gathered enough power to tame the most colossal mathematical conjectures, there is no doubt that scientific research *will* continue, with or without us humans. Maybe that one of our most crucial role in the future will be to prevent that mathematics, with all its power, is not monopolistically detained by private, profit-based companies.
+
+
+## Metaphor with farmers during industrial revolution?
+
+
+## The opportunity for Citizen Science
+
+Alex Townsend, "AI Looping in mathematics": he sees a good opportuinity for decentralized, people-based research, by sharing compute. This "Citizen science" approach would help go against the centralization of the compute and "expertise" in the hand of a few companies. It would however participate in funding them if one uses their models (but maybe, open-weights models strong enough might be available).
+
+ 
+Alternative carreer plans:
+- Data scientist (crossed)
+- Software engineer (crossed)
+- Brewer
